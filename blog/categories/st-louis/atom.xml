@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: st. louis | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/st-louis/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[7 Languages in 7 Weeks in St. Louis]]></title>
+    <link href="http://mfollett.github.io/7-languages-in-7-weeks-st-louis/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/7-languages-in-7-weeks-st-louis/7-languages-in-7-weeks-st-louis</id>
+    <content type="html"><![CDATA[<p>One of the guys at the Genome Center mentioned he wanted to get a 7 Languages in 7 Weeks group started in St. Louis to go through the languages. &nbsp;I thought that was a neat idea, but I also realized it was very simple and may not require a group.</p>
+
+
+<p>If you look at the list that Tate provides for <a href="http://www.amazon.com/dp/193435659X?tag=mfollettcom-20&amp;camp=213381&amp;creative=390973&amp;linkCode=as4&amp;creativeASIN=193435659X&amp;adid=0PAPM4C2W0RA1YW6J762&amp;">Tate's book</a>, he lists these languages:</p>
+
+
+<ol>
+<li>Ruby</li>
+<li>Io</li>
+<li>Scala</li>
+<li>Erlang</li>
+<li>Clojure</li>
+<li>Haskell</li>
+<li>Prolog</li>
+</ol>
+
+
+<p>If you look at <a href="http://www.sluug.org/resources/calendar/">SLUUG's St. Louis Event Calendar</a> you find that:</p>
+
+
+<ol>
+<li><a href="http://groups.google.com/group/stlruby/about">Ruby</a> - Meets 2nd Monday of the Month</li>
+<li>Io</li>
+<li>Scala</li>
+<li><a href="http://groups.google.com/group/erlang-colearning">Erlang</a> - Is now dead due to lack if interest, but could be resurected (I know since I ran it :) )</li>
+<li><a href="http://clojurecljub.wordpress.com/">Clojure</a>&nbsp;- Meets 4th Thursday of the month</li>
+<li>Haskell - Had its first social, maybe it can take off with meetings soon</li>
+<li>Prolog</li>
+</ol>
+
+
+<p>&nbsp;</p>
+
+
+<p>Sadly, we don't have a Scala, Io, or Prolog group that I know. &nbsp;However, I bet that we could get people to volunteer for such talks in <a href="http://www.lambdalounge.com">Lambda Lounge</a>.</p>
+
+
+<p>As an addendum, if STLRUBY didn't want to do a session I'm sure <a href="http://stlouis.pm.org">St. Louis Perl Mongers</a> would be willing to shift around their schedule to do a talk on dynamic typing and meta programming.</p>
+
+
+<p><iframe marginheight="0" scrolling="no" marginwidth="0" src="http://rcm.amazon.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=mfollettcom-20&o=1&p=8&l=as1&m=amazon&f=ifr&md=10FE9736YVPPT7A0FBG2&asins=193435659X" frameborder="0" style="height: 240px;"></iframe></p>
+
+
+<p>&nbsp;</p>
+
+]]></content>
+  </entry>
+  
+</feed>

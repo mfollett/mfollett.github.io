@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://mfollett.github.io/atom.xml" rel="self"/>
   <link href="http://mfollett.github.io/"/>
-  <updated>2013-04-28T15:52:45-05:00</updated>
+  <updated>2013-04-28T16:00:39-05:00</updated>
   <id>http://mfollett.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,5 +12,574 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[When Type Systems Attack]]></title>
+    <link href="http://mfollett.github.io/when-type-systems-attack/index.html"/>
+    <updated>2012-02-10T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/when-type-systems-attack/when-type-systems-attack</id>
+    <content type="html"><![CDATA[<p>Groovy&rsquo;s type system can sometimes have funny interplay and unexpected results. For example, these assertions are true:</p>
+
+<p><script src="https://gist.github.com/1787746.js"></script></p>
+
+<p>However, mixing in a Map into this causes some complications:</p>
+
+<p><script src="https://gist.github.com/1787771.js"></script></p>
+
+<p>This might not seem like a big issue, but it can cause some real headaches. When failing an assertion the message printed only prints values, not types. Because of this you may occasionally run into less than helpful error messages like:</p>
+
+<p><script src="https://gist.github.com/1787784.js"></script></p>
+
+<p>And this can be awfully confusing. One prime example of this is with GORM domains. GORM defaults primary keys to be Longs so if you use a primary key as a map key you could run into some pretty confusing error cases that your tests don&rsquo;t explain as helpfully as you&rsquo;d like.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Grails/DatabaseMigrationPlugin/Liquibase Quirk]]></title>
+    <link href="http://mfollett.github.io/grailsdatabasemigrationpluginliquibase-quirk/index.html"/>
+    <updated>2012-01-25T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/grailsdatabasemigrationpluginliquibase-quirk/grailsdatabasemigrationpluginliquibase-quirk</id>
+    <content type="html"><![CDATA[<p>I just fought with this for a while and figured I&#8217;d record this in the vast internets in case others come across this. While attempting to extend the functionality of our Grails project at work I needed to add a new table and related foreign key constraints. We use the Grails Database Migration Plugin which uses liquibase to keep our schema in sync between production, staging, and development boxes. I declared a foreign key constraint similar to this one:</p>
+<p><script src="https://gist.github.com/1679067.js"></script></p>
+<p>and got this exception:</p>
+<p><script src="https://gist.github.com/1679035.js"></script></p>
+<p>It turns out that passing in a named parameter of referencesUniqueColumn with a value of anything other than false causes this exception. This wasn&#8217;t immediately obvious to me and I still don&#8217;t know why, but I thought I&#8217;d note it in case someone else ran into it too.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Grails Custom Validation messages]]></title>
+    <link href="http://mfollett.github.io/grails-custom-validation-messages/index.html"/>
+    <updated>2012-01-23T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/grails-custom-validation-messages/grails-custom-validation-messages</id>
+    <content type="html"><![CDATA[<p>Grails&#8217; GORM provides convenient ways to define many different constraints for inputing properties including basic ones like max, equal, &amp; notEqual to more specific ones like creditCard, url, &amp; email (full list <a href="http://grails.org/doc/2.0.0/ref/Constraints/Usage.html">here</a> under Quick Reference). But sooner or later you&rsquo;ll want to create your own custom validator. This can be done by providing a validator closure to your domain, for example:</p>
+
+<p><script src="https://gist.github.com/1668699.js"></script></p>
+
+<p>Now, in this example a domain will validate all of the fields, including the user&rsquo;s favorite prime (to a degree of certainty). However, if the prime number certainly isn&rsquo;t prime then the error message provided when validation fails (through validate or save) will be:</p>
+
+<blockquote class="posterous_short_quote"><p>favoritePrime does not pass custom validation.</p></blockquote>
+
+<p>That probably isn&rsquo;t a helpful message to eventually pass back to the user, they might guess what the mysterious &ldquo;custom validation&rdquo; is in this case, but certainly not in all others.</p>
+
+<p>So what <em>is</em> the solution? You might try passing an error message back, but that won&rsquo;t work; you&rsquo;ll get the same message again. It turns out the proper approach is to return a key from your <code>message.properties</code> file. If the key exists in the proper localization file (e.g. French is messages_fr.properties) then it will use that string. A simple modification to the validator above will solve this:</p>
+
+<p><script src="https://gist.github.com/1668702.js"></script></p>
+
+<p>Adding the line:</p>
+
+<p>my.localized.not.prime.message=The number {2} is not prime.</p>
+
+<p>Will cause Grails to generate a much more useful validation failed
+message. As you can probably guess the {2} will be replaced with the
+value inputed by the user.</p>
+
+<p>You can include additional values to your message by returning an array. The first element should be a message key (e.g. &lsquo;my.localized.not.prime.message&rsquo;) and the subsequent entries will be interpolated into the message starting at index 3. So, if you returned <code>['my.localized.not.prime.message', 5]</code> you could have the message:
+my.localized.not.prime.message=The number {2} is not prime, {3} is an example of a prime.
+And in this case if the user passed in 4 they would end up with the message:</p>
+
+<blockquote class="posterous_short_quote"><p>The number 4 is not prime, 5 is an example of a prime.</p></blockquote>
+
+<p>Of course, if you aren&rsquo;t using a prime number validator multiple times
+in your code it may seem silly to have a special key/value pair
+dedicated to primes. Another option is to use a key/value pair dedicated
+to that field. You can do this simply by using the code in the first
+example and addding a field to your message.properties file like:</p>
+
+<p>Groovyist.favoritePrime.validator.invalid=The number {2} is not prime.</p>
+
+<p>Much of this is documented in the <a href="http://grails.org/doc/2.0.0/ref/Constraints/validator.html">validator docs</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Yammer, Scala, & Burgeoning Languages]]></title>
+    <link href="http://mfollett.github.io/yammer-scala-burgeoning-languages/index.html"/>
+    <updated>2011-11-29T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/yammer-scala-burgeoning-languages/yammer-scala-burgeoning-languages</id>
+    <content type="html"><![CDATA[<p>I just finished reading <a href="https://gist.github.com/1406238?1">this letter</a> discussing why Yammer is going to slowly move from Scala to Java. While I&rsquo;ve never done anything more substantial than basic toying around with scala and can&rsquo;t say I know much about Yammer outside of what their website tells me about itself and the fact that <a href="http://www.gabrielweinberg.com/blog/2011/11/online-services-our-startup-subscribes-to.html">Gabriel Weinberg</a> seems to like it I do have some thoughts on general points hit on in the letter.</p>
+
+<p>The <a href="http://codahale.com/downloads/email-to-donald.txt">letter</a> that Coda Hale wrote seemed to be rather well thought out. The author goes into several criticisms of Scala which seem to boil down to:</p>
+
+<ol>
+<li>Complicated concepts in the language</li>
+<li>Community support</li>
+<li>Lack of abundance of developers</li>
+<li>Reality of the Scala-and-Java nature of real world development</li>
+<li>Build toolchain issues</li>
+<li>Performance issues</li>
+</ol>
+
+
+<p>The first point and last two are very specific to Scala. Language designers have to decide between many difficult tradeoffs when designing a language and it is hard to say which ones will pay off for their community in the long run. It is certainly difficult to see how a given choice will pay off in the long run and while some of Scala&rsquo;s features he mentions seem pretty simple, others make me go cross-eyed trying to read explanations of them. Having said that, I still am very much a novice in the language and don&rsquo;t feel particularly qualified to actually weigh in on these topics.</p>
+
+<p>The lack of developers and quality of community support can be bundled together and seem to have more to do with the age and uptake of the language than at the language itself. Any language will have bootstrapping issues similar to this. And when choosing a language, it is an important aspect that should, and to some extent can, be checked out before any major development undertaking. Evaluating a community around a technology is no easy task though. I&rsquo;ve certainly been in situations where the community involvement around the technology used was unhelpful, misleading, or nonexistent; it is a crummy situation to be in. The best way to know the value of a community is to be a part of it for a while.</p>
+
+<p>Coda points out the fact that Yammer wasn&rsquo;t really deciding between Java or Scala but between Java or Scala+Java. If we ever meet I owe Coda a beer for this. I&rsquo;ve had my share of arguments with people in the past on this reality and I&rsquo;m glad to see something saying it so straight forward getting the circulation this is, even if it was never supposed to. Coming from a non-Java background to a Groovy position I feel acutely aware of all the times I&rsquo;ve had to dig through Java code because of an impedence mismatch between a Java concept and a Groovy one, to better understand a library that doesn&rsquo;t document something well and doesn&rsquo;t have a functional equivalent in Groovy, or to debug or diagnose a framework bug. Having said that, I don&rsquo;t believe my team has written a new line of Java for our core product since we migrated to Groovy some number of months ago.</p>
+
+<p>I expect that the Java+otherLang situation is an inevitability of developing on the JVM. As long as Java is the dominant player on the platform it will be the lingua franca. The reality of these languages being so interoperable is that the cost to benefit analysis of porting a framework or library (internal or external) over to another language on the platform almost always works against porting it.</p>
+
+<p>In the end, Coda seems to make a lot of good points. I can&rsquo;t vouch for his Scala specific concerns, but others seem reaonable in the more general case of burgeoning JVM languages. And, while this doesn&rsquo;t lower my interest or intent of learning Scala one of these days I do wonder why Yammer decided to start with Scala given the resources available to them with other languages.</p>
+
+<p>My intention has been that were I to take a startup from day 1 I&rsquo;d pick a language that I already had a team, or list of would be team members, with a strong understanding of and a good history with the community. Maybe they had that int he beginning or thought they did and that wasn&rsquo;t mentioned, I certainly don&rsquo;t have that information. And really, in the end, they have nearly sixty million dollars in VC funding, three million customers, and a rapidly growing revenue stream and I&rsquo;m killing time waiting for my next robotics assignment to come down the pipe. I guess you can&rsquo;t argue with results, hehe.</p>
+
+<p>Edit: Also of note is <a href="http://codahale.com/the-rest-of-the-story/">Coda&rsquo;s follow up</a>, you should read it if you read the first.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl to Groovy Mappings (An Introduction)]]></title>
+    <link href="http://mfollett.github.io/perl-to-groovy-mappings/index.html"/>
+    <updated>2011-08-27T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-to-groovy-mappings/perl-to-groovy-mappings</id>
+    <content type="html"><![CDATA[<p>Recently I took a job with a startup that is using Groovy as their main language. I find the language to be similar to several other languages and they have <a href="http://groovy.codehaus.org/Differences+to+Other+Languages">some comparisons on their site</a>, however one comparison they are missing is to Perl. Since I&#8217;m learning Groovy anyway and the two are sufficiently similar that I thought I&#8217;d give it a shot.</p>
+<p>Before I start with the articles there are a few important things to note about Groovy:</p>
+<ol>
+<li>Groovy autoboxes, as such it is completely legitimate to write `&#8221;I like cheese&#8221;.someMethodOnStrings()`.</li>
+<li>Groovy automatically makes a variable named `it` as the only parameter for lambda function if no parameter list is given, meaning that: `def foo = { it * 2}` is similar to `def foo = { it -&gt; it * 2}`.</li>
+<li>Groovy&#8217;s syntax provides an alternate way to list parameters for a method call when the last parameter is a lambda function meaning that `someData.someMethod(1,2, { it + 2})` is the same as `someData.someMethod(1,2) { it + 2}`, this is useful for methods that loop over lists, like `each`.</li>
+</ol>
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl  to Groovy Mapping (Iterating)]]></title>
+    <link href="http://mfollett.github.io/perl-groovy-cheat-sheet/index.html"/>
+    <updated>2011-08-27T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-groovy-cheat-sheet/perl-groovy-cheat-sheet</id>
+    <content type="html"><![CDATA[<p>This entry will primarily go over various approaches towards iterating over structures of data. This will include basic looping as well as equivalents to Perl&rsquo;s <code>map</code> &amp; <code>grep</code>.</p>
+
+<p>This is not intended to be an exhaustive guide or a best practice for either language. The attempt, as with all articles in this series, is to provide a basic set of mappings between the languages.</p>
+
+<h2>Iterating over collections</h2>
+
+<p>To loop over all the items in an array in Perl you would probably use the <code>for</code> loop construct:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $item (@array) {…}</pre></div>
+</div>
+
+
+<p>You could do something similar in Groovy using the <code>each</code> method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>list.each {<span class="error">…</span>}</pre></div>
+</div>
+
+
+<p>To loop over all the keys in a hash (or Map) you can combine the above with the <code>keys</code> builtin:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $key (keys(%hash)) {…}</pre></div>
+</div>
+
+
+<p>In Groovy you simply use a lambda that accepts two parameters.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>myMap.each { key, _value -&gt; <span class="error">…</span> }</pre></div>
+</div>
+
+
+<p>Looping over all the values is similar to the examples above in both, so I will skip that. Looping over each entry in the hash with both the key and value in Groovy is the same as the example above, in Perl you would have to use <code>each</code>, which I don&rsquo;t like.</p>
+
+<p>It is important to note that with Groovy&rsquo;s <code>each</code> different things are passed in based on the number of parameters. The example above gave <code>each</code> a 2 parameter lambda and so the lambda got inputs of [key, value]. Had a 1 parameter lambda been passed in then that lambda would have received an Entry object that had accessors for the key and value.</p>
+
+<h2>Iterating over a Set of Integers</h2>
+
+<p>Both Perl and Groovy provide many ways to iterate over a range. One popular approach in Perl is to use the dot-dot range operator (..) and <code>for</code> looping construct. By using this it is simple to print all the numbers between one and ten:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $num (1..10) { print $num }</pre></div>
+</div>
+
+
+<p>Groovy has a similar approach:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>(<span class="integer">1</span>..<span class="integer">10</span>).each { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+<p>Groovy has a couple other ways to do the same thing, for example numbers have an <code>upto</code> method attached to them that can be used to iterate. As such, the same thing above could be written as:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">1</span>.upto(<span class="integer">10</span>) { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+<p>Of course, Perl also has the ability to loop via the <code>while</code> looping construct and Groovy could loop using a <code>for in</code> on top of what I&rsquo;ve listed here.</p>
+
+<p>If you wanted to iterate over a set of integers that didn&rsquo;t increment by one in Perl you might use <code>map</code> and <code>for</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( map { $_ * 5 } 1..5) {…}</pre></div>
+</div>
+
+
+<p>Or you might use <code>grep</code> and <code>for</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( grep { not $_ % 5 } 1..25) {…}</pre></div>
+</div>
+
+
+<p>Or, of course, you could pick up a useful module, like <a href="https://metacpan.org/module/Math::Sequence">Math::Sequence</a>.</p>
+
+<p>In Groovy you would simply do this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">5</span>.step(<span class="integer">25</span>,<span class="integer">5</span>) {<span class="error">…</span>}</pre></div>
+</div>
+
+
+<h2>Mapping a List</h2>
+
+<p>Perl helpfully provides the <code>map</code> builtin to easily map a list of values from one to another. For example, were a developer wanting to square all the values in a list they would:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my @squared = map { $_**2 } @original_values</pre></div>
+</div>
+
+
+<p>The same thing can be performed in Groovy using the collect() method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> squared = originalValues.collect { <span class="local-variable">it</span>.power(<span class="integer">2</span>) }</pre></div>
+</div>
+
+
+<h2>Grepping a List</h2>
+
+<p>Perl provides the <code>grep</code> builtin to easily filter values out of a list and provide a new list with only the remaining values. For example, if a developer was looking for all the items in a list that were odd they could:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my @odd = grep { $_ % 2 } @numbers</pre></div>
+</div>
+
+
+<p>To do this in Groovy they would use the <code>findAll</code> method that exists on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> odd = numbers.findAll { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+
+
+<h2>Grepping for the First Item in a List</h2>
+
+<p>Perl has a number of modules which are considered &lsquo;core&rsquo;. It is reasonable to assume any core module is installed and readily available. To get the first item in a list that matches some criteria a Perl developer could use the example above for grepping a list and <code>shift</code> off the top, but more likely they would use <a href="https://metacpan.org/module/List::Util">List::Util</a>&rsquo;s <code>first</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my $first_odd = first { $_ % 2} @numbers</pre></div>
+</div>
+
+
+<p>A similar approach in Groovy could be done via the <code>find</code> method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> firstOdd = numbers.find { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Unity Model]]></title>
+    <link href="http://mfollett.github.io/the-unity-model/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/the-unity-model/the-unity-model</id>
+    <content type="html"><![CDATA[<p>I&#8217;m reading <a href="http://www.amazon.com/gp/product/0201058669?ie=UTF8&amp;tag=mfollettcom-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0201058669">Parallel Programming Design: &nbsp;A Foundation by Chandy and Misra</a> for a master&#8217;s class and am finding it very interesting. &nbsp;The book covers the Unity Model as an approach towards parallel programming. &nbsp;The language used to model solutions to a problem isn&#8217;t meant to be directly implemented as a language (though it has been incarnated as <a href="http://www.osti.gov/bridge/servlets/purl/5955653-tcrAK9/5955653.pdf">PCN</a>) but instead to be used as a model for implementing the solution in some other language. &nbsp;It is a fun language and hopefully now that I don&#8217;t have a presentation looming over my head I can explore it independently and post some example.</p>
+<p>The language is broken up into several parts:</p>
+<ol>
+<li>Declare - used for declaring variables</li>
+<li>Always - used for defining functions</li>
+<li>Initially - used for initializing variables</li>
+<li>Assign - the main portion of the code</li>
+</ol>
+<p>The reason why initialization doesn&#8217;t happen in the main portion of the code is that there is no guarantee that it would happen when you would want or that it would only happen once. &nbsp;In fact, the assignment section of the program has very weak promises. &nbsp;It only guarantees that when the program is executing any given line that any other line will eventually be executed if the program is run forever. &nbsp;Other than that it just randomly picks statements to execute.&nbsp;</p>
+<p>By the way, the book has been out of print for a while now, so it isn&#8217;t the easiest to find for cheap and is impossible to find new. &nbsp;I ordered it three times used from third parties before someone finally actually had it in stock and shipped it to me.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[If You Like X, You Might Like Perl]]></title>
+    <link href="http://mfollett.github.io/if-you-like-x-you-might-like-perl/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/if-you-like-x-you-might-like-perl/if-you-like-x-you-might-like-perl</id>
+    <content type="html"><![CDATA[<p><strong>Objective-C </strong>- You&#8217;d probably like <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Manual.pod">Moose</a>&#8217;s concept of <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Role.pm">roles</a>&nbsp;if you like categories. &nbsp;Roles also provide the ability to require methods exist on classes so you could use them for interfaces too, but when you consume a role you can&#8217;t guarantee it won&#8217;t add functionality.</p>
+<p><strong>Clojure</strong>&nbsp;- If you were willing to play with <a href="http://rakudo.org/how-to-get-rakudo">Perl 6</a> you&#8217;d probably like the many of its lazy aspects. &nbsp;The common example being binding an infinitely long fib sequence to a list (my @fib := 0,1,*+*&#8230;* ). &nbsp;Perl 6 also supports multi-method dispatching and pattern matching. &nbsp;I don&#8217;t know about Clojure&#8217;s pattern matching abilities, but I do know that Perl 6&#8217;s is weaker than Erlang&#8217;s, so be aware of that.</p>
+<p>If you don&#8217;t want to try Perl 6 you should look at the Higher Order Perl book. &nbsp;It focuses on functional Perl and steals heavily from Lisp. &nbsp;In fact, the author states very early on that of the <a href="http://www.paulgraham.com/diff.html">7 things that make Lisp different</a>,&nbsp;Perl has 6. &nbsp;It is available <a href="http://hop.perl.plover.com/book/#PDF">free online</a>&nbsp;or from a book store. &nbsp;The author is currently boycotting Amazon though, so while they sell it you may want to buy from someone else.&nbsp;</p>
+<p><strong>Ruby</strong> - I haven&#8217;t gotten around to learning Ruby. &nbsp;For what it&#8217;s worth, there are a lot of people I know that like both Ruby and Perl so I have to assume there are some good&nbsp;similarities. &nbsp;If you are looking for method_missing it is called autoload. &nbsp;Besides that, <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Exporter.pm">Moose::Exporter</a> is great for making keywords for DSLs. &nbsp;You can use Perl 5&#8217;s <a href="http://perldoc.perl.org/perlsub.html#Prototypes">prototypes</a>, but that gets a little more complicated. &nbsp;You can also use <a href="http://search.cpan.org/~flora/Devel-Declare-0.006000/lib/Devel/Declare.pm">Devel::Declare</a> if you just want to take the parser over altogether which, of course, is gets more complicated.</p>
+<p>Feel free to add more in the comments or tell me where I&#8217;m wrong, I&#8217;ll update the body of the post as the conversation goes along.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 Languages in 7 Weeks in St. Louis]]></title>
+    <link href="http://mfollett.github.io/7-languages-in-7-weeks-st-louis/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/7-languages-in-7-weeks-st-louis/7-languages-in-7-weeks-st-louis</id>
+    <content type="html"><![CDATA[<p>One of the guys at the Genome Center mentioned he wanted to get a 7 Languages in 7 Weeks group started in St. Louis to go through the languages. &nbsp;I thought that was a neat idea, but I also realized it was very simple and may not require a group.</p>
+<p>If you look at the list that Tate provides for <a href="http://www.amazon.com/dp/193435659X?tag=mfollettcom-20&amp;camp=213381&amp;creative=390973&amp;linkCode=as4&amp;creativeASIN=193435659X&amp;adid=0PAPM4C2W0RA1YW6J762&amp;">Tate&#8217;s book</a>, he lists these languages:</p>
+<ol>
+<li>Ruby</li>
+<li>Io</li>
+<li>Scala</li>
+<li>Erlang</li>
+<li>Clojure</li>
+<li>Haskell</li>
+<li>Prolog</li>
+</ol>
+<p>If you look at <a href="http://www.sluug.org/resources/calendar/">SLUUG&#8217;s St. Louis Event Calendar</a> you find that:</p>
+<ol>
+<li><a href="http://groups.google.com/group/stlruby/about">Ruby</a> - Meets 2nd Monday of the Month</li>
+<li>Io</li>
+<li>Scala</li>
+<li><a href="http://groups.google.com/group/erlang-colearning">Erlang</a> - Is now dead due to lack if interest, but could be resurected (I know since I ran it :) )</li>
+<li><a href="http://clojurecljub.wordpress.com/">Clojure</a>&nbsp;- Meets 4th Thursday of the month</li>
+<li>Haskell - Had its first social, maybe it can take off with meetings soon</li>
+<li>Prolog</li>
+</ol>
+<p>&nbsp;</p>
+<p>Sadly, we don&#8217;t have a Scala, Io, or Prolog group that I know. &nbsp;However, I bet that we could get people to volunteer for such talks in <a href="http://www.lambdalounge.com">Lambda Lounge</a>.</p>
+<p>As an addendum, if STLRUBY didn&#8217;t want to do a session I&#8217;m sure <a href="http://stlouis.pm.org">St. Louis Perl Mongers</a> would be willing to shift around their schedule to do a talk on dynamic typing and meta programming.</p>
+<p><iframe marginheight="0" scrolling="no" marginwidth="0" src="http://rcm.amazon.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=mfollettcom-20&o=1&p=8&l=as1&m=amazon&f=ifr&md=10FE9736YVPPT7A0FBG2&asins=193435659X" frameborder="0" style="height: 240px;"></iframe></p>
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[15 Minutes of Fame]]></title>
+    <link href="http://mfollett.github.io/15-minutes-of-fame/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/15-minutes-of-fame/15-minutes-of-fame</id>
+    <content type="html"><![CDATA[<p>Holy cow! &nbsp;I decided to check my Google Analytics account to see what the impact of my <a href="http://mfollett.com/if-you-like-x-you-might-like-perl">If You Like X You Might Like Perl</a>. &nbsp;I thought it might, maybe, double the visitors to this page. &nbsp;I was quite wrong, here is how wrong:</p>
+<p>[[posterous-content:yhofHwAcfwbthvkqAcAn]]So I started looking around at what drove this traffic. &nbsp;It turns out that <a href="http://www.reddit.com/user/perlgeek">perlgeek</a> <a href="http://www.reddit.com/r/programming/comments/ds2w1/if_you_like_x_you_might_like_perl/">posted my article to reddit</a>. &nbsp;When I followed the referring links I found a few interesting things. &nbsp;Apparently the article is the 16th most controversial at the moment. &nbsp;It is below whether ads are like reality, but above some insult against redit users, some act that played out in the war in&nbsp;Afghanistan, and the POTUS&#8217;s policy on&nbsp;cannabis:</p>
+<p>[[posterous-content:uEljCjbzqDglzvjGlHms]]It is also 24th on top scoring links in the programming category, but there aren&#8217;t any interesting juxtapositions so I&#8217;m not providing a screenshot. &nbsp;Honestly, I find the whole thing so amusing that I don&#8217;t mind that the link has received more negative votes than positive ones or that 4 of the 5 comments are either negative, useless, or both. &nbsp;The fifth is asking if one of the other commenters actually read the article, which is really neither positive nor negative.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finalized Perl 6 Talk Slides]]></title>
+    <link href="http://mfollett.github.io/finalized-perl-6-talk-slides/index.html"/>
+    <updated>2010-10-13T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/finalized-perl-6-talk-slides/finalized-perl-6-talk-slides</id>
+    <content type="html"><![CDATA[<p>In a little over 12 hours I will be giving my Perl 6 talk at Strange Loop. &nbsp;I have provided the finalized slides below. &nbsp;Hopefully in the next week I will have an audio overlay on these slides so you can hear how badly I mess up. :)</p>
+<p><a href="http://www.slideshare.net/mfollett/perl-6-talk">http://www.slideshare.net/mfollett/perl-6-talk</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6 Talk - Sneak Peak]]></title>
+    <link href="http://mfollett.github.io/perl-6-talk/index.html"/>
+    <updated>2010-10-12T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-talk/perl-6-talk</id>
+    <content type="html"><![CDATA[<p>This week&#8217;s post is late and a copout. &nbsp;Instead of actually writing an article I&#8217;m posting the slides to the talk I&#8217;ll be giving this Thursday. &nbsp;I will be a speaker at <a href="http://www.strangeloop2010.com">Strange Loop 2010</a>&nbsp;in beautiful St. Louis, MO. &nbsp;The talk will be about Perl 6 and will be predominantly geared towards people who do not know Perl 5 or Perl 6 but are interested in exploring new languages. My intent is to give people a brief history lesson and then show them enough neat features about the language that they&#8217;ll want to go pick up more. &nbsp;More info <a href="http://strangeloop2010.com/talks/14492">here</a>.</p>
+<p>If you have any comments, criticism or suggestions please don&#8217;t hesitate to post them. &nbsp;I would greatly appreciate it.</p>
+<p>&nbsp;</p>
+<p><a href="http://www.slideshare.net/secret/u825FvKM0Ms0gF">http://www.slideshare.net/secret/u825FvKM0Ms0gF</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dancer Presentation]]></title>
+    <link href="http://mfollett.github.io/dancer-presentation/index.html"/>
+    <updated>2010-10-06T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/dancer-presentation/dancer-presentation</id>
+    <content type="html"><![CDATA[SawyerX presented on the exciting new Perl web framework Dancer at a Python meeting. &nbsp;The slides are very informative, I recommend looking over them.<p /><div><a href="http://www.slideshare.net/xSawyer/perl-dancer-for-python-programmers">http://www.slideshare.net/xSawyer/perl-dancer-for-python-programmers</a></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Lacuna Expanse]]></title>
+    <link href="http://mfollett.github.io/the-lacuna-expanse/index.html"/>
+    <updated>2010-10-03T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/the-lacuna-expanse/the-lacuna-expanse</id>
+    <content type="html"><![CDATA[<p>Hey readers,</p>
+<p>Have you looked at <a href="http://www.lacunaexpanse.com/">The Lacuna Expanse</a>? &nbsp;I&#8217;m afraid I just burned an hour of time playing it instead of doing other things. &nbsp;It&#8217;s a pretty neat MMO that combines strategy and SimCity in a fun game with a galactic theme. &nbsp;I was surprised to see how well it is put together for being web based. &nbsp;I&#8217;d really recommend checking it out.</p>
+<p>If you aren&#8217;t interested in the game then you might be interested in the tech behind it. The whole thing is written in Perl and uses a lot of fun tech. &nbsp;Here is a <a href="http://www.madmongers.org/talks/the-lacuna-expanse">slide deck</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Exciting Method Invocation]]></title>
+    <link href="http://mfollett.github.io/perl-6-exciting-method-invocation/index.html"/>
+    <updated>2010-10-03T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-exciting-method-invocation/perl-6-exciting-method-invocation</id>
+    <content type="html"><![CDATA[<p>Perl 6 provides many new and interesting approaches to method invocation. &nbsp;New constructs in the language allow the developer to define how many matching methods are called, how they are called, as well as a few other things.</p>
+<h3>In Line Mutators</h3>
+<p>Perl 6 supports the idea of inline mutators. &nbsp;In Perl 5 it isn&#8217;t too uncommon to see code like this:</p>
+<blockquote class="posterous_short_quote">
+<p>@array = sort @array</p>
+</blockquote>
+<p>It is common enough in the Perl community to see &#8220;assign this mutated value back into the variable it came from&#8221; that Perl 6 gives a cleaner way. &nbsp;The same code in Perl 6 could be written:</p>
+<blockquote class="posterous_short_quote">
+<p>@array .= sort</p>
+</blockquote>
+<p>The line above says to take @array, sort it, and put the values back in @array all in one fluid motion. &nbsp;Of course, there is one motion that developers go through that is so common most probably don&#8217;t think about it:</p>
+<blockquote class="posterous_short_quote">
+<p>my SVG $svg_serializer = SVG.new;</p>
+</blockquote>
+<p>Thankfully, .= can use used here to assign a value into $svg_serializer more cleanly:</p>
+<blockquote style="margin-top: 10px; margin-left: 1px; border-left-width: 4px !important; border-left-style: solid !important; border-left-color: #dddddd !important; padding-left: 10px;">
+<p>my SVG $svg_serializer .= new;</p>
+</blockquote>
+<h3>Invoking Multiple Matched Methods</h3>
+<p>In Perl5 (and other languages) one often finds code litered with statements like this:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo-&gt;frobinicate() if $foo-&gt;can(&#8216;frobinicate&#8217;);</p>
+</blockquote>
+<p>That gets old after a while. &nbsp;Perl 6 solves this, and a few other problems, with a new approach to method calls that allows the developer to request 0 or 1, 1, 1 or more, or any number of methods be called at a time. &nbsp;So, for example, the Perl6 equivalent of above is:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo.?frobinicate;</p>
+</blockquote>
+<p>The above code will invoke the frobinicate method on $foo if one exists. &nbsp;However, if no method exists that matches that criteria then nothing will be executed and instead of dying the statement simply returns Nil.</p>
+<p>As I mentioned there are other options here also, for example if the developer wanted to execute all of the &#8216;frobinicate&#8217;s that existed within the inheritance hierarchy of $foo they could do either:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo.*frobinicate;</p>
+<p>$foo.+frobinicate;</p>
+</blockquote>
+<p>As readers can probably guess &#8216;.*&#8217; will invoke 0 or more methods named &#8216;frobinicate&#8217; on $foo returning Nill if none exist. &nbsp;That leaves &#8216;.+&#8217; to invoke 1 or more matching methods, the line dies if it finds no matching methods.</p>
+<p>Here is an example of the above:</p>
+<blockquote class="posterous_medium_quote">
+<p>class Dog {</p>
+<p>&nbsp;&nbsp; method talk { &#8216;bark&#8217; }</p>
+<p>}</p>
+<p>class TalkingDog is Dog {</p>
+<p>&nbsp;&nbsp; method talk { &#8216;Hello&#8217; }</p>
+<p>}</p>
+<p>my TalkingDog $td .= new;</p>
+<p>$td.talk # returns &#8216;Hello&#8217;</p>
+<p>$td.?talk # returns &#8216;Hello&#8217;</p>
+<p>$td.*talk # returns (&#8216;Hello&#8217;, &#8216;bark&#8217;)</p>
+<p>$td.+talk # also returns (&#8216;Hello&#8217;, &#8216;bark&#8217;)</p>
+<p>$td.*calculate_pi # returns Nil</p>
+<p>$td.+calculate_pi # dies</p>
+<p>$td.?calculate_pi # returns Nil</p>
+<p>$td.calculate_pi # dies</p>
+</blockquote>
+<h3>Parallel Invokation</h3>
+<p>Perl 6 has an incredibly exciting new operator called the hyperoperator. &nbsp;The hyperoperator indicates that the methods being invoked can be dispatched in parallel. &nbsp;This makes simple cases of parallel execution very simple to do. &nbsp;To do this, simply prepend &#8216;&gt;&gt;&#8217; between the object and the invocation operator. &nbsp;For example:</p>
+<blockquote class="posterous_short_quote">
+<p>@foo&gt;&gt;.frobinicate</p>
+</blockquote>
+<p>This would invoke &#8216;frobinicate&#8217; on all the elements in @foo in parallel. &nbsp;</p>
+<p>The hyperoperator can be combined with the previous topic of invoking all the methods that match. &nbsp;This makes it very simple to invoke all of the possible methods on an object in parallel:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo&gt;&gt;.*frobinicate()</p>
+</blockquote>
+<p>Here is a simple, but more fleshed out example to wrap things up:</p>
+<blockquote class="posterous_medium_quote">
+<p>class Department {</p>
+<p>&nbsp;&nbsp; has @.employees;</p>
+<p>&nbsp;&nbsp; has $.name;</p>
+<p>&nbsp;&nbsp; method gen_print_info { return &#8220;$.name:\n&#8221; ~&#8221;\t\t&#8221; ~ @.employees.sort.join(&#8216;, &#8216;)}</p>
+<p>}</p>
+<p>my @company = (</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Accounting&#8217;, &#8216;employees&#8217; =&gt; &lt;Jeff Jane Susan&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Security&#8217;, employees =&gt; &lt;Alice Bob&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Marketing&#8217;, employees =&gt; &lt;Margaret Terry Lawrence&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Development&#8217;, employees =&gt; &lt;Matt Fred Steve Joe Alith Jie&gt;)</p>
+<p>)</p>
+<p>my @print_info = @company&gt;&gt;.gen_print_info;</p>
+</blockquote>
+<p>The example above would execute gen_print_info on all of the Department typed objects in @company.</p>
+<p>&nbsp;</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12 - Objects</a></li>
+<li>Patrick Michaud&#8217;s <a href="http://pmichaud.com/2010/pres/yapcna-perl6/slides/start.html">Cool Perl 6</a>&nbsp;has some neat examples&nbsp;</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Change in Format]]></title>
+    <link href="http://mfollett.github.io/change-in-format/index.html"/>
+    <updated>2010-10-03T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/change-in-format/change-in-format</id>
+    <content type="html"><![CDATA[<p>I had a request that I not use gist.github to host the code snippets. &nbsp;I guess it was a trouble for people who turned off JavaScript. &nbsp;Since github does not currently support Perl 6 syntax highlighting I will inline my code snippets. &nbsp;However, when github supports Perl 6 syntax highlighting I will probably go back to hosting on there. &nbsp;If you have an opinion on this please let me know via email, the comments, or buying me a beer and saying what you think.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Coding with Class]]></title>
+    <link href="http://mfollett.github.io/perl-6-coding-with-class/index.html"/>
+    <updated>2010-09-26T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-coding-with-class/perl-6-coding-with-class</id>
+    <content type="html"><![CDATA[<p>This entry will focus on creating and using classes in Perl 6. &nbsp;Perl 6&#8217;s class system greatly expands on the approach of Perl 5 in many ways, a few of which are giving a standard <em>new</em> method and providing an approach for easily declaring attributes on a class.</p>
+<p>Here is a very simple example of a Perl 6 class:</p>
+<p><script src="https://gist.github.com/598491.js"></script></p>
+<p>This example shows a few basic concepts. &nbsp;First there is the new <em>class</em>&nbsp;keyword. &nbsp;Named classes can easily be declared in one of two ways. &nbsp;The example above, with curly braces, is useful when defining more than one class in a file or providing for some code to execute outside of the scope of the class when loading. &nbsp;Without the curly braces is also legal, however it means that the rest of the file is the class definition.</p>
+<p>Additionally, this shows our first attribute, name. &nbsp;The name attribute is defined as being of type Str. &nbsp;The twigil &#8216;.&#8217; in this case indicates that this attribute should have a public accessor. &nbsp;In this case that accessor is read-only because we did not define it otherwise (see below).</p>
+<p>The eat and sleep method were also defined. &nbsp;The sleep method uses the name attribute on the class in the string that it says. &nbsp;It can do this without using $self because $. implies the object the method was invoked on. &nbsp;So, the eat method could have also been rewritten like it is for the sleep method.</p>
+<p>Instantiating new objects of type Animal and using their methods is simple:</p>
+<p><script src="https://gist.github.com/598494.js"></script></p>
+<p>A more complicated example is below. &nbsp;In this one two more classes, &#8216;Dog&#8217; and &#8216;Tail&#8217;, have been defined:</p>
+<p><script src="https://gist.github.com/598497.js"></script></p>
+<p>The Dog class has a couple new interesting additions. &nbsp;The first thing to notice is that Dog inherits from Animal via the is keyword on the first line. &nbsp;The <em>tag</em> attribute is defined as &#8216;rw&#8217;. &nbsp;This means that public accessors for both acquiring and mutating the value of the tag are provided. &nbsp;The <em>tail </em>attribute has a &#8216;!&#8217; as a twigil. &nbsp;This twigil indicates that no public accessors should be defined. &nbsp;However, an instance of the Dog class delegates to the tail attribute when the wag method is invoked upon it. &nbsp;This means that when someone calls $a_dog.wag they are really calling wag on $a_dog&#8217;s $!tail. &nbsp;Delegation is a very handy way to improve code reuse, Perl 5 developers who use <a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">M&oslash;&oslash;se</a> should be familiar with it. &nbsp;Finally the tail also has a default value of a new Tail object.</p>
+<p>This new class can be easily used like the following example:</p>
+<p><script src="https://gist.github.com/598498.js"></script></p>
+<p>However, what if we didn&#8217;t want to use the simple Tail class for our dog&#8217;s tail. &nbsp;We could pass in an object of another class that had a wag method on it like so:</p>
+<p><script src="https://gist.github.com/598500.js"></script></p>
+<p>That pretty much wraps up this entry on Perl 6&#8217;s class system. &nbsp;The system includes many more powerful features that should be covered at a later date.</p>
+<p>Further Reading:</p>
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12: Objects</a></li>
+<li><a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">Moose</a></li>
+<li><a href="http://github.com/perl6/book/downloads">Using Perl 6</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Week 4:  Currying]]></title>
+    <link href="http://mfollett.github.io/week-3-currying/index.html"/>
+    <updated>2010-09-19T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/week-3-currying/week-3-currying</id>
+    <content type="html"><![CDATA[<p>This week we&#8217;ll be covering the process of partially applying parameters to a subroutine, this is based off of closures which we covered last week. &nbsp;This allows us to create new subroutines that we can pass around that already have some of their parameters defined. &nbsp;One of the benefits of this is that we don&#8217;t have to pass around a parameter list and wait until all the parameters are ready, instead we can apply each parameter as we get it and then execute the subroutine at some later time when we are ready. &nbsp;Doing this in Perl is actually very simple.</p>
+<p>
+<script src="http://gist.github.com/556982.js?file=fpblog-week3a.pl"></script>
+</p>
+<p>The function above provides us the ability to curry other functions. &nbsp;Analyzing it shows that all we are doing is creating a new anonymous function that is going to call the function we passed in with the parameters we passed in and the parameters it receives. &nbsp;Let&#8217;s see an example of how this would work.</p>
+<p>
+<script src="http://gist.github.com/556983.js?file=fpblog-week3b.pl"></script>
+</p>
+<p>So, let&#8217;s look at how it all worked. &nbsp;First, we made a new anonymous function that takes a list of parameters, joins them, and prints them. &nbsp;Next we curried that list with 3 fruit. &nbsp;To do this we created a new anonymous subroutine that passed in the three fruit into the first anonymous subroutine. &nbsp;After that we repeated the process, by currying the new subroutine we created from the last curried we now have a subroutine that calls the subroutine created on line 3 with 2 new fruit, that subroutine calls the subroutine created on line 1. &nbsp;Once we execute this we will output a list of all the fruit we&#8217;ve given to the function.</p>
+<p>We don&#8217;t have to only curry anonymous functions. &nbsp;Because we can get the reference of named functions and builtins we can also curry those.</p>
+<p>
+<script src="http://gist.github.com/556984.js?file=fpblog-week3c.pl"></script>
+</p>
+<p>This concludes this week&#8217;s lesson. &nbsp;Next week we will move past the building blocks of functional programming and start getting into systems built on top of this functional foundation. &nbsp;Next week we&#8217;ll cover dynamic dispatch tables.</p>
+<p>As an aside, the name curry didn&#8217;t come from the tasty South Asian type of dish, unlike the <a href="http://listserv.linguistlist.org/cgi-bin/wa?A2=ind0208a&amp;L=ads-l&amp;P=11751">naming of Mix-Ins</a>. &nbsp;Instead, currying is named after the American Mathematician and Logician <a href="http://en.wikipedia.org/wiki/Haskell_Curry">Haskell Curry</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cutting Back]]></title>
+    <link href="http://mfollett.github.io/cutting-back/index.html"/>
+    <updated>2010-09-14T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/cutting-back/cutting-back</id>
+    <content type="html"><![CDATA[<p>I will probably be cutting back to one larger article a week. &nbsp;The articles will probably either focus on Perl 6 or functional programming, I doubt I will continue the Moose series during this time. &nbsp;Moose is great, but the documentation is so approachable I doubt I can really add much to it, at least not until I read <a href="http://www.amazon.com/gp/product/0262610744?ie=UTF8&amp;tag=mfollettcom-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0262610744">The Art of the Metaobject Protocol</a><img src="http://www.assoc-amazon.com/e/ir?t=mfollettcom-20&amp;l=as2&amp;o=1&amp;a=0262610744" border="0" height="1" alt="" style="border: none !important; margin: 0px !important;" width="1" /> .</p>
+<p>It is awfully early to be doing so but I&#8217;m doubling my course load for my masters, while holding a full time job, fixing up my house, and preparing <a href="http://strangeloop2010.com/talks/14492">my talk</a> at <a href="http://strangeloop2010.com/">Strange Loop 2010</a>. &nbsp;Sorry for anyone who enjoyed the current frequency.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Week 3: Lazy Evaluation]]></title>
+    <link href="http://mfollett.github.io/week-3-lazy-evaluation/index.html"/>
+    <updated>2010-09-12T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/week-3-lazy-evaluation/week-3-lazy-evaluation</id>
+    <content type="html"><![CDATA[<p>One of the popular concepts in functional programming is the concept of <em>lazy evaluation</em>. &nbsp;For code to be lazily evaluated it means that instead of being evaluated at the point when the system reaches it it is instead evaluated at the point that the results are needed. &nbsp;The concept of lazy evaluation exists in lots of languages; Perl 6 uses them for lists, as does Python, and languages like Haskell, Clojure, and others use them quite frequently. &nbsp;In fact, at the latest <a href="http://clojurecljub.wordpress.com/">Clojure Cljub</a> meeting one developer was complaining that Clojure was so lazy it was hard for him to tell when it was doing nothing at all.</p>
+<p>The benefits of having the ability to lazily evaluate code show up in many cases. &nbsp;Lazy evaluation can allow developers to represent &#8220;infinite streams&#8221; because the only portion of the stream that is computed is the portion that the program needs to perform its task. &nbsp;Without lazy evaluation the program would try and compute all possible values and never complete. &nbsp;Additionally, things like <a href="http://search.cpan.org/~drolsky/Moose-1.12/lib/Moose.pm">Moose</a> use this concept to allow a developer to lazily evaluate attribute construction. &nbsp;This is hugely beneficial because it means that attributes that take a long time to construct will only be constructed when they are needed, instead of on the main object&#8217;s construction. &nbsp;<a href="http://search.cpan.org/~frew/DBIx-Class-0.08123/lib/DBIx/Class.pm">DBIx::Class</a> also uses this, the query to the database doesn&#8217;t happen when &#8216;search&#8217; is called on the DBIx::Class object. &nbsp;Instead, it is called when the first piece of data is retrieved. &nbsp;This allows DBIx::Class to wait and collect as much information about what the query really needs to be before it executes it, saving precious database time by not making wasteful queries. &nbsp;A final example would be <a href="http://search.cpan.org/dist/Object-Trampoline/lib/Object/Trampoline.pm">Object::Trampoline</a>, which can delay the construction of an object and the loading of modules.</p>
+<p>So, how do we lazily evaluate code in Perl 5? &nbsp;We simply wrap it in a subroutine. &nbsp;Let&#8217;s say, for example, we wanted to make a stream that generated the set of all natural numbers (<strong>N</strong>), which is simply all the integers &ge; 0. &nbsp;We would simply write something like this:</p>
+<p><script src="https://gist.github.com/576746.js"></script></p>
+<p>Now, each time we want a new natural number we can call the anonymous subroutine and a new one will be generated. &nbsp;We could then use this in a while loop:</p>
+<p><script src="https://gist.github.com/576734.js"></script></p>
+<p>Another benefit of this approach is that we can now provide streams of numbers logically separated from the looping method (which is a common benefit of iterators). &nbsp;So, for example, we could use these two streams with the same while loop:</p>
+<p><script src="https://gist.github.com/576739.js"></script></p>
+<p>Obviously, we could do considerably more interesting things than this. &nbsp;MJD&#8217;s <a href="http://hop.perl.plover.com/">Higher Order Perl</a> talks about creating lazy linked lists in chapter 6.2.</p>
+]]></content>
+  </entry>
   
 </feed>

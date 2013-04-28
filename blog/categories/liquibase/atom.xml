@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: liquibase | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/liquibase/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Grails/DatabaseMigrationPlugin/Liquibase Quirk]]></title>
+    <link href="http://mfollett.github.io/grailsdatabasemigrationpluginliquibase-quirk/index.html"/>
+    <updated>2012-01-25T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/grailsdatabasemigrationpluginliquibase-quirk/grailsdatabasemigrationpluginliquibase-quirk</id>
+    <content type="html"><![CDATA[<p>I just fought with this for a while and figured I'd record this in the vast internets in case others come across this. While attempting to extend the functionality of our Grails project at work I needed to add a new table and related foreign key constraints. We use the Grails Database Migration Plugin which uses liquibase to keep our schema in sync between production, staging, and development boxes. I declared a foreign key constraint similar to this one:</p>
+
+
+<p><script src="https://gist.github.com/1679067.js"></script></p>
+
+
+<p>and got this exception:</p>
+
+
+<p><script src="https://gist.github.com/1679035.js"></script></p>
+
+
+<p>It turns out that passing in a named parameter of referencesUniqueColumn with a value of anything other than false causes this exception. This wasn't immediately obvious to me and I still don't know why, but I thought I'd note it in case someone else ran into it too.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

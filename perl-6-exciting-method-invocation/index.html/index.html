@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Perl 6: Exciting Method Invocation - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="Perl 6 provides many new and interesting approaches to method invocation. &nbsp;New constructs in the language allow the developer to define how many &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/perl-6-exciting-method-invocation">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Perl 6: Exciting Method Invocation</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-03T00:00:00-05:00" pubdate data-updated="true">Oct 3<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Perl 6 provides many new and interesting approaches to method invocation. &nbsp;New constructs in the language allow the developer to define how many matching methods are called, how they are called, as well as a few other things.</p>
+<h3>In Line Mutators</h3>
+<p>Perl 6 supports the idea of inline mutators. &nbsp;In Perl 5 it isn&#8217;t too uncommon to see code like this:</p>
+<blockquote class="posterous_short_quote">
+<p>@array = sort @array</p>
+</blockquote>
+<p>It is common enough in the Perl community to see &#8220;assign this mutated value back into the variable it came from&#8221; that Perl 6 gives a cleaner way. &nbsp;The same code in Perl 6 could be written:</p>
+<blockquote class="posterous_short_quote">
+<p>@array .= sort</p>
+</blockquote>
+<p>The line above says to take @array, sort it, and put the values back in @array all in one fluid motion. &nbsp;Of course, there is one motion that developers go through that is so common most probably don&#8217;t think about it:</p>
+<blockquote class="posterous_short_quote">
+<p>my SVG $svg_serializer = SVG.new;</p>
+</blockquote>
+<p>Thankfully, .= can use used here to assign a value into $svg_serializer more cleanly:</p>
+<blockquote style="margin-top: 10px; margin-left: 1px; border-left-width: 4px !important; border-left-style: solid !important; border-left-color: #dddddd !important; padding-left: 10px;">
+<p>my SVG $svg_serializer .= new;</p>
+</blockquote>
+<h3>Invoking Multiple Matched Methods</h3>
+<p>In Perl5 (and other languages) one often finds code litered with statements like this:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo-&gt;frobinicate() if $foo-&gt;can(&#8216;frobinicate&#8217;);</p>
+</blockquote>
+<p>That gets old after a while. &nbsp;Perl 6 solves this, and a few other problems, with a new approach to method calls that allows the developer to request 0 or 1, 1, 1 or more, or any number of methods be called at a time. &nbsp;So, for example, the Perl6 equivalent of above is:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo.?frobinicate;</p>
+</blockquote>
+<p>The above code will invoke the frobinicate method on $foo if one exists. &nbsp;However, if no method exists that matches that criteria then nothing will be executed and instead of dying the statement simply returns Nil.</p>
+<p>As I mentioned there are other options here also, for example if the developer wanted to execute all of the &#8216;frobinicate&#8217;s that existed within the inheritance hierarchy of $foo they could do either:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo.*frobinicate;</p>
+<p>$foo.+frobinicate;</p>
+</blockquote>
+<p>As readers can probably guess &#8216;.*&#8217; will invoke 0 or more methods named &#8216;frobinicate&#8217; on $foo returning Nill if none exist. &nbsp;That leaves &#8216;.+&#8217; to invoke 1 or more matching methods, the line dies if it finds no matching methods.</p>
+<p>Here is an example of the above:</p>
+<blockquote class="posterous_medium_quote">
+<p>class Dog {</p>
+<p>&nbsp;&nbsp; method talk { &#8216;bark&#8217; }</p>
+<p>}</p>
+<p>class TalkingDog is Dog {</p>
+<p>&nbsp;&nbsp; method talk { &#8216;Hello&#8217; }</p>
+<p>}</p>
+<p>my TalkingDog $td .= new;</p>
+<p>$td.talk # returns &#8216;Hello&#8217;</p>
+<p>$td.?talk # returns &#8216;Hello&#8217;</p>
+<p>$td.*talk # returns (&#8216;Hello&#8217;, &#8216;bark&#8217;)</p>
+<p>$td.+talk # also returns (&#8216;Hello&#8217;, &#8216;bark&#8217;)</p>
+<p>$td.*calculate_pi # returns Nil</p>
+<p>$td.+calculate_pi # dies</p>
+<p>$td.?calculate_pi # returns Nil</p>
+<p>$td.calculate_pi # dies</p>
+</blockquote>
+<h3>Parallel Invokation</h3>
+<p>Perl 6 has an incredibly exciting new operator called the hyperoperator. &nbsp;The hyperoperator indicates that the methods being invoked can be dispatched in parallel. &nbsp;This makes simple cases of parallel execution very simple to do. &nbsp;To do this, simply prepend &#8216;&gt;&gt;&#8217; between the object and the invocation operator. &nbsp;For example:</p>
+<blockquote class="posterous_short_quote">
+<p>@foo&gt;&gt;.frobinicate</p>
+</blockquote>
+<p>This would invoke &#8216;frobinicate&#8217; on all the elements in @foo in parallel. &nbsp;</p>
+<p>The hyperoperator can be combined with the previous topic of invoking all the methods that match. &nbsp;This makes it very simple to invoke all of the possible methods on an object in parallel:</p>
+<blockquote class="posterous_short_quote">
+<p>$foo&gt;&gt;.*frobinicate()</p>
+</blockquote>
+<p>Here is a simple, but more fleshed out example to wrap things up:</p>
+<blockquote class="posterous_medium_quote">
+<p>class Department {</p>
+<p>&nbsp;&nbsp; has @.employees;</p>
+<p>&nbsp;&nbsp; has $.name;</p>
+<p>&nbsp;&nbsp; method gen_print_info { return &#8220;$.name:\n&#8221; ~&#8221;\t\t&#8221; ~ @.employees.sort.join(&#8216;, &#8216;)}</p>
+<p>}</p>
+<p>my @company = (</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Accounting&#8217;, &#8216;employees&#8217; =&gt; &lt;Jeff Jane Susan&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Security&#8217;, employees =&gt; &lt;Alice Bob&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Marketing&#8217;, employees =&gt; &lt;Margaret Terry Lawrence&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; &#8216;Development&#8217;, employees =&gt; &lt;Matt Fred Steve Joe Alith Jie&gt;)</p>
+<p>)</p>
+<p>my @print_info = @company&gt;&gt;.gen_print_info;</p>
+</blockquote>
+<p>The example above would execute gen_print_info on all of the Department typed objects in @company.</p>
+<p>&nbsp;</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12 - Objects</a></li>
+<li>Patrick Michaud&#8217;s <a href="http://pmichaud.com/2010/pres/yapcna-perl6/slides/start.html">Cool Perl 6</a>&nbsp;has some neat examples&nbsp;</li>
+</ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-03T00:00:00-05:00" pubdate data-updated="true">Oct 3<span>rd</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/oop/'>OOP</a>, <a class='category' href='/blog/categories/methods/'>methods</a>, <a class='category' href='/blog/categories/parallelism/'>parallelism</a>, <a class='category' href='/blog/categories/perl/'>perl</a>, <a class='category' href='/blog/categories/perl-6/'>perl 6</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mfollett.github.io/perl-6-exciting-method-invocation/index.html" data-via="" data-counturl="http://mfollett.github.io/perl-6-exciting-method-invocation/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/change-in-format/index.html" title="Previous Post: Change in Format">&laquo; Change in Format</a>
+      
+      
+        <a class="basic-alignment right" href="/the-lacuna-expanse/index.html" title="Next Post: The Lacuna Expanse">The Lacuna Expanse &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

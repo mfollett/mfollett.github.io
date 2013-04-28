@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Perl  to Groovy Mapping (Iterating) - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="This entry will primarily go over various approaches towards iterating over structures of data. This will include basic looping as well as &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/perl-groovy-cheat-sheet">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Perl to Groovy Mapping (Iterating)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-27T00:00:00-05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This entry will primarily go over various approaches towards iterating over structures of data. This will include basic looping as well as equivalents to Perl&rsquo;s <code>map</code> &amp; <code>grep</code>.</p>
+
+<p>This is not intended to be an exhaustive guide or a best practice for either language. The attempt, as with all articles in this series, is to provide a basic set of mappings between the languages.</p>
+
+<h2>Iterating over collections</h2>
+
+<p>To loop over all the items in an array in Perl you would probably use the <code>for</code> loop construct:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $item (@array) {…}</pre></div>
+</div>
+
+
+<p>You could do something similar in Groovy using the <code>each</code> method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>list.each {<span class="error">…</span>}</pre></div>
+</div>
+
+
+<p>To loop over all the keys in a hash (or Map) you can combine the above with the <code>keys</code> builtin:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $key (keys(%hash)) {…}</pre></div>
+</div>
+
+
+<p>In Groovy you simply use a lambda that accepts two parameters.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>myMap.each { key, _value -&gt; <span class="error">…</span> }</pre></div>
+</div>
+
+
+<p>Looping over all the values is similar to the examples above in both, so I will skip that. Looping over each entry in the hash with both the key and value in Groovy is the same as the example above, in Perl you would have to use <code>each</code>, which I don&rsquo;t like.</p>
+
+<p>It is important to note that with Groovy&rsquo;s <code>each</code> different things are passed in based on the number of parameters. The example above gave <code>each</code> a 2 parameter lambda and so the lambda got inputs of [key, value]. Had a 1 parameter lambda been passed in then that lambda would have received an Entry object that had accessors for the key and value.</p>
+
+<h2>Iterating over a Set of Integers</h2>
+
+<p>Both Perl and Groovy provide many ways to iterate over a range. One popular approach in Perl is to use the dot-dot range operator (..) and <code>for</code> looping construct. By using this it is simple to print all the numbers between one and ten:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $num (1..10) { print $num }</pre></div>
+</div>
+
+
+<p>Groovy has a similar approach:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>(<span class="integer">1</span>..<span class="integer">10</span>).each { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+<p>Groovy has a couple other ways to do the same thing, for example numbers have an <code>upto</code> method attached to them that can be used to iterate. As such, the same thing above could be written as:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">1</span>.upto(<span class="integer">10</span>) { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+<p>Of course, Perl also has the ability to loop via the <code>while</code> looping construct and Groovy could loop using a <code>for in</code> on top of what I&rsquo;ve listed here.</p>
+
+<p>If you wanted to iterate over a set of integers that didn&rsquo;t increment by one in Perl you might use <code>map</code> and <code>for</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( map { $_ * 5 } 1..5) {…}</pre></div>
+</div>
+
+
+<p>Or you might use <code>grep</code> and <code>for</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( grep { not $_ % 5 } 1..25) {…}</pre></div>
+</div>
+
+
+<p>Or, of course, you could pick up a useful module, like <a href="https://metacpan.org/module/Math::Sequence">Math::Sequence</a>.</p>
+
+<p>In Groovy you would simply do this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">5</span>.step(<span class="integer">25</span>,<span class="integer">5</span>) {<span class="error">…</span>}</pre></div>
+</div>
+
+
+<h2>Mapping a List</h2>
+
+<p>Perl helpfully provides the <code>map</code> builtin to easily map a list of values from one to another. For example, were a developer wanting to square all the values in a list they would:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my @squared = map { $_**2 } @original_values</pre></div>
+</div>
+
+
+<p>The same thing can be performed in Groovy using the collect() method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> squared = originalValues.collect { <span class="local-variable">it</span>.power(<span class="integer">2</span>) }</pre></div>
+</div>
+
+
+<h2>Grepping a List</h2>
+
+<p>Perl provides the <code>grep</code> builtin to easily filter values out of a list and provide a new list with only the remaining values. For example, if a developer was looking for all the items in a list that were odd they could:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my @odd = grep { $_ % 2 } @numbers</pre></div>
+</div>
+
+
+<p>To do this in Groovy they would use the <code>findAll</code> method that exists on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> odd = numbers.findAll { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+
+
+<h2>Grepping for the First Item in a List</h2>
+
+<p>Perl has a number of modules which are considered &lsquo;core&rsquo;. It is reasonable to assume any core module is installed and readily available. To get the first item in a list that matches some criteria a Perl developer could use the example above for grepping a list and <code>shift</code> off the top, but more likely they would use <a href="https://metacpan.org/module/List::Util">List::Util</a>&rsquo;s <code>first</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my $first_odd = first { $_ % 2} @numbers</pre></div>
+</div>
+
+
+<p>A similar approach in Groovy could be done via the <code>find</code> method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> firstOdd = numbers.find { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-27T00:00:00-05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/groovy/'>groovy</a>, <a class='category' href='/blog/categories/perl-5/'>perl 5</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mfollett.github.io/perl-groovy-cheat-sheet/index.html" data-via="" data-counturl="http://mfollett.github.io/perl-groovy-cheat-sheet/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/the-unity-model/index.html" title="Previous Post: The Unity Model">&laquo; The Unity Model</a>
+      
+      
+        <a class="basic-alignment right" href="/perl-to-groovy-mappings/index.html" title="Next Post: Perl to Groovy Mappings (An Introduction)">Perl to Groovy Mappings (An Introduction) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

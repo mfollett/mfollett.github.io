@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: OOP | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/oop/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Exciting Method Invocation]]></title>
+    <link href="http://mfollett.github.io/perl-6-exciting-method-invocation/index.html"/>
+    <updated>2010-10-03T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-exciting-method-invocation/perl-6-exciting-method-invocation</id>
+    <content type="html"><![CDATA[<p>Perl 6 provides many new and interesting approaches to method invocation. &nbsp;New constructs in the language allow the developer to define how many matching methods are called, how they are called, as well as a few other things.</p>
+
+
+<h3>In Line Mutators</h3>
+
+
+<p>Perl 6 supports the idea of inline mutators. &nbsp;In Perl 5 it isn't too uncommon to see code like this:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@array = sort @array</p>
+</blockquote>
+
+
+<p>It is common enough in the Perl community to see "assign this mutated value back into the variable it came from" that Perl 6 gives a cleaner way. &nbsp;The same code in Perl 6 could be written:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@array .= sort</p>
+</blockquote>
+
+
+<p>The line above says to take @array, sort it, and put the values back in @array all in one fluid motion. &nbsp;Of course, there is one motion that developers go through that is so common most probably don't think about it:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>my SVG $svg_serializer = SVG.new;</p>
+</blockquote>
+
+
+<p>Thankfully, .= can use used here to assign a value into $svg_serializer more cleanly:</p>
+
+
+<blockquote style="margin-top: 10px; margin-left: 1px; border-left-width: 4px !important; border-left-style: solid !important; border-left-color: #dddddd !important; padding-left: 10px;">
+<p>my SVG $svg_serializer .= new;</p>
+</blockquote>
+
+
+<h3>Invoking Multiple Matched Methods</h3>
+
+
+<p>In Perl5 (and other languages) one often finds code litered with statements like this:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo-&gt;frobinicate() if $foo-&gt;can('frobinicate');</p>
+</blockquote>
+
+
+<p>That gets old after a while. &nbsp;Perl 6 solves this, and a few other problems, with a new approach to method calls that allows the developer to request 0 or 1, 1, 1 or more, or any number of methods be called at a time. &nbsp;So, for example, the Perl6 equivalent of above is:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo.?frobinicate;</p>
+</blockquote>
+
+
+<p>The above code will invoke the frobinicate method on $foo if one exists. &nbsp;However, if no method exists that matches that criteria then nothing will be executed and instead of dying the statement simply returns Nil.</p>
+
+
+<p>As I mentioned there are other options here also, for example if the developer wanted to execute all of the 'frobinicate's that existed within the inheritance hierarchy of $foo they could do either:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo.*frobinicate;</p>
+<p>$foo.+frobinicate;</p>
+</blockquote>
+
+
+<p>As readers can probably guess '.*' will invoke 0 or more methods named 'frobinicate' on $foo returning Nill if none exist. &nbsp;That leaves '.+' to invoke 1 or more matching methods, the line dies if it finds no matching methods.</p>
+
+
+<p>Here is an example of the above:</p>
+
+
+<blockquote class="posterous_medium_quote">
+<p>class Dog {</p>
+<p>&nbsp;&nbsp; method talk { 'bark' }</p>
+<p>}</p>
+<p>class TalkingDog is Dog {</p>
+<p>&nbsp;&nbsp; method talk { 'Hello' }</p>
+<p>}</p>
+<p>my TalkingDog $td .= new;</p>
+<p>$td.talk # returns 'Hello'</p>
+<p>$td.?talk # returns 'Hello'</p>
+<p>$td.*talk # returns ('Hello', 'bark')</p>
+<p>$td.+talk # also returns ('Hello', 'bark')</p>
+<p>$td.*calculate_pi # returns Nil</p>
+<p>$td.+calculate_pi # dies</p>
+<p>$td.?calculate_pi # returns Nil</p>
+<p>$td.calculate_pi # dies</p>
+</blockquote>
+
+
+<h3>Parallel Invokation</h3>
+
+
+<p>Perl 6 has an incredibly exciting new operator called the hyperoperator. &nbsp;The hyperoperator indicates that the methods being invoked can be dispatched in parallel. &nbsp;This makes simple cases of parallel execution very simple to do. &nbsp;To do this, simply prepend '&gt;&gt;' between the object and the invocation operator. &nbsp;For example:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@foo&gt;&gt;.frobinicate</p>
+</blockquote>
+
+
+<p>This would invoke 'frobinicate' on all the elements in @foo in parallel. &nbsp;</p>
+
+
+<p>The hyperoperator can be combined with the previous topic of invoking all the methods that match. &nbsp;This makes it very simple to invoke all of the possible methods on an object in parallel:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo&gt;&gt;.*frobinicate()</p>
+</blockquote>
+
+
+<p>Here is a simple, but more fleshed out example to wrap things up:</p>
+
+
+<blockquote class="posterous_medium_quote">
+<p>class Department {</p>
+<p>&nbsp;&nbsp; has @.employees;</p>
+<p>&nbsp;&nbsp; has $.name;</p>
+<p>&nbsp;&nbsp; method gen_print_info { return "$.name:\n" ~"\t\t" ~ @.employees.sort.join(', ')}</p>
+<p>}</p>
+<p>my @company = (</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Accounting', 'employees' =&gt; &lt;Jeff Jane Susan&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Security', employees =&gt; &lt;Alice Bob&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Marketing', employees =&gt; &lt;Margaret Terry Lawrence&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Development', employees =&gt; &lt;Matt Fred Steve Joe Alith Jie&gt;)</p>
+<p>)</p>
+<p>my @print_info = @company&gt;&gt;.gen_print_info;</p>
+</blockquote>
+
+
+<p>The example above would execute gen_print_info on all of the Department typed objects in @company.</p>
+
+
+<p>&nbsp;</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12 - Objects</a></li>
+<li>Patrick Michaud's <a href="http://pmichaud.com/2010/pres/yapcna-perl6/slides/start.html">Cool Perl 6</a>&nbsp;has some neat examples&nbsp;</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Coding with Class]]></title>
+    <link href="http://mfollett.github.io/perl-6-coding-with-class/index.html"/>
+    <updated>2010-09-26T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-coding-with-class/perl-6-coding-with-class</id>
+    <content type="html"><![CDATA[<p>This entry will focus on creating and using classes in Perl 6. &nbsp;Perl 6's class system greatly expands on the approach of Perl 5 in many ways, a few of which are giving a standard <em>new</em> method and providing an approach for easily declaring attributes on a class.</p>
+
+
+<p>Here is a very simple example of a Perl 6 class:</p>
+
+
+<p><script src="https://gist.github.com/598491.js"></script></p>
+
+
+<p>This example shows a few basic concepts. &nbsp;First there is the new <em>class</em>&nbsp;keyword. &nbsp;Named classes can easily be declared in one of two ways. &nbsp;The example above, with curly braces, is useful when defining more than one class in a file or providing for some code to execute outside of the scope of the class when loading. &nbsp;Without the curly braces is also legal, however it means that the rest of the file is the class definition.</p>
+
+
+<p>Additionally, this shows our first attribute, name. &nbsp;The name attribute is defined as being of type Str. &nbsp;The twigil '.' in this case indicates that this attribute should have a public accessor. &nbsp;In this case that accessor is read-only because we did not define it otherwise (see below).</p>
+
+
+<p>The eat and sleep method were also defined. &nbsp;The sleep method uses the name attribute on the class in the string that it says. &nbsp;It can do this without using $self because $. implies the object the method was invoked on. &nbsp;So, the eat method could have also been rewritten like it is for the sleep method.</p>
+
+
+<p>Instantiating new objects of type Animal and using their methods is simple:</p>
+
+
+<p><script src="https://gist.github.com/598494.js"></script></p>
+
+
+<p>A more complicated example is below. &nbsp;In this one two more classes, 'Dog' and 'Tail', have been defined:</p>
+
+
+<p><script src="https://gist.github.com/598497.js"></script></p>
+
+
+<p>The Dog class has a couple new interesting additions. &nbsp;The first thing to notice is that Dog inherits from Animal via the is keyword on the first line. &nbsp;The <em>tag</em> attribute is defined as 'rw'. &nbsp;This means that public accessors for both acquiring and mutating the value of the tag are provided. &nbsp;The <em>tail </em>attribute has a '!' as a twigil. &nbsp;This twigil indicates that no public accessors should be defined. &nbsp;However, an instance of the Dog class delegates to the tail attribute when the wag method is invoked upon it. &nbsp;This means that when someone calls $a_dog.wag they are really calling wag on $a_dog's $!tail. &nbsp;Delegation is a very handy way to improve code reuse, Perl 5 developers who use <a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">M&oslash;&oslash;se</a> should be familiar with it. &nbsp;Finally the tail also has a default value of a new Tail object.</p>
+
+
+<p>This new class can be easily used like the following example:</p>
+
+
+<p><script src="https://gist.github.com/598498.js"></script></p>
+
+
+<p>However, what if we didn't want to use the simple Tail class for our dog's tail. &nbsp;We could pass in an object of another class that had a wag method on it like so:</p>
+
+
+<p><script src="https://gist.github.com/598500.js"></script></p>
+
+
+<p>That pretty much wraps up this entry on Perl 6's class system. &nbsp;The system includes many more powerful features that should be covered at a later date.</p>
+
+
+<p>Further Reading:</p>
+
+
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12: Objects</a></li>
+<li><a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">Moose</a></li>
+<li><a href="http://github.com/perl6/book/downloads">Using Perl 6</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Basic Moose Week 1: Creating a Class]]></title>
+    <link href="http://mfollett.github.io/basic-moose-week-1-creating-a-class/index.html"/>
+    <updated>2010-09-01T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/basic-moose-week-1-creating-a-class/basic-moose-week-1-creating-a-class</id>
+    <content type="html"><![CDATA[<p><strong>*** Update: &nbsp;Thanks to Kent Fredric (<a href="http://twitter.com/kentnl">@kentnl</a>) for catching my mistake on his <a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/">MooseX::Has::Sugar</a>***</strong></p>
+
+
+<p>Perl5's object system is impressive in its simplicity. &nbsp;From that simplicity it gains an incredible flexibility which both matches Perl and allows for amazing things. &nbsp;However, it is easy to find patterns created from the spartan nature of the system. &nbsp;This last point has caused many people to design new object interfaces on top of Perl's object system. &nbsp;The most robust and popular of these is Moose. &nbsp;This first tutorial will show you a simple way to create classes using Moose.</p>
+
+
+<p>Moose allows the user to easily declare the attributes that are provided on a class along with metadata about those attributes. &nbsp;This metadata defines many important aspects of the attribute, such as what type of attribute it is, what the permissions are on the attribute, the default value of the attribute, and many other things. &nbsp;Here is an example of a simple class called employee:</p>
+
+
+<p><script src="https://gist.github.com/561887.js"></script></p>
+
+
+<p>This class definition does several things, so let's break it down. &nbsp;First we use Moose, this exports some spiffy 'keywords' like <em>has</em>. &nbsp;Additionally, it very sneakily uses the strict and warnings pragma in our package which is very convenient. &nbsp;Next we use the has keyword to define an attribute called <em>pay. &nbsp;</em>We define this attribute as being both readable and writable through its accessor and we say that the accessor should only accept numbers. &nbsp;Next, we create another attribute called <em>manager</em>, which has an accessor that both allows reading and writing and only accepts Employee objects. &nbsp;How does it know that Employees are objects? &nbsp;Well, Moose has a <a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual/Types.pod#THE_TYPES">list</a> of things that it considers types. &nbsp;If the type is already defined then it uses that type, otherwise it assumes it is a class.</p>
+
+
+<p>That seems like that could be dangerous though. &nbsp;For example, what if you typo'd 'Num' to be 'num' or 'NUm' or if you spelled out 'number'? &nbsp;In these cases Moose would assume that 'num', 'NUm', or 'number' were names of classes and only accept values that were of that class. &nbsp;Don't worry though, someone has already seen and solved that problem, the solution we will use for this is a combination of&nbsp;<a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a>&nbsp;and <a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a>. &nbsp;MooseX::Has::Sugar provides us with several predefined 'keywords' that we can use and if we typo we'll get compile time errors. &nbsp;Additionally, it defines <em>rw</em> and <em>ro </em>(the value for <em>is</em> that indicates readonly)&nbsp;in such a way that we no longer have to provide the 'is =&gt;' portion. &nbsp;MooseX::Types allows us to predeclare types and organize them into libraries. &nbsp;Now our class definition looks like this:</p>
+
+
+<p><script src="https://gist.github.com/561902.js"></script></p>
+
+
+<p>This looks much better. &nbsp;By the way, there are many options to&nbsp;<a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a>&nbsp;and <a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a>&nbsp;so you would really benefit from reading that over.</p>
+
+
+<p>Let's try and use this class in a script:</p>
+
+
+<p><script src="https://gist.github.com/561913.js"></script></p>
+
+
+<p>Now, if we look at that script we see some very interesting things. &nbsp;We never explicitly created a new, manager, or salary method but they are all there. &nbsp;This is because Moose created each of these for us to use. &nbsp;In fact, it is imperative that when you are using Moose you <strong>do not </strong>create your own new method, that is <em>very</em> dangerous.</p>
+
+
+<p>Of course, Moose provides many other meta attributes to define the attributes of your class, some of which are:</p>
+
+
+<ul>
+<li><em>required</em>&nbsp;- whether calls to new() must include this attribute, can be 1 or 0</li>
+<li><em>default</em> - the default value of this attribute or a reference to a sub that will return the default value, it is better to use <em>builder</em> though (see below)</li>
+<li><em>lazy</em> - whether this attribute will be built when the object is built or whether Moose will wait until it is first used</li>
+<li>&hellip;and more we'll cover in following weeks</li>
+</ul>
+
+
+<p>We'll rewrite our class by adding some attributes and adding these meta attributes to all the attributes, but this time we won't use MooseX::Has::Sugar or MooseX::Types:</p>
+
+
+<p><script src="https://gist.github.com/561923.js"></script></p>
+
+
+<ul>
+</ul>
+
+
+<h3>Builder vs. Default</h3>
+
+
+<p>I mentioned above that you can set the default value of an attribute with <em>default</em>&nbsp;however it is better to use <em>builder</em>. &nbsp;The builder option takes the name of a subroutine that will return a value for the attribute instead of a subref or actual value. &nbsp;The benefit of this is that if you inherit from a base class that uses a builder you can easily override the default value by overriding the sub that builds the value, with default it is not so simple.</p>
+
+
+<h3>Caveat</h3>
+
+
+<p>There is one important caveat to mention. &nbsp;Neither Moose nor any of its extensions are magical and, in fact, none of them actually create new keywords. &nbsp;Instead, all of these modules are importing methods into your package just like any other tool. &nbsp;This means that they happen in the same order as you would expect function calls to happen. &nbsp;It also means you can write them any way you want, however this is a place where following the standard benefits everyone.</p>
+
+
+<h3>Dirty Little Secret</h3>
+
+
+<p>As much as I like the idea of MooseX::Has::Sugar and MooseX::Types I should probably mention that I actually rarely use them. &nbsp;However, they seem like a good tool to start off with.</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://search.cpan.org/~drolsky/Moose/lib/Moose/Manual/Attributes.pod">Moose::Manual::Attribute</a></li>
+<li><a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual/Types.pod">Moose::Manual::Types</a></li>
+<li><a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a></li>
+<li><a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

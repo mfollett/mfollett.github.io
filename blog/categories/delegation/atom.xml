@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: delegation | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/delegation/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Coding with Class]]></title>
+    <link href="http://mfollett.github.io/perl-6-coding-with-class/index.html"/>
+    <updated>2010-09-26T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-coding-with-class/perl-6-coding-with-class</id>
+    <content type="html"><![CDATA[<p>This entry will focus on creating and using classes in Perl 6. &nbsp;Perl 6's class system greatly expands on the approach of Perl 5 in many ways, a few of which are giving a standard <em>new</em> method and providing an approach for easily declaring attributes on a class.</p>
+
+
+<p>Here is a very simple example of a Perl 6 class:</p>
+
+
+<p><script src="https://gist.github.com/598491.js"></script></p>
+
+
+<p>This example shows a few basic concepts. &nbsp;First there is the new <em>class</em>&nbsp;keyword. &nbsp;Named classes can easily be declared in one of two ways. &nbsp;The example above, with curly braces, is useful when defining more than one class in a file or providing for some code to execute outside of the scope of the class when loading. &nbsp;Without the curly braces is also legal, however it means that the rest of the file is the class definition.</p>
+
+
+<p>Additionally, this shows our first attribute, name. &nbsp;The name attribute is defined as being of type Str. &nbsp;The twigil '.' in this case indicates that this attribute should have a public accessor. &nbsp;In this case that accessor is read-only because we did not define it otherwise (see below).</p>
+
+
+<p>The eat and sleep method were also defined. &nbsp;The sleep method uses the name attribute on the class in the string that it says. &nbsp;It can do this without using $self because $. implies the object the method was invoked on. &nbsp;So, the eat method could have also been rewritten like it is for the sleep method.</p>
+
+
+<p>Instantiating new objects of type Animal and using their methods is simple:</p>
+
+
+<p><script src="https://gist.github.com/598494.js"></script></p>
+
+
+<p>A more complicated example is below. &nbsp;In this one two more classes, 'Dog' and 'Tail', have been defined:</p>
+
+
+<p><script src="https://gist.github.com/598497.js"></script></p>
+
+
+<p>The Dog class has a couple new interesting additions. &nbsp;The first thing to notice is that Dog inherits from Animal via the is keyword on the first line. &nbsp;The <em>tag</em> attribute is defined as 'rw'. &nbsp;This means that public accessors for both acquiring and mutating the value of the tag are provided. &nbsp;The <em>tail </em>attribute has a '!' as a twigil. &nbsp;This twigil indicates that no public accessors should be defined. &nbsp;However, an instance of the Dog class delegates to the tail attribute when the wag method is invoked upon it. &nbsp;This means that when someone calls $a_dog.wag they are really calling wag on $a_dog's $!tail. &nbsp;Delegation is a very handy way to improve code reuse, Perl 5 developers who use <a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">M&oslash;&oslash;se</a> should be familiar with it. &nbsp;Finally the tail also has a default value of a new Tail object.</p>
+
+
+<p>This new class can be easily used like the following example:</p>
+
+
+<p><script src="https://gist.github.com/598498.js"></script></p>
+
+
+<p>However, what if we didn't want to use the simple Tail class for our dog's tail. &nbsp;We could pass in an object of another class that had a wag method on it like so:</p>
+
+
+<p><script src="https://gist.github.com/598500.js"></script></p>
+
+
+<p>That pretty much wraps up this entry on Perl 6's class system. &nbsp;The system includes many more powerful features that should be covered at a later date.</p>
+
+
+<p>Further Reading:</p>
+
+
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12: Objects</a></li>
+<li><a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">Moose</a></li>
+<li><a href="http://github.com/perl6/book/downloads">Using Perl 6</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

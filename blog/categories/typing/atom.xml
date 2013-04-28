@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: typing | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/typing/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[When Type Systems Attack]]></title>
+    <link href="http://mfollett.github.io/when-type-systems-attack/index.html"/>
+    <updated>2012-02-10T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/when-type-systems-attack/when-type-systems-attack</id>
+    <content type="html"><![CDATA[<p>Groovy&rsquo;s type system can sometimes have funny interplay and unexpected results. For example, these assertions are true:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1787746.js"></script></p>
+
+
+
+
+<p>However, mixing in a Map into this causes some complications:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1787771.js"></script></p>
+
+
+
+
+<p>This might not seem like a big issue, but it can cause some real headaches. When failing an assertion the message printed only prints values, not types. Because of this you may occasionally run into less than helpful error messages like:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1787784.js"></script></p>
+
+
+
+
+<p>And this can be awfully confusing. One prime example of this is with GORM domains. GORM defaults primary keys to be Longs so if you use a primary key as a map key you could run into some pretty confusing error cases that your tests don&rsquo;t explain as helpfully as you&rsquo;d like.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

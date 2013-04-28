@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rant | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/rant/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Yammer, Scala, & Burgeoning Languages]]></title>
+    <link href="http://mfollett.github.io/yammer-scala-burgeoning-languages/index.html"/>
+    <updated>2011-11-29T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/yammer-scala-burgeoning-languages/yammer-scala-burgeoning-languages</id>
+    <content type="html"><![CDATA[<p>I just finished reading <a href="https://gist.github.com/1406238?1">this letter</a> discussing why Yammer is going to slowly move from Scala to Java. While I&rsquo;ve never done anything more substantial than basic toying around with scala and can&rsquo;t say I know much about Yammer outside of what their website tells me about itself and the fact that <a href="http://www.gabrielweinberg.com/blog/2011/11/online-services-our-startup-subscribes-to.html">Gabriel Weinberg</a> seems to like it I do have some thoughts on general points hit on in the letter.</p>
+
+
+
+
+<p>The <a href="http://codahale.com/downloads/email-to-donald.txt">letter</a> that Coda Hale wrote seemed to be rather well thought out. The author goes into several criticisms of Scala which seem to boil down to:</p>
+
+
+
+
+<ol>
+<li>Complicated concepts in the language</li>
+<li>Community support</li>
+<li>Lack of abundance of developers</li>
+<li>Reality of the Scala-and-Java nature of real world development</li>
+<li>Build toolchain issues</li>
+<li>Performance issues</li>
+</ol>
+
+
+
+
+<p>The first point and last two are very specific to Scala. Language designers have to decide between many difficult tradeoffs when designing a language and it is hard to say which ones will pay off for their community in the long run. It is certainly difficult to see how a given choice will pay off in the long run and while some of Scala&rsquo;s features he mentions seem pretty simple, others make me go cross-eyed trying to read explanations of them. Having said that, I still am very much a novice in the language and don&rsquo;t feel particularly qualified to actually weigh in on these topics.</p>
+
+
+
+
+<p>The lack of developers and quality of community support can be bundled together and seem to have more to do with the age and uptake of the language than at the language itself. Any language will have bootstrapping issues similar to this. And when choosing a language, it is an important aspect that should, and to some extent can, be checked out before any major development undertaking. Evaluating a community around a technology is no easy task though. I&rsquo;ve certainly been in situations where the community involvement around the technology used was unhelpful, misleading, or nonexistent; it is a crummy situation to be in. The best way to know the value of a community is to be a part of it for a while.</p>
+
+
+
+
+<p>Coda points out the fact that Yammer wasn&rsquo;t really deciding between Java or Scala but between Java or Scala+Java. If we ever meet I owe Coda a beer for this. I&rsquo;ve had my share of arguments with people in the past on this reality and I&rsquo;m glad to see something saying it so straight forward getting the circulation this is, even if it was never supposed to. Coming from a non-Java background to a Groovy position I feel acutely aware of all the times I&rsquo;ve had to dig through Java code because of an impedence mismatch between a Java concept and a Groovy one, to better understand a library that doesn&rsquo;t document something well and doesn&rsquo;t have a functional equivalent in Groovy, or to debug or diagnose a framework bug. Having said that, I don&rsquo;t believe my team has written a new line of Java for our core product since we migrated to Groovy some number of months ago.</p>
+
+
+
+
+<p>I expect that the Java+otherLang situation is an inevitability of developing on the JVM. As long as Java is the dominant player on the platform it will be the lingua franca. The reality of these languages being so interoperable is that the cost to benefit analysis of porting a framework or library (internal or external) over to another language on the platform almost always works against porting it.</p>
+
+
+
+
+<p>In the end, Coda seems to make a lot of good points. I can&rsquo;t vouch for his Scala specific concerns, but others seem reaonable in the more general case of burgeoning JVM languages. And, while this doesn&rsquo;t lower my interest or intent of learning Scala one of these days I do wonder why Yammer decided to start with Scala given the resources available to them with other languages.</p>
+
+
+
+
+<p>My intention has been that were I to take a startup from day 1 I&rsquo;d pick a language that I already had a team, or list of would be team members, with a strong understanding of and a good history with the community. Maybe they had that int he beginning or thought they did and that wasn&rsquo;t mentioned, I certainly don&rsquo;t have that information. And really, in the end, they have nearly sixty million dollars in VC funding, three million customers, and a rapidly growing revenue stream and I&rsquo;m killing time waiting for my next robotics assignment to come down the pipe. I guess you can&rsquo;t argue with results, hehe.</p>
+
+
+
+
+<p>Edit: Also of note is <a href="http://codahale.com/the-rest-of-the-story/">Coda&rsquo;s follow up</a>, you should read it if you read the first.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

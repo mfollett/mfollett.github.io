@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Moose | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/moose/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Basic Moose Week 1: Creating a Class]]></title>
+    <link href="http://mfollett.github.io/basic-moose-week-1-creating-a-class/index.html"/>
+    <updated>2010-09-01T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/basic-moose-week-1-creating-a-class/basic-moose-week-1-creating-a-class</id>
+    <content type="html"><![CDATA[<p><strong>*** Update: &nbsp;Thanks to Kent Fredric (<a href="http://twitter.com/kentnl">@kentnl</a>) for catching my mistake on his <a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/">MooseX::Has::Sugar</a>***</strong></p>
+
+
+<p>Perl5's object system is impressive in its simplicity. &nbsp;From that simplicity it gains an incredible flexibility which both matches Perl and allows for amazing things. &nbsp;However, it is easy to find patterns created from the spartan nature of the system. &nbsp;This last point has caused many people to design new object interfaces on top of Perl's object system. &nbsp;The most robust and popular of these is Moose. &nbsp;This first tutorial will show you a simple way to create classes using Moose.</p>
+
+
+<p>Moose allows the user to easily declare the attributes that are provided on a class along with metadata about those attributes. &nbsp;This metadata defines many important aspects of the attribute, such as what type of attribute it is, what the permissions are on the attribute, the default value of the attribute, and many other things. &nbsp;Here is an example of a simple class called employee:</p>
+
+
+<p><script src="https://gist.github.com/561887.js"></script></p>
+
+
+<p>This class definition does several things, so let's break it down. &nbsp;First we use Moose, this exports some spiffy 'keywords' like <em>has</em>. &nbsp;Additionally, it very sneakily uses the strict and warnings pragma in our package which is very convenient. &nbsp;Next we use the has keyword to define an attribute called <em>pay. &nbsp;</em>We define this attribute as being both readable and writable through its accessor and we say that the accessor should only accept numbers. &nbsp;Next, we create another attribute called <em>manager</em>, which has an accessor that both allows reading and writing and only accepts Employee objects. &nbsp;How does it know that Employees are objects? &nbsp;Well, Moose has a <a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual/Types.pod#THE_TYPES">list</a> of things that it considers types. &nbsp;If the type is already defined then it uses that type, otherwise it assumes it is a class.</p>
+
+
+<p>That seems like that could be dangerous though. &nbsp;For example, what if you typo'd 'Num' to be 'num' or 'NUm' or if you spelled out 'number'? &nbsp;In these cases Moose would assume that 'num', 'NUm', or 'number' were names of classes and only accept values that were of that class. &nbsp;Don't worry though, someone has already seen and solved that problem, the solution we will use for this is a combination of&nbsp;<a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a>&nbsp;and <a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a>. &nbsp;MooseX::Has::Sugar provides us with several predefined 'keywords' that we can use and if we typo we'll get compile time errors. &nbsp;Additionally, it defines <em>rw</em> and <em>ro </em>(the value for <em>is</em> that indicates readonly)&nbsp;in such a way that we no longer have to provide the 'is =&gt;' portion. &nbsp;MooseX::Types allows us to predeclare types and organize them into libraries. &nbsp;Now our class definition looks like this:</p>
+
+
+<p><script src="https://gist.github.com/561902.js"></script></p>
+
+
+<p>This looks much better. &nbsp;By the way, there are many options to&nbsp;<a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a>&nbsp;and <a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a>&nbsp;so you would really benefit from reading that over.</p>
+
+
+<p>Let's try and use this class in a script:</p>
+
+
+<p><script src="https://gist.github.com/561913.js"></script></p>
+
+
+<p>Now, if we look at that script we see some very interesting things. &nbsp;We never explicitly created a new, manager, or salary method but they are all there. &nbsp;This is because Moose created each of these for us to use. &nbsp;In fact, it is imperative that when you are using Moose you <strong>do not </strong>create your own new method, that is <em>very</em> dangerous.</p>
+
+
+<p>Of course, Moose provides many other meta attributes to define the attributes of your class, some of which are:</p>
+
+
+<ul>
+<li><em>required</em>&nbsp;- whether calls to new() must include this attribute, can be 1 or 0</li>
+<li><em>default</em> - the default value of this attribute or a reference to a sub that will return the default value, it is better to use <em>builder</em> though (see below)</li>
+<li><em>lazy</em> - whether this attribute will be built when the object is built or whether Moose will wait until it is first used</li>
+<li>&hellip;and more we'll cover in following weeks</li>
+</ul>
+
+
+<p>We'll rewrite our class by adding some attributes and adding these meta attributes to all the attributes, but this time we won't use MooseX::Has::Sugar or MooseX::Types:</p>
+
+
+<p><script src="https://gist.github.com/561923.js"></script></p>
+
+
+<ul>
+</ul>
+
+
+<h3>Builder vs. Default</h3>
+
+
+<p>I mentioned above that you can set the default value of an attribute with <em>default</em>&nbsp;however it is better to use <em>builder</em>. &nbsp;The builder option takes the name of a subroutine that will return a value for the attribute instead of a subref or actual value. &nbsp;The benefit of this is that if you inherit from a base class that uses a builder you can easily override the default value by overriding the sub that builds the value, with default it is not so simple.</p>
+
+
+<h3>Caveat</h3>
+
+
+<p>There is one important caveat to mention. &nbsp;Neither Moose nor any of its extensions are magical and, in fact, none of them actually create new keywords. &nbsp;Instead, all of these modules are importing methods into your package just like any other tool. &nbsp;This means that they happen in the same order as you would expect function calls to happen. &nbsp;It also means you can write them any way you want, however this is a place where following the standard benefits everyone.</p>
+
+
+<h3>Dirty Little Secret</h3>
+
+
+<p>As much as I like the idea of MooseX::Has::Sugar and MooseX::Types I should probably mention that I actually rarely use them. &nbsp;However, they seem like a good tool to start off with.</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://search.cpan.org/~drolsky/Moose/lib/Moose/Manual/Attributes.pod">Moose::Manual::Attribute</a></li>
+<li><a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual/Types.pod">Moose::Manual::Types</a></li>
+<li><a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a></li>
+<li><a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: currying | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/currying/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Week 4:  Currying]]></title>
+    <link href="http://mfollett.github.io/week-3-currying/index.html"/>
+    <updated>2010-09-19T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/week-3-currying/week-3-currying</id>
+    <content type="html"><![CDATA[<p>This week we'll be covering the process of partially applying parameters to a subroutine, this is based off of closures which we covered last week. &nbsp;This allows us to create new subroutines that we can pass around that already have some of their parameters defined. &nbsp;One of the benefits of this is that we don't have to pass around a parameter list and wait until all the parameters are ready, instead we can apply each parameter as we get it and then execute the subroutine at some later time when we are ready. &nbsp;Doing this in Perl is actually very simple.</p>
+
+
+<p>
+<script src="http://gist.github.com/556982.js?file=fpblog-week3a.pl"></script>
+</p>
+
+
+<p>The function above provides us the ability to curry other functions. &nbsp;Analyzing it shows that all we are doing is creating a new anonymous function that is going to call the function we passed in with the parameters we passed in and the parameters it receives. &nbsp;Let's see an example of how this would work.</p>
+
+
+<p>
+<script src="http://gist.github.com/556983.js?file=fpblog-week3b.pl"></script>
+</p>
+
+
+<p>So, let's look at how it all worked. &nbsp;First, we made a new anonymous function that takes a list of parameters, joins them, and prints them. &nbsp;Next we curried that list with 3 fruit. &nbsp;To do this we created a new anonymous subroutine that passed in the three fruit into the first anonymous subroutine. &nbsp;After that we repeated the process, by currying the new subroutine we created from the last curried we now have a subroutine that calls the subroutine created on line 3 with 2 new fruit, that subroutine calls the subroutine created on line 1. &nbsp;Once we execute this we will output a list of all the fruit we've given to the function.</p>
+
+
+<p>We don't have to only curry anonymous functions. &nbsp;Because we can get the reference of named functions and builtins we can also curry those.</p>
+
+
+<p>
+<script src="http://gist.github.com/556984.js?file=fpblog-week3c.pl"></script>
+</p>
+
+
+<p>This concludes this week's lesson. &nbsp;Next week we will move past the building blocks of functional programming and start getting into systems built on top of this functional foundation. &nbsp;Next week we'll cover dynamic dispatch tables.</p>
+
+
+<p>As an aside, the name curry didn't come from the tasty South Asian type of dish, unlike the <a href="http://listserv.linguistlist.org/cgi-bin/wa?A2=ind0208a&amp;L=ads-l&amp;P=11751">naming of Mix-Ins</a>. &nbsp;Instead, currying is named after the American Mathematician and Logician <a href="http://en.wikipedia.org/wiki/Haskell_Curry">Haskell Curry</a>.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: anonymous function | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/anonymous-function/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6 - The Many Faces & Features of Functions]]></title>
+    <link href="http://mfollett.github.io/27523143/index.html"/>
+    <updated>2010-09-06T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/27523143/27523143</id>
+    <content type="html"><![CDATA[<p><strong>***Update: Carl M&auml;sak (<a href="http://www.twitter.com/carlmasak">@carlmasak</a>) corrected some misunderstandings I had regarding the scoping of subroutines and the use of export.***</strong></p>
+
+
+<p>When I first announced the Functional Perl series on the STL-PM <a href="http://tmtowtdi.com/">Bill Odom</a> <a href="http://groups.google.com/group/stl-pm/browse_thread/thread/b93c52c02fc2ef2b">asked if I would be including Perl 6</a>. &nbsp;I declined at the time stating that there were sufficient difference between Perl 6 and Perl 5 to make the articles too busy. &nbsp;There aren't a huge amount of differences, but I didn't want to clutter a Perl 5 article with things like <em>method.assuming( x=&gt; 11)</em> or leave it out of a Perl 6 article. &nbsp;This article isn't an article about functional programming, but it is a talk about functions in Perl 6 so that I can later do functional articles.</p>
+
+
+<h3>Named Functions</h3>
+
+
+<p>Perl 6 sports an incredible amount of power and flexibility without losing a bit of the flexibility one can find in Perl 5. &nbsp;In fact, one could write a Perl 6 subroutine that looked like this:</p>
+
+
+<p><script src="https://gist.github.com/567852.js"></script></p>
+
+
+<p>Or like this, which gives us type checking:</p>
+
+
+<p><script src="https://gist.github.com/567857.js"></script></p>
+
+
+<p>But constraint checking can even move beyond basic type checking. &nbsp;Perl 6 can can provide further constraint checking with a <em>where</em> clause on a parameter:</p>
+
+
+<p><script src="https://gist.github.com/567871.js"></script></p>
+
+
+<p>This version only allows us to give interest rates that will increase the future value. &nbsp;</p>
+
+
+<p>Perl 6 also allows for functions to be able to declare through traits:</p>
+
+
+<ul>
+<li>if they are safe to automatically cache</li>
+<li>the precedence (if it is for an operator)</li>
+<li>tons of other stuff</li>
+</ul>
+
+
+<p>Additionally, explicitly stating all the implicit traits on a method can make it very verbose, like AppleScript verbose.</p>
+
+
+<h3>Anonymous Functions</h3>
+
+
+<p>&nbsp;</p>
+
+
+<p>The Perl 5 way of creating anonymous functions is still valid in Perl6. &nbsp;However, you now use the method invocation operator ('.') instead of the '-&gt;' available in Perl 5. &nbsp;You can actually skip the method invocation operator since it can be implicit in this case. &nbsp;So, for example, you can make and use an anonymous subroutine like this:</p>
+
+
+<p><script src="https://gist.github.com/571386.js"></script></p>
+
+
+<p>&nbsp;</p>
+
+
+<p>Perl 6 also provides for a lot of new approaches towards creating and using anonymous functions. &nbsp;In fact, according to <a href="http://perlcabal.org/syn/S04.html">Synopsis 4</a>, every block is a closure. &nbsp;so, for example, you can now write an anonymous function simply by doing this:</p>
+
+
+<p><script src="https://gist.github.com/571388.js"></script></p>
+
+
+<p>If you wish to include a parameter list you can do so with a slightly modified version of that called the "pointy block":</p>
+
+
+<p><script src="https://gist.github.com/571390.js"></script></p>
+
+
+<p>Additionally, If you read my post on <a href="http://mfollett.com/perl-6-whatever">Perl 6's Whatever</a> then you already know that you can use Whatever in a statement to close over that statement and create a function to evaluate it later.</p>
+
+
+<h3>A Bump in the Road: Scope</h3>
+
+
+<p>The move isn't completely roses for function happy developers though, there is one little hiccup you might encounter. &nbsp;This code, which uses a hash as a cache that's closed over in the subroutine will be a little different than the Perl 5 version:</p>
+
+
+<p><script src="https://gist.github.com/571400.js"></script></p>
+
+
+<p>That is because subroutines are now also scoped and are&nbsp;implicitly&nbsp;given the same scope as provided by 'my'. &nbsp;This is a simple matter though, we simply give the subroutine the 'our' scope. &nbsp;Here is the equivalent example in Perl 6:</p>
+
+
+<p><script src="https://gist.github.com/571411.js"></script></p>
+
+
+<p><span style="font-size: 15px; font-weight: bold;">A Tangent: Control Structures</span></p>
+
+
+<p>This is a bit of a tangent, but I find it interesting. &nbsp;Do you remember when I said that any block is a closure? &nbsp;That counts for things you probably didn't consider, things like the blocks on if, while, and for statements. &nbsp;These are all now closures too. &nbsp;In fact, Perl 6 allows us to iterate over lists n-at-a-time because of this. &nbsp;The for loop will now pass us as many values as we provide as parameters in our block.&nbsp;Here is an example:</p>
+
+
+<p><script src="https://gist.github.com/571425.js"></script></p>
+
+
+<p>Of course, this example will complain when we reach 100, so we can do this:</p>
+
+
+<p><script src="https://gist.github.com/571426.js"></script></p>
+
+
+<p>The above example allows us to pass in 1-3 parameters, as many as are available. &nbsp;In this case though Mu is assigned to values that aren't passed in, which stringifies to "Mu()". &nbsp;We probably don't want that, so we'll just use defaults:</p>
+
+
+<p><script src="https://gist.github.com/571429.js"></script></p>
+
+
+<h3>Summary</h3>
+
+
+<p>Perl 6 gives functions, named or otherwise, a wide variety of new syntactic features. &nbsp;It also really promotes the role of closures and anonymous functions, which is a welcome addition. &nbsp;Perl 6 is also bakes in new features, like memoization and currying.</p>
+
+
+<p>Given all of that, I hope people understand why I'll be trying to keep Perl 5 and Perl 6 articles apart.</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://perlgeek.de/blog-en/perl-5-to-6/28-currying.html">Perl 5 to Perl 6 - Lesson 28 Currying</a></li>
+<li><a href="http://blogs.perl.org/users/tyler_curtis/2010/08/age-discrimination-in-perl-6-using-subsets-and-multiple-dispatch.html">Tyler Curtis - Age&nbsp;Discrimination&nbsp;in Perl 6 using Subsets and Multiple Dispatch</a>&nbsp;- talk on multimethod dispatching</li>
+<li><a href="http://dev.perl.org/perl6/doc/design/exe/E06.html">Exegesis 6 - Subroutines</a></li>
+<li><a href="http://perlcabal.org/syn/S06.html">Synopsis 6</a></li>
+<li><a href="http://perlcabal.org/syn/S04.html">Synopsis 4</a></li>
+<li><a href="http://mfollett.com/perl-6-whatever">Perl 6 - Whatever</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Week 1: The Lambda Function]]></title>
+    <link href="http://mfollett.github.io/26878051/index.html"/>
+    <updated>2010-08-30T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/26878051/26878051</id>
+    <content type="html"><![CDATA[<p><strong>***UPDATE: &nbsp;I modified the final example with Naveed's (<a href="http://twitter.com/ironcamel">@ironcamel</a>) suggestion, it looks much nicer now.***</strong></p>
+
+
+<p><strong>***UPDATE: Christopher Bottom caught some vestigial lines of code in the final example, which I have removed.***</strong></p>
+
+
+<p>The <em>Lambda Function</em> is the building block of all functional programming.&nbsp; It is also referred to as an <em>anonymous function</em> or sometimes in Perl as an <em>anonymous subroutine</em>.&nbsp; Perl treats subroutines as first class data types.&nbsp; Because of this it is incredibly simple to create, store, and invoke anonymous subroutines.&nbsp; To create an anonymous subroutine you simply use the 'sub' keyword without putting a name between the keyword and the body.&nbsp; For example:<p />
+<script src="http://gist.github.com/556891.js?file=fpblog-week1a.pl"></script>
+<p />Is an example of an anonymous subroutine.&nbsp; Obviously it isn't very useful though.&nbsp; To make this useful we need to store the reference of that anonymous subroutine in a variable:<p />
+<script src="http://gist.github.com/556893.js?file=fpblog-week1b.pl"></script>
+<p />Now that we have an anonymous subroutine referenced by the $hello variable we can access it by dereferencing and calling it like so:<p />
+<script src="http://gist.github.com/556894.js?file=fpblog-week1c.pl"></script>
+<p />Anonymous subroutines are just like normal subroutines.&nbsp; Because of this you can pass parameters in to them.&nbsp; Passed in parameters are provided in @_ just like in a normal subroutine.&nbsp; If an anonymous subroutine exists within a larger subroutine then both will have their own @_ within their scope and you won't have to worry about them intermingling.<p />
+<script src="http://gist.github.com/556896.js?file=fpblog-week1d.pl"></script>
+<br />
+<script src="http://gist.github.com/556898.js?file=fpblog-week1d.pl"></script>
+</p>
+<p><br />Without dereferencing and calling it you are simply referring to the variable itself, which you can pass around.&nbsp; In fact, because these subroutine references are first class they can be treated the same as any other value.&nbsp; This means that you can store subroutine references in arrays and in hashes (as both the key or the value), and that you can pass it along in subroutines.<p />
+<script src="http://gist.github.com/556900.js?file=fpblog-week1e.pl"></script>
+<br />
+<script src="http://gist.github.com/556901.js?file=fpblog-week1f.pl"></script>
+</p>
+<p>This concludes this week's installment in Functional Perl.&nbsp; Next week will cover the next building block, closures.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

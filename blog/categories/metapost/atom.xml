@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: metapost | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/metapost/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[15 Minutes of Fame]]></title>
+    <link href="http://mfollett.github.io/15-minutes-of-fame/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/15-minutes-of-fame/15-minutes-of-fame</id>
+    <content type="html"><![CDATA[<p>Holy cow! &nbsp;I decided to check my Google Analytics account to see what the impact of my <a href="http://mfollett.com/if-you-like-x-you-might-like-perl">If You Like X You Might Like Perl</a>. &nbsp;I thought it might, maybe, double the visitors to this page. &nbsp;I was quite wrong, here is how wrong:</p>
+
+
+<p>[[posterous-content:yhofHwAcfwbthvkqAcAn]]So I started looking around at what drove this traffic. &nbsp;It turns out that <a href="http://www.reddit.com/user/perlgeek">perlgeek</a> <a href="http://www.reddit.com/r/programming/comments/ds2w1/if_you_like_x_you_might_like_perl/">posted my article to reddit</a>. &nbsp;When I followed the referring links I found a few interesting things. &nbsp;Apparently the article is the 16th most controversial at the moment. &nbsp;It is below whether ads are like reality, but above some insult against redit users, some act that played out in the war in&nbsp;Afghanistan, and the POTUS's policy on&nbsp;cannabis:</p>
+
+
+<p>[[posterous-content:uEljCjbzqDglzvjGlHms]]It is also 24th on top scoring links in the programming category, but there aren't any interesting juxtapositions so I'm not providing a screenshot. &nbsp;Honestly, I find the whole thing so amusing that I don't mind that the link has received more negative votes than positive ones or that 4 of the 5 comments are either negative, useless, or both. &nbsp;The fifth is asking if one of the other commenters actually read the article, which is really neither positive nor negative.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

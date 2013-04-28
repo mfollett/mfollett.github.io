@@ -9,7 +9,7 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
+  <meta name="description" content="Groovy&rsquo;s type system can sometimes have funny interplay and unexpected results. For example, these assertions are true: However, mixing in a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,7 +66,625 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/when-type-systems-attack/index.html">When Type Systems Attack</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-10T00:00:00-06:00" pubdate data-updated="true">Feb 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Groovy&rsquo;s type system can sometimes have funny interplay and unexpected results. For example, these assertions are true:</p>
+
+<p><script src="https://gist.github.com/1787746.js"></script></p>
+
+<p>However, mixing in a Map into this causes some complications:</p>
+
+<p><script src="https://gist.github.com/1787771.js"></script></p>
+
+<p>This might not seem like a big issue, but it can cause some real headaches. When failing an assertion the message printed only prints values, not types. Because of this you may occasionally run into less than helpful error messages like:</p>
+
+<p><script src="https://gist.github.com/1787784.js"></script></p>
+
+<p>And this can be awfully confusing. One prime example of this is with GORM domains. GORM defaults primary keys to be Longs so if you use a primary key as a map key you could run into some pretty confusing error cases that your tests don&rsquo;t explain as helpfully as you&rsquo;d like.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-25T00:00:00-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just fought with this for a while and figured I&#8217;d record this in the vast internets in case others come across this. While attempting to extend the functionality of our Grails project at work I needed to add a new table and related foreign key constraints. We use the Grails Database Migration Plugin which uses liquibase to keep our schema in sync between production, staging, and development boxes. I declared a foreign key constraint similar to this one:</p>
+<p><script src="https://gist.github.com/1679067.js"></script></p>
+<p>and got this exception:</p>
+<p><script src="https://gist.github.com/1679035.js"></script></p>
+<p>It turns out that passing in a named parameter of referencesUniqueColumn with a value of anything other than false causes this exception. This wasn&#8217;t immediately obvious to me and I still don&#8217;t know why, but I thought I&#8217;d note it in case someone else ran into it too.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/grails-custom-validation-messages/index.html">Grails Custom Validation Messages</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-23T00:00:00-06:00" pubdate data-updated="true">Jan 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Grails&#8217; GORM provides convenient ways to define many different constraints for inputing properties including basic ones like max, equal, &amp; notEqual to more specific ones like creditCard, url, &amp; email (full list <a href="http://grails.org/doc/2.0.0/ref/Constraints/Usage.html">here</a> under Quick Reference). But sooner or later you&rsquo;ll want to create your own custom validator. This can be done by providing a validator closure to your domain, for example:</p>
+
+<p><script src="https://gist.github.com/1668699.js"></script></p>
+
+<p>Now, in this example a domain will validate all of the fields, including the user&rsquo;s favorite prime (to a degree of certainty). However, if the prime number certainly isn&rsquo;t prime then the error message provided when validation fails (through validate or save) will be:</p>
+
+<blockquote class="posterous_short_quote"><p>favoritePrime does not pass custom validation.</p></blockquote>
+
+<p>That probably isn&rsquo;t a helpful message to eventually pass back to the user, they might guess what the mysterious &ldquo;custom validation&rdquo; is in this case, but certainly not in all others.</p>
+
+<p>So what <em>is</em> the solution? You might try passing an error message back, but that won&rsquo;t work; you&rsquo;ll get the same message again. It turns out the proper approach is to return a key from your <code>message.properties</code> file. If the key exists in the proper localization file (e.g. French is messages_fr.properties) then it will use that string. A simple modification to the validator above will solve this:</p>
+
+<p><script src="https://gist.github.com/1668702.js"></script></p>
+
+<p>Adding the line:</p>
+
+<p>my.localized.not.prime.message=The number {2} is not prime.</p>
+
+<p>Will cause Grails to generate a much more useful validation failed
+message. As you can probably guess the {2} will be replaced with the
+value inputed by the user.</p>
+
+<p>You can include additional values to your message by returning an array. The first element should be a message key (e.g. &lsquo;my.localized.not.prime.message&rsquo;) and the subsequent entries will be interpolated into the message starting at index 3. So, if you returned <code>['my.localized.not.prime.message', 5]</code> you could have the message:
+my.localized.not.prime.message=The number {2} is not prime, {3} is an example of a prime.
+And in this case if the user passed in 4 they would end up with the message:</p>
+
+<blockquote class="posterous_short_quote"><p>The number 4 is not prime, 5 is an example of a prime.</p></blockquote>
+
+<p>Of course, if you aren&rsquo;t using a prime number validator multiple times
+in your code it may seem silly to have a special key/value pair
+dedicated to primes. Another option is to use a key/value pair dedicated
+to that field. You can do this simply by using the code in the first
+example and addding a field to your message.properties file like:</p>
+
+<p>Groovyist.favoritePrime.validator.invalid=The number {2} is not prime.</p>
+
+<p>Much of this is documented in the <a href="http://grails.org/doc/2.0.0/ref/Constraints/validator.html">validator docs</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-29T00:00:00-06:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just finished reading <a href="https://gist.github.com/1406238?1">this letter</a> discussing why Yammer is going to slowly move from Scala to Java. While I&rsquo;ve never done anything more substantial than basic toying around with scala and can&rsquo;t say I know much about Yammer outside of what their website tells me about itself and the fact that <a href="http://www.gabrielweinberg.com/blog/2011/11/online-services-our-startup-subscribes-to.html">Gabriel Weinberg</a> seems to like it I do have some thoughts on general points hit on in the letter.</p>
+
+<p>The <a href="http://codahale.com/downloads/email-to-donald.txt">letter</a> that Coda Hale wrote seemed to be rather well thought out. The author goes into several criticisms of Scala which seem to boil down to:</p>
+
+<ol>
+<li>Complicated concepts in the language</li>
+<li>Community support</li>
+<li>Lack of abundance of developers</li>
+<li>Reality of the Scala-and-Java nature of real world development</li>
+<li>Build toolchain issues</li>
+<li>Performance issues</li>
+</ol>
+
+
+<p>The first point and last two are very specific to Scala. Language designers have to decide between many difficult tradeoffs when designing a language and it is hard to say which ones will pay off for their community in the long run. It is certainly difficult to see how a given choice will pay off in the long run and while some of Scala&rsquo;s features he mentions seem pretty simple, others make me go cross-eyed trying to read explanations of them. Having said that, I still am very much a novice in the language and don&rsquo;t feel particularly qualified to actually weigh in on these topics.</p>
+
+<p>The lack of developers and quality of community support can be bundled together and seem to have more to do with the age and uptake of the language than at the language itself. Any language will have bootstrapping issues similar to this. And when choosing a language, it is an important aspect that should, and to some extent can, be checked out before any major development undertaking. Evaluating a community around a technology is no easy task though. I&rsquo;ve certainly been in situations where the community involvement around the technology used was unhelpful, misleading, or nonexistent; it is a crummy situation to be in. The best way to know the value of a community is to be a part of it for a while.</p>
+
+<p>Coda points out the fact that Yammer wasn&rsquo;t really deciding between Java or Scala but between Java or Scala+Java. If we ever meet I owe Coda a beer for this. I&rsquo;ve had my share of arguments with people in the past on this reality and I&rsquo;m glad to see something saying it so straight forward getting the circulation this is, even if it was never supposed to. Coming from a non-Java background to a Groovy position I feel acutely aware of all the times I&rsquo;ve had to dig through Java code because of an impedence mismatch between a Java concept and a Groovy one, to better understand a library that doesn&rsquo;t document something well and doesn&rsquo;t have a functional equivalent in Groovy, or to debug or diagnose a framework bug. Having said that, I don&rsquo;t believe my team has written a new line of Java for our core product since we migrated to Groovy some number of months ago.</p>
+
+<p>I expect that the Java+otherLang situation is an inevitability of developing on the JVM. As long as Java is the dominant player on the platform it will be the lingua franca. The reality of these languages being so interoperable is that the cost to benefit analysis of porting a framework or library (internal or external) over to another language on the platform almost always works against porting it.</p>
+
+<p>In the end, Coda seems to make a lot of good points. I can&rsquo;t vouch for his Scala specific concerns, but others seem reaonable in the more general case of burgeoning JVM languages. And, while this doesn&rsquo;t lower my interest or intent of learning Scala one of these days I do wonder why Yammer decided to start with Scala given the resources available to them with other languages.</p>
+
+<p>My intention has been that were I to take a startup from day 1 I&rsquo;d pick a language that I already had a team, or list of would be team members, with a strong understanding of and a good history with the community. Maybe they had that int he beginning or thought they did and that wasn&rsquo;t mentioned, I certainly don&rsquo;t have that information. And really, in the end, they have nearly sixty million dollars in VC funding, three million customers, and a rapidly growing revenue stream and I&rsquo;m killing time waiting for my next robotics assignment to come down the pipe. I guess you can&rsquo;t argue with results, hehe.</p>
+
+<p>Edit: Also of note is <a href="http://codahale.com/the-rest-of-the-story/">Coda&rsquo;s follow up</a>, you should read it if you read the first.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (an Introduction)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-27T00:00:00-05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I took a job with a startup that is using Groovy as their main language. I find the language to be similar to several other languages and they have <a href="http://groovy.codehaus.org/Differences+to+Other+Languages">some comparisons on their site</a>, however one comparison they are missing is to Perl. Since I&#8217;m learning Groovy anyway and the two are sufficiently similar that I thought I&#8217;d give it a shot.</p>
+<p>Before I start with the articles there are a few important things to note about Groovy:</p>
+<ol>
+<li>Groovy autoboxes, as such it is completely legitimate to write `&#8221;I like cheese&#8221;.someMethodOnStrings()`.</li>
+<li>Groovy automatically makes a variable named `it` as the only parameter for lambda function if no parameter list is given, meaning that: `def foo = { it * 2}` is similar to `def foo = { it -&gt; it * 2}`.</li>
+<li>Groovy&#8217;s syntax provides an alternate way to list parameters for a method call when the last parameter is a lambda function meaning that `someData.someMethod(1,2, { it + 2})` is the same as `someData.someMethod(1,2) { it + 2}`, this is useful for methods that loop over lists, like `each`.</li>
+</ol>
+<p>&nbsp;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/perl-groovy-cheat-sheet/index.html">Perl to Groovy Mapping (Iterating)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-27T00:00:00-05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This entry will primarily go over various approaches towards iterating over structures of data. This will include basic looping as well as equivalents to Perl&rsquo;s <code>map</code> &amp; <code>grep</code>.</p>
+
+<p>This is not intended to be an exhaustive guide or a best practice for either language. The attempt, as with all articles in this series, is to provide a basic set of mappings between the languages.</p>
+
+<h2>Iterating over collections</h2>
+
+<p>To loop over all the items in an array in Perl you would probably use the <code>for</code> loop construct:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $item (@array) {…}</pre></div>
+</div>
+
+
+<p>You could do something similar in Groovy using the <code>each</code> method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>list.each {<span class="error">…</span>}</pre></div>
+</div>
+
+
+<p>To loop over all the keys in a hash (or Map) you can combine the above with the <code>keys</code> builtin:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $key (keys(%hash)) {…}</pre></div>
+</div>
+
+
+<p>In Groovy you simply use a lambda that accepts two parameters.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>myMap.each { key, _value -&gt; <span class="error">…</span> }</pre></div>
+</div>
+
+
+<p>Looping over all the values is similar to the examples above in both, so I will skip that. Looping over each entry in the hash with both the key and value in Groovy is the same as the example above, in Perl you would have to use <code>each</code>, which I don&rsquo;t like.</p>
+
+<p>It is important to note that with Groovy&rsquo;s <code>each</code> different things are passed in based on the number of parameters. The example above gave <code>each</code> a 2 parameter lambda and so the lambda got inputs of [key, value]. Had a 1 parameter lambda been passed in then that lambda would have received an Entry object that had accessors for the key and value.</p>
+
+<h2>Iterating over a Set of Integers</h2>
+
+<p>Both Perl and Groovy provide many ways to iterate over a range. One popular approach in Perl is to use the dot-dot range operator (..) and <code>for</code> looping construct. By using this it is simple to print all the numbers between one and ten:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $num (1..10) { print $num }</pre></div>
+</div>
+
+
+<p>Groovy has a similar approach:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>(<span class="integer">1</span>..<span class="integer">10</span>).each { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+<p>Groovy has a couple other ways to do the same thing, for example numbers have an <code>upto</code> method attached to them that can be used to iterate. As such, the same thing above could be written as:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">1</span>.upto(<span class="integer">10</span>) { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+<p>Of course, Perl also has the ability to loop via the <code>while</code> looping construct and Groovy could loop using a <code>for in</code> on top of what I&rsquo;ve listed here.</p>
+
+<p>If you wanted to iterate over a set of integers that didn&rsquo;t increment by one in Perl you might use <code>map</code> and <code>for</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( map { $_ * 5 } 1..5) {…}</pre></div>
+</div>
+
+
+<p>Or you might use <code>grep</code> and <code>for</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( grep { not $_ % 5 } 1..25) {…}</pre></div>
+</div>
+
+
+<p>Or, of course, you could pick up a useful module, like <a href="https://metacpan.org/module/Math::Sequence">Math::Sequence</a>.</p>
+
+<p>In Groovy you would simply do this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">5</span>.step(<span class="integer">25</span>,<span class="integer">5</span>) {<span class="error">…</span>}</pre></div>
+</div>
+
+
+<h2>Mapping a List</h2>
+
+<p>Perl helpfully provides the <code>map</code> builtin to easily map a list of values from one to another. For example, were a developer wanting to square all the values in a list they would:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my @squared = map { $_**2 } @original_values</pre></div>
+</div>
+
+
+<p>The same thing can be performed in Groovy using the collect() method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> squared = originalValues.collect { <span class="local-variable">it</span>.power(<span class="integer">2</span>) }</pre></div>
+</div>
+
+
+<h2>Grepping a List</h2>
+
+<p>Perl provides the <code>grep</code> builtin to easily filter values out of a list and provide a new list with only the remaining values. For example, if a developer was looking for all the items in a list that were odd they could:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my @odd = grep { $_ % 2 } @numbers</pre></div>
+</div>
+
+
+<p>To do this in Groovy they would use the <code>findAll</code> method that exists on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> odd = numbers.findAll { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+
+
+<h2>Grepping for the First Item in a List</h2>
+
+<p>Perl has a number of modules which are considered &lsquo;core&rsquo;. It is reasonable to assume any core module is installed and readily available. To get the first item in a list that matches some criteria a Perl developer could use the example above for grepping a list and <code>shift</code> off the top, but more likely they would use <a href="https://metacpan.org/module/List::Util">List::Util</a>&rsquo;s <code>first</code> like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>my $first_odd = first { $_ % 2} @numbers</pre></div>
+</div>
+
+
+<p>A similar approach in Groovy could be done via the <code>find</code> method on collections:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> firstOdd = numbers.find { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/the-unity-model/index.html">The Unity Model</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-16T00:00:00-05:00" pubdate data-updated="true">Oct 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m reading <a href="http://www.amazon.com/gp/product/0201058669?ie=UTF8&amp;tag=mfollettcom-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0201058669">Parallel Programming Design: &nbsp;A Foundation by Chandy and Misra</a> for a master&#8217;s class and am finding it very interesting. &nbsp;The book covers the Unity Model as an approach towards parallel programming. &nbsp;The language used to model solutions to a problem isn&#8217;t meant to be directly implemented as a language (though it has been incarnated as <a href="http://www.osti.gov/bridge/servlets/purl/5955653-tcrAK9/5955653.pdf">PCN</a>) but instead to be used as a model for implementing the solution in some other language. &nbsp;It is a fun language and hopefully now that I don&#8217;t have a presentation looming over my head I can explore it independently and post some example.</p>
+<p>The language is broken up into several parts:</p>
+<ol>
+<li>Declare - used for declaring variables</li>
+<li>Always - used for defining functions</li>
+<li>Initially - used for initializing variables</li>
+<li>Assign - the main portion of the code</li>
+</ol>
+<p>The reason why initialization doesn&#8217;t happen in the main portion of the code is that there is no guarantee that it would happen when you would want or that it would only happen once. &nbsp;In fact, the assignment section of the program has very weak promises. &nbsp;It only guarantees that when the program is executing any given line that any other line will eventually be executed if the program is run forever. &nbsp;Other than that it just randomly picks statements to execute.&nbsp;</p>
+<p>By the way, the book has been out of print for a while now, so it isn&#8217;t the easiest to find for cheap and is impossible to find new. &nbsp;I ordered it three times used from third parties before someone finally actually had it in stock and shipped it to me.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/if-you-like-x-you-might-like-perl/index.html">If You Like X, You Might Like Perl</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-16T00:00:00-05:00" pubdate data-updated="true">Oct 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Objective-C </strong>- You&#8217;d probably like <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Manual.pod">Moose</a>&#8217;s concept of <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Role.pm">roles</a>&nbsp;if you like categories. &nbsp;Roles also provide the ability to require methods exist on classes so you could use them for interfaces too, but when you consume a role you can&#8217;t guarantee it won&#8217;t add functionality.</p>
+<p><strong>Clojure</strong>&nbsp;- If you were willing to play with <a href="http://rakudo.org/how-to-get-rakudo">Perl 6</a> you&#8217;d probably like the many of its lazy aspects. &nbsp;The common example being binding an infinitely long fib sequence to a list (my @fib := 0,1,*+*&#8230;* ). &nbsp;Perl 6 also supports multi-method dispatching and pattern matching. &nbsp;I don&#8217;t know about Clojure&#8217;s pattern matching abilities, but I do know that Perl 6&#8217;s is weaker than Erlang&#8217;s, so be aware of that.</p>
+<p>If you don&#8217;t want to try Perl 6 you should look at the Higher Order Perl book. &nbsp;It focuses on functional Perl and steals heavily from Lisp. &nbsp;In fact, the author states very early on that of the <a href="http://www.paulgraham.com/diff.html">7 things that make Lisp different</a>,&nbsp;Perl has 6. &nbsp;It is available <a href="http://hop.perl.plover.com/book/#PDF">free online</a>&nbsp;or from a book store. &nbsp;The author is currently boycotting Amazon though, so while they sell it you may want to buy from someone else.&nbsp;</p>
+<p><strong>Ruby</strong> - I haven&#8217;t gotten around to learning Ruby. &nbsp;For what it&#8217;s worth, there are a lot of people I know that like both Ruby and Perl so I have to assume there are some good&nbsp;similarities. &nbsp;If you are looking for method_missing it is called autoload. &nbsp;Besides that, <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Exporter.pm">Moose::Exporter</a> is great for making keywords for DSLs. &nbsp;You can use Perl 5&#8217;s <a href="http://perldoc.perl.org/perlsub.html#Prototypes">prototypes</a>, but that gets a little more complicated. &nbsp;You can also use <a href="http://search.cpan.org/~flora/Devel-Declare-0.006000/lib/Devel/Declare.pm">Devel::Declare</a> if you just want to take the parser over altogether which, of course, is gets more complicated.</p>
+<p>Feel free to add more in the comments or tell me where I&#8217;m wrong, I&#8217;ll update the body of the post as the conversation goes along.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/7-languages-in-7-weeks-st-louis/index.html">7 Languages in 7 Weeks in St. Louis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-16T00:00:00-05:00" pubdate data-updated="true">Oct 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the guys at the Genome Center mentioned he wanted to get a 7 Languages in 7 Weeks group started in St. Louis to go through the languages. &nbsp;I thought that was a neat idea, but I also realized it was very simple and may not require a group.</p>
+<p>If you look at the list that Tate provides for <a href="http://www.amazon.com/dp/193435659X?tag=mfollettcom-20&amp;camp=213381&amp;creative=390973&amp;linkCode=as4&amp;creativeASIN=193435659X&amp;adid=0PAPM4C2W0RA1YW6J762&amp;">Tate&#8217;s book</a>, he lists these languages:</p>
+<ol>
+<li>Ruby</li>
+<li>Io</li>
+<li>Scala</li>
+<li>Erlang</li>
+<li>Clojure</li>
+<li>Haskell</li>
+<li>Prolog</li>
+</ol>
+<p>If you look at <a href="http://www.sluug.org/resources/calendar/">SLUUG&#8217;s St. Louis Event Calendar</a> you find that:</p>
+<ol>
+<li><a href="http://groups.google.com/group/stlruby/about">Ruby</a> - Meets 2nd Monday of the Month</li>
+<li>Io</li>
+<li>Scala</li>
+<li><a href="http://groups.google.com/group/erlang-colearning">Erlang</a> - Is now dead due to lack if interest, but could be resurected (I know since I ran it :) )</li>
+<li><a href="http://clojurecljub.wordpress.com/">Clojure</a>&nbsp;- Meets 4th Thursday of the month</li>
+<li>Haskell - Had its first social, maybe it can take off with meetings soon</li>
+<li>Prolog</li>
+</ol>
+<p>&nbsp;</p>
+<p>Sadly, we don&#8217;t have a Scala, Io, or Prolog group that I know. &nbsp;However, I bet that we could get people to volunteer for such talks in <a href="http://www.lambdalounge.com">Lambda Lounge</a>.</p>
+<p>As an addendum, if STLRUBY didn&#8217;t want to do a session I&#8217;m sure <a href="http://stlouis.pm.org">St. Louis Perl Mongers</a> would be willing to shift around their schedule to do a talk on dynamic typing and meta programming.</p>
+<p><iframe marginheight="0" scrolling="no" marginwidth="0" src="http://rcm.amazon.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=mfollettcom-20&o=1&p=8&l=as1&m=amazon&f=ifr&md=10FE9736YVPPT7A0FBG2&asins=193435659X" frameborder="0" style="height: 240px;"></iframe></p>
+<p>&nbsp;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/15-minutes-of-fame/index.html">15 Minutes of Fame</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-16T00:00:00-05:00" pubdate data-updated="true">Oct 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Holy cow! &nbsp;I decided to check my Google Analytics account to see what the impact of my <a href="http://mfollett.com/if-you-like-x-you-might-like-perl">If You Like X You Might Like Perl</a>. &nbsp;I thought it might, maybe, double the visitors to this page. &nbsp;I was quite wrong, here is how wrong:</p>
+<p>[[posterous-content:yhofHwAcfwbthvkqAcAn]]So I started looking around at what drove this traffic. &nbsp;It turns out that <a href="http://www.reddit.com/user/perlgeek">perlgeek</a> <a href="http://www.reddit.com/r/programming/comments/ds2w1/if_you_like_x_you_might_like_perl/">posted my article to reddit</a>. &nbsp;When I followed the referring links I found a few interesting things. &nbsp;Apparently the article is the 16th most controversial at the moment. &nbsp;It is below whether ads are like reality, but above some insult against redit users, some act that played out in the war in&nbsp;Afghanistan, and the POTUS&#8217;s policy on&nbsp;cannabis:</p>
+<p>[[posterous-content:uEljCjbzqDglzvjGlHms]]It is also 24th on top scoring links in the programming category, but there aren&#8217;t any interesting juxtapositions so I&#8217;m not providing a screenshot. &nbsp;Honestly, I find the whole thing so amusing that I don&#8217;t mind that the link has received more negative votes than positive ones or that 4 of the 5 comments are either negative, useless, or both. &nbsp;The fifth is asking if one of the other commenters actually read the article, which is really neither positive nor negative.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -77,6 +695,26 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
     
   </ul>
 </section>

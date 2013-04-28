@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Perl 6: Coding with Class - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="This entry will focus on creating and using classes in Perl 6. &nbsp;Perl 6&#8217;s class system greatly expands on the approach of Perl 5 in many &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/perl-6-coding-with-class">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Perl 6: Coding With Class</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-26T00:00:00-05:00" pubdate data-updated="true">Sep 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This entry will focus on creating and using classes in Perl 6. &nbsp;Perl 6&#8217;s class system greatly expands on the approach of Perl 5 in many ways, a few of which are giving a standard <em>new</em> method and providing an approach for easily declaring attributes on a class.</p>
+<p>Here is a very simple example of a Perl 6 class:</p>
+<p><script src="https://gist.github.com/598491.js"></script></p>
+<p>This example shows a few basic concepts. &nbsp;First there is the new <em>class</em>&nbsp;keyword. &nbsp;Named classes can easily be declared in one of two ways. &nbsp;The example above, with curly braces, is useful when defining more than one class in a file or providing for some code to execute outside of the scope of the class when loading. &nbsp;Without the curly braces is also legal, however it means that the rest of the file is the class definition.</p>
+<p>Additionally, this shows our first attribute, name. &nbsp;The name attribute is defined as being of type Str. &nbsp;The twigil &#8216;.&#8217; in this case indicates that this attribute should have a public accessor. &nbsp;In this case that accessor is read-only because we did not define it otherwise (see below).</p>
+<p>The eat and sleep method were also defined. &nbsp;The sleep method uses the name attribute on the class in the string that it says. &nbsp;It can do this without using $self because $. implies the object the method was invoked on. &nbsp;So, the eat method could have also been rewritten like it is for the sleep method.</p>
+<p>Instantiating new objects of type Animal and using their methods is simple:</p>
+<p><script src="https://gist.github.com/598494.js"></script></p>
+<p>A more complicated example is below. &nbsp;In this one two more classes, &#8216;Dog&#8217; and &#8216;Tail&#8217;, have been defined:</p>
+<p><script src="https://gist.github.com/598497.js"></script></p>
+<p>The Dog class has a couple new interesting additions. &nbsp;The first thing to notice is that Dog inherits from Animal via the is keyword on the first line. &nbsp;The <em>tag</em> attribute is defined as &#8216;rw&#8217;. &nbsp;This means that public accessors for both acquiring and mutating the value of the tag are provided. &nbsp;The <em>tail </em>attribute has a &#8216;!&#8217; as a twigil. &nbsp;This twigil indicates that no public accessors should be defined. &nbsp;However, an instance of the Dog class delegates to the tail attribute when the wag method is invoked upon it. &nbsp;This means that when someone calls $a_dog.wag they are really calling wag on $a_dog&#8217;s $!tail. &nbsp;Delegation is a very handy way to improve code reuse, Perl 5 developers who use <a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">M&oslash;&oslash;se</a> should be familiar with it. &nbsp;Finally the tail also has a default value of a new Tail object.</p>
+<p>This new class can be easily used like the following example:</p>
+<p><script src="https://gist.github.com/598498.js"></script></p>
+<p>However, what if we didn&#8217;t want to use the simple Tail class for our dog&#8217;s tail. &nbsp;We could pass in an object of another class that had a wag method on it like so:</p>
+<p><script src="https://gist.github.com/598500.js"></script></p>
+<p>That pretty much wraps up this entry on Perl 6&#8217;s class system. &nbsp;The system includes many more powerful features that should be covered at a later date.</p>
+<p>Further Reading:</p>
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12: Objects</a></li>
+<li><a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">Moose</a></li>
+<li><a href="http://github.com/perl6/book/downloads">Using Perl 6</a></li>
+</ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-26T00:00:00-05:00" pubdate data-updated="true">Sep 26<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/oop/'>OOP</a>, <a class='category' href='/blog/categories/delegation/'>delegation</a>, <a class='category' href='/blog/categories/perl/'>perl</a>, <a class='category' href='/blog/categories/perl-6/'>perl 6</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mfollett.github.io/perl-6-coding-with-class/index.html" data-via="" data-counturl="http://mfollett.github.io/perl-6-coding-with-class/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/week-3-currying/index.html" title="Previous Post: Week 4:  Currying">&laquo; Week 4:  Currying</a>
+      
+      
+        <a class="basic-alignment right" href="/change-in-format/index.html" title="Next Post: Change in Format">Change in Format &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

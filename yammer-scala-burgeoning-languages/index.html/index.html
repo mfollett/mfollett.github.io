@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Yammer, Scala, & Burgeoning Languages - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="I just finished reading this letter discussing why Yammer is going to slowly move from Scala to Java. While I&rsquo;ve never done anything more &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/yammer-scala-burgeoning-languages">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Yammer, Scala, & Burgeoning Languages</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-29T00:00:00-06:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I just finished reading <a href="https://gist.github.com/1406238?1">this letter</a> discussing why Yammer is going to slowly move from Scala to Java. While I&rsquo;ve never done anything more substantial than basic toying around with scala and can&rsquo;t say I know much about Yammer outside of what their website tells me about itself and the fact that <a href="http://www.gabrielweinberg.com/blog/2011/11/online-services-our-startup-subscribes-to.html">Gabriel Weinberg</a> seems to like it I do have some thoughts on general points hit on in the letter.</p>
+
+<p>The <a href="http://codahale.com/downloads/email-to-donald.txt">letter</a> that Coda Hale wrote seemed to be rather well thought out. The author goes into several criticisms of Scala which seem to boil down to:</p>
+
+<ol>
+<li>Complicated concepts in the language</li>
+<li>Community support</li>
+<li>Lack of abundance of developers</li>
+<li>Reality of the Scala-and-Java nature of real world development</li>
+<li>Build toolchain issues</li>
+<li>Performance issues</li>
+</ol>
+
+
+<p>The first point and last two are very specific to Scala. Language designers have to decide between many difficult tradeoffs when designing a language and it is hard to say which ones will pay off for their community in the long run. It is certainly difficult to see how a given choice will pay off in the long run and while some of Scala&rsquo;s features he mentions seem pretty simple, others make me go cross-eyed trying to read explanations of them. Having said that, I still am very much a novice in the language and don&rsquo;t feel particularly qualified to actually weigh in on these topics.</p>
+
+<p>The lack of developers and quality of community support can be bundled together and seem to have more to do with the age and uptake of the language than at the language itself. Any language will have bootstrapping issues similar to this. And when choosing a language, it is an important aspect that should, and to some extent can, be checked out before any major development undertaking. Evaluating a community around a technology is no easy task though. I&rsquo;ve certainly been in situations where the community involvement around the technology used was unhelpful, misleading, or nonexistent; it is a crummy situation to be in. The best way to know the value of a community is to be a part of it for a while.</p>
+
+<p>Coda points out the fact that Yammer wasn&rsquo;t really deciding between Java or Scala but between Java or Scala+Java. If we ever meet I owe Coda a beer for this. I&rsquo;ve had my share of arguments with people in the past on this reality and I&rsquo;m glad to see something saying it so straight forward getting the circulation this is, even if it was never supposed to. Coming from a non-Java background to a Groovy position I feel acutely aware of all the times I&rsquo;ve had to dig through Java code because of an impedence mismatch between a Java concept and a Groovy one, to better understand a library that doesn&rsquo;t document something well and doesn&rsquo;t have a functional equivalent in Groovy, or to debug or diagnose a framework bug. Having said that, I don&rsquo;t believe my team has written a new line of Java for our core product since we migrated to Groovy some number of months ago.</p>
+
+<p>I expect that the Java+otherLang situation is an inevitability of developing on the JVM. As long as Java is the dominant player on the platform it will be the lingua franca. The reality of these languages being so interoperable is that the cost to benefit analysis of porting a framework or library (internal or external) over to another language on the platform almost always works against porting it.</p>
+
+<p>In the end, Coda seems to make a lot of good points. I can&rsquo;t vouch for his Scala specific concerns, but others seem reaonable in the more general case of burgeoning JVM languages. And, while this doesn&rsquo;t lower my interest or intent of learning Scala one of these days I do wonder why Yammer decided to start with Scala given the resources available to them with other languages.</p>
+
+<p>My intention has been that were I to take a startup from day 1 I&rsquo;d pick a language that I already had a team, or list of would be team members, with a strong understanding of and a good history with the community. Maybe they had that int he beginning or thought they did and that wasn&rsquo;t mentioned, I certainly don&rsquo;t have that information. And really, in the end, they have nearly sixty million dollars in VC funding, three million customers, and a rapidly growing revenue stream and I&rsquo;m killing time waiting for my next robotics assignment to come down the pipe. I guess you can&rsquo;t argue with results, hehe.</p>
+
+<p>Edit: Also of note is <a href="http://codahale.com/the-rest-of-the-story/">Coda&rsquo;s follow up</a>, you should read it if you read the first.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-29T00:00:00-06:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rant/'>rant</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mfollett.github.io/yammer-scala-burgeoning-languages/index.html" data-via="" data-counturl="http://mfollett.github.io/yammer-scala-burgeoning-languages/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/perl-to-groovy-mappings/index.html" title="Previous Post: Perl to Groovy Mappings (An Introduction)">&laquo; Perl to Groovy Mappings (An Introduction)</a>
+      
+      
+        <a class="basic-alignment right" href="/grails-custom-validation-messages/index.html" title="Next Post: Grails Custom Validation messages">Grails Custom Validation messages &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

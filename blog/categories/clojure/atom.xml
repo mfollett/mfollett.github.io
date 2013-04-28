@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: clojure | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/clojure/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[If You Like X, You Might Like Perl]]></title>
+    <link href="http://mfollett.github.io/if-you-like-x-you-might-like-perl/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/if-you-like-x-you-might-like-perl/if-you-like-x-you-might-like-perl</id>
+    <content type="html"><![CDATA[<p><strong>Objective-C </strong>- You'd probably like <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Manual.pod">Moose</a>'s concept of <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Role.pm">roles</a>&nbsp;if you like categories. &nbsp;Roles also provide the ability to require methods exist on classes so you could use them for interfaces too, but when you consume a role you can't guarantee it won't add functionality.</p>
+
+
+<p><strong>Clojure</strong>&nbsp;- If you were willing to play with <a href="http://rakudo.org/how-to-get-rakudo">Perl 6</a> you'd probably like the many of its lazy aspects. &nbsp;The common example being binding an infinitely long fib sequence to a list (my @fib := 0,1,*+*...* ). &nbsp;Perl 6 also supports multi-method dispatching and pattern matching. &nbsp;I don't know about Clojure's pattern matching abilities, but I do know that Perl 6's is weaker than Erlang's, so be aware of that.</p>
+
+
+<p>If you don't want to try Perl 6 you should look at the Higher Order Perl book. &nbsp;It focuses on functional Perl and steals heavily from Lisp. &nbsp;In fact, the author states very early on that of the <a href="http://www.paulgraham.com/diff.html">7 things that make Lisp different</a>,&nbsp;Perl has 6. &nbsp;It is available <a href="http://hop.perl.plover.com/book/#PDF">free online</a>&nbsp;or from a book store. &nbsp;The author is currently boycotting Amazon though, so while they sell it you may want to buy from someone else.&nbsp;</p>
+
+
+<p><strong>Ruby</strong> - I haven't gotten around to learning Ruby. &nbsp;For what it's worth, there are a lot of people I know that like both Ruby and Perl so I have to assume there are some good&nbsp;similarities. &nbsp;If you are looking for method_missing it is called autoload. &nbsp;Besides that, <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Exporter.pm">Moose::Exporter</a> is great for making keywords for DSLs. &nbsp;You can use Perl 5's <a href="http://perldoc.perl.org/perlsub.html#Prototypes">prototypes</a>, but that gets a little more complicated. &nbsp;You can also use <a href="http://search.cpan.org/~flora/Devel-Declare-0.006000/lib/Devel/Declare.pm">Devel::Declare</a> if you just want to take the parser over altogether which, of course, is gets more complicated.</p>
+
+
+<p>Feel free to add more in the comments or tell me where I'm wrong, I'll update the body of the post as the conversation goes along.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

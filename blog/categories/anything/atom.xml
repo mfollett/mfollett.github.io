@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Anything | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/anything/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6 - Whatever]]></title>
+    <link href="http://mfollett.github.io/perl-6-whatever/index.html"/>
+    <updated>2010-09-02T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-whatever/perl-6-whatever</id>
+    <content type="html"><![CDATA[<p><strong>***UPDATE: Carl M&auml;sak (<a href="http://twitter.com/carlmasak">@carlmasak</a>) was kind enough to let me know that Whatever is simply a term. ***</strong></p>
+
+
+<p>The specifications for Perl 6 define the Whatever term,&nbsp;which is just an asterisk (*). &nbsp;The Whatever term basically means "I don't care, you decide." &nbsp;This breaks down to some slightly different meanings in different contexts.</p>
+
+
+<h3>As a Parameter</h3>
+
+
+<p>The Whatever term can be used by passing it as a parameter in a function, e.g. `bless( *, |%my_Data)`. &nbsp;In the case where it is a parameter passed into the method it is telling the method, "I don't know or care, so whatever you think is best." &nbsp;This may seem strange, but this is actually very similar to default values in other languages (and Perl 6), but is more powerful. &nbsp;</p>
+
+
+<p>This is more powerful than default values you see in other languages for two reasons. The first reason is that the Whatever term can appear anywhere in the parameter list. &nbsp;This means that API designers don't have to guess their most commonly defaulted parameters and then put them at the end, they can put them in the order that makes the most sense. The second reason is that Whatever can be more powerful than a default. &nbsp;Since methods receive your Whatever they can hold on to it and do a little bit of reasoning to determine what it is you probably want before it replaces your Whatever. &nbsp;This is unlike defaults which are set at the top of the function. &nbsp;Here is an example usage with bless:</p>
+
+
+<p><script src="https://gist.github.com/563295.js"></script></p>
+
+
+<p>In this case bless will return back an object of type Any because bless decides to use the type of the object that called this.&nbsp;</p>
+
+
+<p>Of course, it is important to know how this works. &nbsp;When you pass in '*' as a parameter to a method the method gets back an object of type Whatever. &nbsp;This effectively signals to the called method that it can do whatever it wants with that parameter.</p>
+
+
+<h3>In a statement</h3>
+
+
+<p>When you provide the Whatever term inside of a statement that&nbsp;statement is closed over, replacing your Whatever term with a&nbsp;variable that will be passed in to the new anonymous function. &nbsp;So, for&nbsp;example, were you to provide:</p>
+
+
+<p><script src="https://gist.github.com/563296.js"></script></p>
+
+
+<p>You would find $foo holds something like:</p>
+
+
+<p><script src="https://gist.github.com/563297.js"></script></p>
+
+
+<p>Which you could then use like this:</p>
+
+
+<p><script src="https://gist.github.com/563298.js"></script></p>
+
+
+<p>You can also use it for a method call, like this:</p>
+
+
+<p><script src="https://gist.github.com/563300.js"></script></p>
+
+
+<p>In this case $x basically holds something like:</p>
+
+
+<p><script src="https://gist.github.com/563301.js"></script></p>
+
+
+<h3>Specific Uses</h3>
+
+
+<p>The Whatever term has some very specific uses when it is provided in some cases:</p>
+
+
+<p><script src="https://gist.github.com/563302.js"></script></p>
+
+
+<h3>Further Reading</h3>
+
+
+<p>If you would like to read more on the Whatever term you should look through <a href="http://perlcabal.org/syn/S02.html">Synopsis 2-Bits and Pieces</a>&nbsp;where this is defined.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

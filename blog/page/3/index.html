@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="***Update: Carl M&auml;sak (@carlmasak) corrected some misunderstandings I had regarding the scoping of subroutines and the use of export.*** When I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/blog/page/3">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/27523143/index.html">Perl 6 - the Many Faces & Features of Functions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-06T00:00:00-05:00" pubdate data-updated="true">Sep 6<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>***Update: Carl M&auml;sak (<a href="http://www.twitter.com/carlmasak">@carlmasak</a>) corrected some misunderstandings I had regarding the scoping of subroutines and the use of export.***</strong></p>
+<p>When I first announced the Functional Perl series on the STL-PM <a href="http://tmtowtdi.com/">Bill Odom</a> <a href="http://groups.google.com/group/stl-pm/browse_thread/thread/b93c52c02fc2ef2b">asked if I would be including Perl 6</a>. &nbsp;I declined at the time stating that there were sufficient difference between Perl 6 and Perl 5 to make the articles too busy. &nbsp;There aren&#8217;t a huge amount of differences, but I didn&#8217;t want to clutter a Perl 5 article with things like <em>method.assuming( x=&gt; 11)</em> or leave it out of a Perl 6 article. &nbsp;This article isn&#8217;t an article about functional programming, but it is a talk about functions in Perl 6 so that I can later do functional articles.</p>
+<h3>Named Functions</h3>
+<p>Perl 6 sports an incredible amount of power and flexibility without losing a bit of the flexibility one can find in Perl 5. &nbsp;In fact, one could write a Perl 6 subroutine that looked like this:</p>
+<p><script src="https://gist.github.com/567852.js"></script></p>
+<p>Or like this, which gives us type checking:</p>
+<p><script src="https://gist.github.com/567857.js"></script></p>
+<p>But constraint checking can even move beyond basic type checking. &nbsp;Perl 6 can can provide further constraint checking with a <em>where</em> clause on a parameter:</p>
+<p><script src="https://gist.github.com/567871.js"></script></p>
+<p>This version only allows us to give interest rates that will increase the future value. &nbsp;</p>
+<p>Perl 6 also allows for functions to be able to declare through traits:</p>
+<ul>
+<li>if they are safe to automatically cache</li>
+<li>the precedence (if it is for an operator)</li>
+<li>tons of other stuff</li>
+</ul>
+<p>Additionally, explicitly stating all the implicit traits on a method can make it very verbose, like AppleScript verbose.</p>
+<h3>Anonymous Functions</h3>
+<p>&nbsp;</p>
+<p>The Perl 5 way of creating anonymous functions is still valid in Perl6. &nbsp;However, you now use the method invocation operator (&#8216;.&#8217;) instead of the &#8216;-&gt;&#8217; available in Perl 5. &nbsp;You can actually skip the method invocation operator since it can be implicit in this case. &nbsp;So, for example, you can make and use an anonymous subroutine like this:</p>
+<p><script src="https://gist.github.com/571386.js"></script></p>
+<p>&nbsp;</p>
+<p>Perl 6 also provides for a lot of new approaches towards creating and using anonymous functions. &nbsp;In fact, according to <a href="http://perlcabal.org/syn/S04.html">Synopsis 4</a>, every block is a closure. &nbsp;so, for example, you can now write an anonymous function simply by doing this:</p>
+<p><script src="https://gist.github.com/571388.js"></script></p>
+<p>If you wish to include a parameter list you can do so with a slightly modified version of that called the &#8220;pointy block&#8221;:</p>
+<p><script src="https://gist.github.com/571390.js"></script></p>
+<p>Additionally, If you read my post on <a href="http://mfollett.com/perl-6-whatever">Perl 6&#8217;s Whatever</a> then you already know that you can use Whatever in a statement to close over that statement and create a function to evaluate it later.</p>
+<h3>A Bump in the Road: Scope</h3>
+<p>The move isn&#8217;t completely roses for function happy developers though, there is one little hiccup you might encounter. &nbsp;This code, which uses a hash as a cache that&#8217;s closed over in the subroutine will be a little different than the Perl 5 version:</p>
+<p><script src="https://gist.github.com/571400.js"></script></p>
+<p>That is because subroutines are now also scoped and are&nbsp;implicitly&nbsp;given the same scope as provided by &#8216;my&#8217;. &nbsp;This is a simple matter though, we simply give the subroutine the &#8216;our&#8217; scope. &nbsp;Here is the equivalent example in Perl 6:</p>
+<p><script src="https://gist.github.com/571411.js"></script></p>
+<p><span style="font-size: 15px; font-weight: bold;">A Tangent: Control Structures</span></p>
+<p>This is a bit of a tangent, but I find it interesting. &nbsp;Do you remember when I said that any block is a closure? &nbsp;That counts for things you probably didn&#8217;t consider, things like the blocks on if, while, and for statements. &nbsp;These are all now closures too. &nbsp;In fact, Perl 6 allows us to iterate over lists n-at-a-time because of this. &nbsp;The for loop will now pass us as many values as we provide as parameters in our block.&nbsp;Here is an example:</p>
+<p><script src="https://gist.github.com/571425.js"></script></p>
+<p>Of course, this example will complain when we reach 100, so we can do this:</p>
+<p><script src="https://gist.github.com/571426.js"></script></p>
+<p>The above example allows us to pass in 1-3 parameters, as many as are available. &nbsp;In this case though Mu is assigned to values that aren&#8217;t passed in, which stringifies to &#8220;Mu()&#8221;. &nbsp;We probably don&#8217;t want that, so we&#8217;ll just use defaults:</p>
+<p><script src="https://gist.github.com/571429.js"></script></p>
+<h3>Summary</h3>
+<p>Perl 6 gives functions, named or otherwise, a wide variety of new syntactic features. &nbsp;It also really promotes the role of closures and anonymous functions, which is a welcome addition. &nbsp;Perl 6 is also bakes in new features, like memoization and currying.</p>
+<p>Given all of that, I hope people understand why I&#8217;ll be trying to keep Perl 5 and Perl 6 articles apart.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="http://perlgeek.de/blog-en/perl-5-to-6/28-currying.html">Perl 5 to Perl 6 - Lesson 28 Currying</a></li>
+<li><a href="http://blogs.perl.org/users/tyler_curtis/2010/08/age-discrimination-in-perl-6-using-subsets-and-multiple-dispatch.html">Tyler Curtis - Age&nbsp;Discrimination&nbsp;in Perl 6 using Subsets and Multiple Dispatch</a>&nbsp;- talk on multimethod dispatching</li>
+<li><a href="http://dev.perl.org/perl6/doc/design/exe/E06.html">Exegesis 6 - Subroutines</a></li>
+<li><a href="http://perlcabal.org/syn/S06.html">Synopsis 6</a></li>
+<li><a href="http://perlcabal.org/syn/S04.html">Synopsis 4</a></li>
+<li><a href="http://mfollett.com/perl-6-whatever">Perl 6 - Whatever</a></li>
+</ul>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/week-2-closures/index.html">Week 2: Closures</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-05T00:00:00-05:00" pubdate data-updated="true">Sep 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This week we will be covering <em>closures</em>. &nbsp;Closures are another basic concept of functional programming. &nbsp;They are based right on top of anonymous functions so if you haven&#8217;t read <a href="http://mfollett.com/26878051">last week&#8217;s article</a> it would behoove you to do so.</p>
+<p>Closures are subroutines that &#8220;close over&#8221; variables thereby storing them in the scope of the subroutine to be accessed later. &nbsp;Values stored in variables that exist within the scope of a function are guaranteed to exist as long as the function does. &nbsp;This allows a developer to create subroutines that do many useful things, including provide state and encapsulate values.</p>
+<p>In Perl a subroutine can access variables defined anywhere lexically above it, even once the scope that it is in is left. &nbsp;This allows us to access otherwise lost data.</p>
+<p>
+<script src="http://gist.github.com/556960.js?file=fpblog-week2a.pl"></script>
+</p>
+<p>Whereas if we change this example to simply:</p>
+<p>
+<script src="http://gist.github.com/556961.js?file=fpblog-week2b.pl"></script>
+</p>
+<p>This code will fail at compilation time because $value isn&#8217;t defined in the outer scope.</p>
+<p>This is not unique to named functions, anonymous functions provide the same functionality:</p>
+<p>
+<script src="http://gist.github.com/556962.js?file=fpblog-week2c.pl"></script>
+</p>
+<p>We can use closures to create new subroutines that have some state stored in them. &nbsp;For example, here is a subroutine that returns a subroutine that takes numbers to the power of the variable that was closed over.</p>
+<p>
+<script src="http://gist.github.com/556963.js?file=fpblog-week2d.pl"></script>
+</p>
+<p>It is important to note in the example above that each time power_of_generator is called the new anonymous subroutine returned has a new value to $power and cannot interfere with any other subroutines value of $power.</p>
+<p>Another useful ability that closures have is that they can safely encapsulate data, more safely than many of the OOP approaches in Perl.</p>
+<p>
+<script src="http://gist.github.com/556964.js?file=fpblog-week2e.pl"></script>
+</p>
+<p>It is important to note in the example above that $name cannot be accessed outside of the scope of the outer curly brackets. &nbsp;As such, there is no way to set $name to a value that is not title cased. &nbsp;This is because the only way to set name is through set_name() which will not accept a value that isn&#8217;t title cased.</p>
+<p>The example above only provides the ability to store one name in a running program. &nbsp;If we wanted to safely store multiple names we could do so by wrapping the $name and accompanying subs into a larger sub.</p>
+<p>
+<script src="http://gist.github.com/556965.js?file=fpblog-week2f.pl"></script>
+</p>
+<p>This concludes our discussion on closures. &nbsp;Next week we will move on to currying and a discussion on &#8216;higher order&#8217; subroutines.</p>
+<p>&nbsp;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/perl-6-whatever/index.html">Perl 6 - Whatever</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-02T00:00:00-05:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>***UPDATE: Carl M&auml;sak (<a href="http://twitter.com/carlmasak">@carlmasak</a>) was kind enough to let me know that Whatever is simply a term. ***</strong></p>
+<p>The specifications for Perl 6 define the Whatever term,&nbsp;which is just an asterisk (*). &nbsp;The Whatever term basically means &#8220;I don&#8217;t care, you decide.&#8221; &nbsp;This breaks down to some slightly different meanings in different contexts.</p>
+<h3>As a Parameter</h3>
+<p>The Whatever term can be used by passing it as a parameter in a function, e.g. `bless( *, |%my_Data)`. &nbsp;In the case where it is a parameter passed into the method it is telling the method, &#8220;I don&#8217;t know or care, so whatever you think is best.&#8221; &nbsp;This may seem strange, but this is actually very similar to default values in other languages (and Perl 6), but is more powerful. &nbsp;</p>
+<p>This is more powerful than default values you see in other languages for two reasons. The first reason is that the Whatever term can appear anywhere in the parameter list. &nbsp;This means that API designers don&#8217;t have to guess their most commonly defaulted parameters and then put them at the end, they can put them in the order that makes the most sense. The second reason is that Whatever can be more powerful than a default. &nbsp;Since methods receive your Whatever they can hold on to it and do a little bit of reasoning to determine what it is you probably want before it replaces your Whatever. &nbsp;This is unlike defaults which are set at the top of the function. &nbsp;Here is an example usage with bless:</p>
+<p><script src="https://gist.github.com/563295.js"></script></p>
+<p>In this case bless will return back an object of type Any because bless decides to use the type of the object that called this.&nbsp;</p>
+<p>Of course, it is important to know how this works. &nbsp;When you pass in &#8216;*&#8217; as a parameter to a method the method gets back an object of type Whatever. &nbsp;This effectively signals to the called method that it can do whatever it wants with that parameter.</p>
+<h3>In a statement</h3>
+<p>When you provide the Whatever term inside of a statement that&nbsp;statement is closed over, replacing your Whatever term with a&nbsp;variable that will be passed in to the new anonymous function. &nbsp;So, for&nbsp;example, were you to provide:</p>
+<p><script src="https://gist.github.com/563296.js"></script></p>
+<p>You would find $foo holds something like:</p>
+<p><script src="https://gist.github.com/563297.js"></script></p>
+<p>Which you could then use like this:</p>
+<p><script src="https://gist.github.com/563298.js"></script></p>
+<p>You can also use it for a method call, like this:</p>
+<p><script src="https://gist.github.com/563300.js"></script></p>
+<p>In this case $x basically holds something like:</p>
+<p><script src="https://gist.github.com/563301.js"></script></p>
+<h3>Specific Uses</h3>
+<p>The Whatever term has some very specific uses when it is provided in some cases:</p>
+<p><script src="https://gist.github.com/563302.js"></script></p>
+<h3>Further Reading</h3>
+<p>If you would like to read more on the Whatever term you should look through <a href="http://perlcabal.org/syn/S02.html">Synopsis 2-Bits and Pieces</a>&nbsp;where this is defined.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/basic-moose-week-1-creating-a-class/index.html">Basic Moose Week 1: Creating a Class</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-01T00:00:00-05:00" pubdate data-updated="true">Sep 1<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>*** Update: &nbsp;Thanks to Kent Fredric (<a href="http://twitter.com/kentnl">@kentnl</a>) for catching my mistake on his <a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/">MooseX::Has::Sugar</a>***</strong></p>
+<p>Perl5&#8217;s object system is impressive in its simplicity. &nbsp;From that simplicity it gains an incredible flexibility which both matches Perl and allows for amazing things. &nbsp;However, it is easy to find patterns created from the spartan nature of the system. &nbsp;This last point has caused many people to design new object interfaces on top of Perl&#8217;s object system. &nbsp;The most robust and popular of these is Moose. &nbsp;This first tutorial will show you a simple way to create classes using Moose.</p>
+<p>Moose allows the user to easily declare the attributes that are provided on a class along with metadata about those attributes. &nbsp;This metadata defines many important aspects of the attribute, such as what type of attribute it is, what the permissions are on the attribute, the default value of the attribute, and many other things. &nbsp;Here is an example of a simple class called employee:</p>
+<p><script src="https://gist.github.com/561887.js"></script></p>
+<p>This class definition does several things, so let&#8217;s break it down. &nbsp;First we use Moose, this exports some spiffy &#8216;keywords&#8217; like <em>has</em>. &nbsp;Additionally, it very sneakily uses the strict and warnings pragma in our package which is very convenient. &nbsp;Next we use the has keyword to define an attribute called <em>pay. &nbsp;</em>We define this attribute as being both readable and writable through its accessor and we say that the accessor should only accept numbers. &nbsp;Next, we create another attribute called <em>manager</em>, which has an accessor that both allows reading and writing and only accepts Employee objects. &nbsp;How does it know that Employees are objects? &nbsp;Well, Moose has a <a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual/Types.pod#THE_TYPES">list</a> of things that it considers types. &nbsp;If the type is already defined then it uses that type, otherwise it assumes it is a class.</p>
+<p>That seems like that could be dangerous though. &nbsp;For example, what if you typo&#8217;d &#8216;Num&#8217; to be &#8216;num&#8217; or &#8216;NUm&#8217; or if you spelled out &#8216;number&#8217;? &nbsp;In these cases Moose would assume that &#8216;num&#8217;, &#8216;NUm&#8217;, or &#8216;number&#8217; were names of classes and only accept values that were of that class. &nbsp;Don&#8217;t worry though, someone has already seen and solved that problem, the solution we will use for this is a combination of&nbsp;<a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a>&nbsp;and <a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a>. &nbsp;MooseX::Has::Sugar provides us with several predefined &#8216;keywords&#8217; that we can use and if we typo we&#8217;ll get compile time errors. &nbsp;Additionally, it defines <em>rw</em> and <em>ro </em>(the value for <em>is</em> that indicates readonly)&nbsp;in such a way that we no longer have to provide the &#8216;is =&gt;&#8217; portion. &nbsp;MooseX::Types allows us to predeclare types and organize them into libraries. &nbsp;Now our class definition looks like this:</p>
+<p><script src="https://gist.github.com/561902.js"></script></p>
+<p>This looks much better. &nbsp;By the way, there are many options to&nbsp;<a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a>&nbsp;and <a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a>&nbsp;so you would really benefit from reading that over.</p>
+<p>Let&#8217;s try and use this class in a script:</p>
+<p><script src="https://gist.github.com/561913.js"></script></p>
+<p>Now, if we look at that script we see some very interesting things. &nbsp;We never explicitly created a new, manager, or salary method but they are all there. &nbsp;This is because Moose created each of these for us to use. &nbsp;In fact, it is imperative that when you are using Moose you <strong>do not </strong>create your own new method, that is <em>very</em> dangerous.</p>
+<p>Of course, Moose provides many other meta attributes to define the attributes of your class, some of which are:</p>
+<ul>
+<li><em>required</em>&nbsp;- whether calls to new() must include this attribute, can be 1 or 0</li>
+<li><em>default</em> - the default value of this attribute or a reference to a sub that will return the default value, it is better to use <em>builder</em> though (see below)</li>
+<li><em>lazy</em> - whether this attribute will be built when the object is built or whether Moose will wait until it is first used</li>
+<li>&hellip;and more we&#8217;ll cover in following weeks</li>
+</ul>
+<p>We&#8217;ll rewrite our class by adding some attributes and adding these meta attributes to all the attributes, but this time we won&#8217;t use MooseX::Has::Sugar or MooseX::Types:</p>
+<p><script src="https://gist.github.com/561923.js"></script></p>
+<ul>
+</ul>
+<h3>Builder vs. Default</h3>
+<p>I mentioned above that you can set the default value of an attribute with <em>default</em>&nbsp;however it is better to use <em>builder</em>. &nbsp;The builder option takes the name of a subroutine that will return a value for the attribute instead of a subref or actual value. &nbsp;The benefit of this is that if you inherit from a base class that uses a builder you can easily override the default value by overriding the sub that builds the value, with default it is not so simple.</p>
+<h3>Caveat</h3>
+<p>There is one important caveat to mention. &nbsp;Neither Moose nor any of its extensions are magical and, in fact, none of them actually create new keywords. &nbsp;Instead, all of these modules are importing methods into your package just like any other tool. &nbsp;This means that they happen in the same order as you would expect function calls to happen. &nbsp;It also means you can write them any way you want, however this is a place where following the standard benefits everyone.</p>
+<h3>Dirty Little Secret</h3>
+<p>As much as I like the idea of MooseX::Has::Sugar and MooseX::Types I should probably mention that I actually rarely use them. &nbsp;However, they seem like a good tool to start off with.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="http://search.cpan.org/~drolsky/Moose/lib/Moose/Manual/Attributes.pod">Moose::Manual::Attribute</a></li>
+<li><a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual/Types.pod">Moose::Manual::Types</a></li>
+<li><a href="http://search.cpan.org/~kentnl/MooseX-Has-Sugar-0.05046611/lib/MooseX/Has/Sugar.pm">MooseX::Has::Sugar</a></li>
+<li><a href="http://search.cpan.org/~flora/MooseX-Types-0.23/lib/MooseX/Types.pm">MooseX::Types</a></li>
+</ul>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/26878051/index.html">Week 1: The Lambda Function</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-30T00:00:00-05:00" pubdate data-updated="true">Aug 30<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>***UPDATE: &nbsp;I modified the final example with Naveed&#8217;s (<a href="http://twitter.com/ironcamel">@ironcamel</a>) suggestion, it looks much nicer now.***</strong></p>
+<p><strong>***UPDATE: Christopher Bottom caught some vestigial lines of code in the final example, which I have removed.***</strong></p>
+<p>The <em>Lambda Function</em> is the building block of all functional programming.&nbsp; It is also referred to as an <em>anonymous function</em> or sometimes in Perl as an <em>anonymous subroutine</em>.&nbsp; Perl treats subroutines as first class data types.&nbsp; Because of this it is incredibly simple to create, store, and invoke anonymous subroutines.&nbsp; To create an anonymous subroutine you simply use the &#8216;sub&#8217; keyword without putting a name between the keyword and the body.&nbsp; For example:<p />
+<script src="http://gist.github.com/556891.js?file=fpblog-week1a.pl"></script>
+<p />Is an example of an anonymous subroutine.&nbsp; Obviously it isn&#8217;t very useful though.&nbsp; To make this useful we need to store the reference of that anonymous subroutine in a variable:<p />
+<script src="http://gist.github.com/556893.js?file=fpblog-week1b.pl"></script>
+<p />Now that we have an anonymous subroutine referenced by the $hello variable we can access it by dereferencing and calling it like so:<p />
+<script src="http://gist.github.com/556894.js?file=fpblog-week1c.pl"></script>
+<p />Anonymous subroutines are just like normal subroutines.&nbsp; Because of this you can pass parameters in to them.&nbsp; Passed in parameters are provided in @_ just like in a normal subroutine.&nbsp; If an anonymous subroutine exists within a larger subroutine then both will have their own @_ within their scope and you won&#8217;t have to worry about them intermingling.<p />
+<script src="http://gist.github.com/556896.js?file=fpblog-week1d.pl"></script>
+<br />
+<script src="http://gist.github.com/556898.js?file=fpblog-week1d.pl"></script>
+</p>
+<p><br />Without dereferencing and calling it you are simply referring to the variable itself, which you can pass around.&nbsp; In fact, because these subroutine references are first class they can be treated the same as any other value.&nbsp; This means that you can store subroutine references in arrays and in hashes (as both the key or the value), and that you can pass it along in subroutines.<p />
+<script src="http://gist.github.com/556900.js?file=fpblog-week1e.pl"></script>
+<br />
+<script src="http://gist.github.com/556901.js?file=fpblog-week1f.pl"></script>
+</p>
+<p>This concludes this week&#8217;s installment in Functional Perl.&nbsp; Next week will cover the next building block, closures.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

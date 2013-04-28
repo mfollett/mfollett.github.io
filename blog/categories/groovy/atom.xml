@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: groovy | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/groovy/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[When Type Systems Attack]]></title>
+    <link href="http://mfollett.github.io/when-type-systems-attack/index.html"/>
+    <updated>2012-02-10T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/when-type-systems-attack/when-type-systems-attack</id>
+    <content type="html"><![CDATA[<p>Groovy&rsquo;s type system can sometimes have funny interplay and unexpected results. For example, these assertions are true:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1787746.js"></script></p>
+
+
+
+
+<p>However, mixing in a Map into this causes some complications:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1787771.js"></script></p>
+
+
+
+
+<p>This might not seem like a big issue, but it can cause some real headaches. When failing an assertion the message printed only prints values, not types. Because of this you may occasionally run into less than helpful error messages like:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1787784.js"></script></p>
+
+
+
+
+<p>And this can be awfully confusing. One prime example of this is with GORM domains. GORM defaults primary keys to be Longs so if you use a primary key as a map key you could run into some pretty confusing error cases that your tests don&rsquo;t explain as helpfully as you&rsquo;d like.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Grails Custom Validation messages]]></title>
+    <link href="http://mfollett.github.io/grails-custom-validation-messages/index.html"/>
+    <updated>2012-01-23T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/grails-custom-validation-messages/grails-custom-validation-messages</id>
+    <content type="html"><![CDATA[<p>Grails' GORM provides convenient ways to define many different constraints for inputing properties including basic ones like max, equal, &amp; notEqual to more specific ones like creditCard, url, &amp; email (full list <a href="http://grails.org/doc/2.0.0/ref/Constraints/Usage.html">here</a> under Quick Reference). But sooner or later you&rsquo;ll want to create your own custom validator. This can be done by providing a validator closure to your domain, for example:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1668699.js"></script></p>
+
+
+
+
+<p>Now, in this example a domain will validate all of the fields, including the user&rsquo;s favorite prime (to a degree of certainty). However, if the prime number certainly isn&rsquo;t prime then the error message provided when validation fails (through validate or save) will be:</p>
+
+
+
+
+<blockquote class="posterous_short_quote"><p>favoritePrime does not pass custom validation.</p></blockquote>
+
+
+
+
+<p>That probably isn&rsquo;t a helpful message to eventually pass back to the user, they might guess what the mysterious &ldquo;custom validation&rdquo; is in this case, but certainly not in all others.</p>
+
+
+
+
+<p>So what <em>is</em> the solution? You might try passing an error message back, but that won&rsquo;t work; you&rsquo;ll get the same message again. It turns out the proper approach is to return a key from your <code>message.properties</code> file. If the key exists in the proper localization file (e.g. French is messages_fr.properties) then it will use that string. A simple modification to the validator above will solve this:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1668702.js"></script></p>
+
+
+
+
+<p>Adding the line:</p>
+
+
+
+
+<p>my.localized.not.prime.message=The number {2} is not prime.</p>
+
+
+
+
+<p>Will cause Grails to generate a much more useful validation failed
+message. As you can probably guess the {2} will be replaced with the
+value inputed by the user.</p>
+
+
+
+
+<p>You can include additional values to your message by returning an array. The first element should be a message key (e.g. &lsquo;my.localized.not.prime.message&rsquo;) and the subsequent entries will be interpolated into the message starting at index 3. So, if you returned <code>['my.localized.not.prime.message', 5]</code> you could have the message:
+my.localized.not.prime.message=The number {2} is not prime, {3} is an example of a prime.
+And in this case if the user passed in 4 they would end up with the message:</p>
+
+
+
+
+<blockquote class="posterous_short_quote"><p>The number 4 is not prime, 5 is an example of a prime.</p></blockquote>
+
+
+
+
+<p>Of course, if you aren&rsquo;t using a prime number validator multiple times
+in your code it may seem silly to have a special key/value pair
+dedicated to primes. Another option is to use a key/value pair dedicated
+to that field. You can do this simply by using the code in the first
+example and addding a field to your message.properties file like:</p>
+
+
+
+
+<p>Groovyist.favoritePrime.validator.invalid=The number {2} is not prime.</p>
+
+
+
+
+<p>Much of this is documented in the <a href="http://grails.org/doc/2.0.0/ref/Constraints/validator.html">validator docs</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl to Groovy Mappings (An Introduction)]]></title>
+    <link href="http://mfollett.github.io/perl-to-groovy-mappings/index.html"/>
+    <updated>2011-08-27T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-to-groovy-mappings/perl-to-groovy-mappings</id>
+    <content type="html"><![CDATA[<p>Recently I took a job with a startup that is using Groovy as their main language. I find the language to be similar to several other languages and they have <a href="http://groovy.codehaus.org/Differences+to+Other+Languages">some comparisons on their site</a>, however one comparison they are missing is to Perl. Since I'm learning Groovy anyway and the two are sufficiently similar that I thought I'd give it a shot.</p>
+
+
+<p>Before I start with the articles there are a few important things to note about Groovy:</p>
+
+
+<ol>
+<li>Groovy autoboxes, as such it is completely legitimate to write `"I like cheese".someMethodOnStrings()`.</li>
+<li>Groovy automatically makes a variable named `it` as the only parameter for lambda function if no parameter list is given, meaning that: `def foo = { it * 2}` is similar to `def foo = { it -&gt; it * 2}`.</li>
+<li>Groovy's syntax provides an alternate way to list parameters for a method call when the last parameter is a lambda function meaning that `someData.someMethod(1,2, { it + 2})` is the same as `someData.someMethod(1,2) { it + 2}`, this is useful for methods that loop over lists, like `each`.</li>
+</ol>
+
+
+<p>&nbsp;</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl  to Groovy Mapping (Iterating)]]></title>
+    <link href="http://mfollett.github.io/perl-groovy-cheat-sheet/index.html"/>
+    <updated>2011-08-27T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-groovy-cheat-sheet/perl-groovy-cheat-sheet</id>
+    <content type="html"><![CDATA[<p>This entry will primarily go over various approaches towards iterating over structures of data. This will include basic looping as well as equivalents to Perl&rsquo;s <code>map</code> &amp; <code>grep</code>.</p>
+
+
+
+
+<p>This is not intended to be an exhaustive guide or a best practice for either language. The attempt, as with all articles in this series, is to provide a basic set of mappings between the languages.</p>
+
+
+
+
+<h2>Iterating over collections</h2>
+
+
+
+
+<p>To loop over all the items in an array in Perl you would probably use the <code>for</code> loop construct:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $item (@array) {…}</pre></div>
+</div>
+
+
+
+
+<p>You could do something similar in Groovy using the <code>each</code> method on collections:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>list.each {<span class="error">…</span>}</pre></div>
+</div>
+
+
+
+
+<p>To loop over all the keys in a hash (or Map) you can combine the above with the <code>keys</code> builtin:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $key (keys(%hash)) {…}</pre></div>
+</div>
+
+
+
+
+<p>In Groovy you simply use a lambda that accepts two parameters.</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>myMap.each { key, _value -&gt; <span class="error">…</span> }</pre></div>
+</div>
+
+
+
+
+<p>Looping over all the values is similar to the examples above in both, so I will skip that. Looping over each entry in the hash with both the key and value in Groovy is the same as the example above, in Perl you would have to use <code>each</code>, which I don&rsquo;t like.</p>
+
+
+
+
+<p>It is important to note that with Groovy&rsquo;s <code>each</code> different things are passed in based on the number of parameters. The example above gave <code>each</code> a 2 parameter lambda and so the lambda got inputs of [key, value]. Had a 1 parameter lambda been passed in then that lambda would have received an Entry object that had accessors for the key and value.</p>
+
+
+
+
+<h2>Iterating over a Set of Integers</h2>
+
+
+
+
+<p>Both Perl and Groovy provide many ways to iterate over a range. One popular approach in Perl is to use the dot-dot range operator (..) and <code>for</code> looping construct. By using this it is simple to print all the numbers between one and ten:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $num (1..10) { print $num }</pre></div>
+</div>
+
+
+
+
+<p>Groovy has a similar approach:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>(<span class="integer">1</span>..<span class="integer">10</span>).each { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+
+
+<p>Groovy has a couple other ways to do the same thing, for example numbers have an <code>upto</code> method attached to them that can be used to iterate. As such, the same thing above could be written as:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">1</span>.upto(<span class="integer">10</span>) { print <span class="local-variable">it</span> }</pre></div>
+</div>
+
+
+
+
+<p>Of course, Perl also has the ability to loop via the <code>while</code> looping construct and Groovy could loop using a <code>for in</code> on top of what I&rsquo;ve listed here.</p>
+
+
+
+
+<p>If you wanted to iterate over a set of integers that didn&rsquo;t increment by one in Perl you might use <code>map</code> and <code>for</code> like this:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( map { $_ * 5 } 1..5) {…}</pre></div>
+</div>
+
+
+
+
+<p>Or you might use <code>grep</code> and <code>for</code> like this:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>for my $multiple_of_five ( grep { not $_ % 5 } 1..25) {…}</pre></div>
+</div>
+
+
+
+
+<p>Or, of course, you could pick up a useful module, like <a href="https://metacpan.org/module/Math::Sequence">Math::Sequence</a>.</p>
+
+
+
+
+<p>In Groovy you would simply do this:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="integer">5</span>.step(<span class="integer">25</span>,<span class="integer">5</span>) {<span class="error">…</span>}</pre></div>
+</div>
+
+
+
+
+<h2>Mapping a List</h2>
+
+
+
+
+<p>Perl helpfully provides the <code>map</code> builtin to easily map a list of values from one to another. For example, were a developer wanting to square all the values in a list they would:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>my @squared = map { $_**2 } @original_values</pre></div>
+</div>
+
+
+
+
+<p>The same thing can be performed in Groovy using the collect() method on collections:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> squared = originalValues.collect { <span class="local-variable">it</span>.power(<span class="integer">2</span>) }</pre></div>
+</div>
+
+
+
+
+<h2>Grepping a List</h2>
+
+
+
+
+<p>Perl provides the <code>grep</code> builtin to easily filter values out of a list and provide a new list with only the remaining values. For example, if a developer was looking for all the items in a list that were odd they could:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>my @odd = grep { $_ % 2 } @numbers</pre></div>
+</div>
+
+
+
+
+<p>To do this in Groovy they would use the <code>findAll</code> method that exists on collections:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="predefined-type">List</span> odd = numbers.findAll { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+
+
+
+
+<h2>Grepping for the First Item in a List</h2>
+
+
+
+
+<p>Perl has a number of modules which are considered &lsquo;core&rsquo;. It is reasonable to assume any core module is installed and readily available. To get the first item in a list that matches some criteria a Perl developer could use the example above for grepping a list and <code>shift</code> off the top, but more likely they would use <a href="https://metacpan.org/module/List::Util">List::Util</a>&rsquo;s <code>first</code> like this:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre>my $first_odd = first { $_ % 2} @numbers</pre></div>
+</div>
+
+
+
+
+<p>A similar approach in Groovy could be done via the <code>find</code> method on collections:</p>
+
+
+
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> firstOdd = numbers.find { <span class="local-variable">it</span> % <span class="integer">2</span> }</pre></div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

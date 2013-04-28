@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: web framework | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/web-framework/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dancer Presentation]]></title>
+    <link href="http://mfollett.github.io/dancer-presentation/index.html"/>
+    <updated>2010-10-06T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/dancer-presentation/dancer-presentation</id>
+    <content type="html"><![CDATA[<p>SawyerX presented on the exciting new Perl web framework Dancer at a Python meeting. &nbsp;The slides are very informative, I recommend looking over them.<p /><div><a href="http://www.slideshare.net/xSawyer/perl-dancer-for-python-programmers">http://www.slideshare.net/xSawyer/perl-dancer-for-python-programmers</a></div></p>
+]]></content>
+  </entry>
+  
+</feed>

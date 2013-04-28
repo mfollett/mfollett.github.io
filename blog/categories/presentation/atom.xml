@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: presentation | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/presentation/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Finalized Perl 6 Talk Slides]]></title>
+    <link href="http://mfollett.github.io/finalized-perl-6-talk-slides/index.html"/>
+    <updated>2010-10-13T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/finalized-perl-6-talk-slides/finalized-perl-6-talk-slides</id>
+    <content type="html"><![CDATA[<p>In a little over 12 hours I will be giving my Perl 6 talk at Strange Loop. &nbsp;I have provided the finalized slides below. &nbsp;Hopefully in the next week I will have an audio overlay on these slides so you can hear how badly I mess up. :)</p>
+
+
+<p><a href="http://www.slideshare.net/mfollett/perl-6-talk">http://www.slideshare.net/mfollett/perl-6-talk</a></p>
+
+]]></content>
+  </entry>
+  
+</feed>

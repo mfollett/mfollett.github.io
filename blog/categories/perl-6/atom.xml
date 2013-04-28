@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: perl 6 | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/perl-6/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[If You Like X, You Might Like Perl]]></title>
+    <link href="http://mfollett.github.io/if-you-like-x-you-might-like-perl/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/if-you-like-x-you-might-like-perl/if-you-like-x-you-might-like-perl</id>
+    <content type="html"><![CDATA[<p><strong>Objective-C </strong>- You'd probably like <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Manual.pod">Moose</a>'s concept of <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Role.pm">roles</a>&nbsp;if you like categories. &nbsp;Roles also provide the ability to require methods exist on classes so you could use them for interfaces too, but when you consume a role you can't guarantee it won't add functionality.</p>
+
+
+<p><strong>Clojure</strong>&nbsp;- If you were willing to play with <a href="http://rakudo.org/how-to-get-rakudo">Perl 6</a> you'd probably like the many of its lazy aspects. &nbsp;The common example being binding an infinitely long fib sequence to a list (my @fib := 0,1,*+*...* ). &nbsp;Perl 6 also supports multi-method dispatching and pattern matching. &nbsp;I don't know about Clojure's pattern matching abilities, but I do know that Perl 6's is weaker than Erlang's, so be aware of that.</p>
+
+
+<p>If you don't want to try Perl 6 you should look at the Higher Order Perl book. &nbsp;It focuses on functional Perl and steals heavily from Lisp. &nbsp;In fact, the author states very early on that of the <a href="http://www.paulgraham.com/diff.html">7 things that make Lisp different</a>,&nbsp;Perl has 6. &nbsp;It is available <a href="http://hop.perl.plover.com/book/#PDF">free online</a>&nbsp;or from a book store. &nbsp;The author is currently boycotting Amazon though, so while they sell it you may want to buy from someone else.&nbsp;</p>
+
+
+<p><strong>Ruby</strong> - I haven't gotten around to learning Ruby. &nbsp;For what it's worth, there are a lot of people I know that like both Ruby and Perl so I have to assume there are some good&nbsp;similarities. &nbsp;If you are looking for method_missing it is called autoload. &nbsp;Besides that, <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Exporter.pm">Moose::Exporter</a> is great for making keywords for DSLs. &nbsp;You can use Perl 5's <a href="http://perldoc.perl.org/perlsub.html#Prototypes">prototypes</a>, but that gets a little more complicated. &nbsp;You can also use <a href="http://search.cpan.org/~flora/Devel-Declare-0.006000/lib/Devel/Declare.pm">Devel::Declare</a> if you just want to take the parser over altogether which, of course, is gets more complicated.</p>
+
+
+<p>Feel free to add more in the comments or tell me where I'm wrong, I'll update the body of the post as the conversation goes along.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finalized Perl 6 Talk Slides]]></title>
+    <link href="http://mfollett.github.io/finalized-perl-6-talk-slides/index.html"/>
+    <updated>2010-10-13T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/finalized-perl-6-talk-slides/finalized-perl-6-talk-slides</id>
+    <content type="html"><![CDATA[<p>In a little over 12 hours I will be giving my Perl 6 talk at Strange Loop. &nbsp;I have provided the finalized slides below. &nbsp;Hopefully in the next week I will have an audio overlay on these slides so you can hear how badly I mess up. :)</p>
+
+
+<p><a href="http://www.slideshare.net/mfollett/perl-6-talk">http://www.slideshare.net/mfollett/perl-6-talk</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Exciting Method Invocation]]></title>
+    <link href="http://mfollett.github.io/perl-6-exciting-method-invocation/index.html"/>
+    <updated>2010-10-03T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-exciting-method-invocation/perl-6-exciting-method-invocation</id>
+    <content type="html"><![CDATA[<p>Perl 6 provides many new and interesting approaches to method invocation. &nbsp;New constructs in the language allow the developer to define how many matching methods are called, how they are called, as well as a few other things.</p>
+
+
+<h3>In Line Mutators</h3>
+
+
+<p>Perl 6 supports the idea of inline mutators. &nbsp;In Perl 5 it isn't too uncommon to see code like this:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@array = sort @array</p>
+</blockquote>
+
+
+<p>It is common enough in the Perl community to see "assign this mutated value back into the variable it came from" that Perl 6 gives a cleaner way. &nbsp;The same code in Perl 6 could be written:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@array .= sort</p>
+</blockquote>
+
+
+<p>The line above says to take @array, sort it, and put the values back in @array all in one fluid motion. &nbsp;Of course, there is one motion that developers go through that is so common most probably don't think about it:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>my SVG $svg_serializer = SVG.new;</p>
+</blockquote>
+
+
+<p>Thankfully, .= can use used here to assign a value into $svg_serializer more cleanly:</p>
+
+
+<blockquote style="margin-top: 10px; margin-left: 1px; border-left-width: 4px !important; border-left-style: solid !important; border-left-color: #dddddd !important; padding-left: 10px;">
+<p>my SVG $svg_serializer .= new;</p>
+</blockquote>
+
+
+<h3>Invoking Multiple Matched Methods</h3>
+
+
+<p>In Perl5 (and other languages) one often finds code litered with statements like this:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo-&gt;frobinicate() if $foo-&gt;can('frobinicate');</p>
+</blockquote>
+
+
+<p>That gets old after a while. &nbsp;Perl 6 solves this, and a few other problems, with a new approach to method calls that allows the developer to request 0 or 1, 1, 1 or more, or any number of methods be called at a time. &nbsp;So, for example, the Perl6 equivalent of above is:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo.?frobinicate;</p>
+</blockquote>
+
+
+<p>The above code will invoke the frobinicate method on $foo if one exists. &nbsp;However, if no method exists that matches that criteria then nothing will be executed and instead of dying the statement simply returns Nil.</p>
+
+
+<p>As I mentioned there are other options here also, for example if the developer wanted to execute all of the 'frobinicate's that existed within the inheritance hierarchy of $foo they could do either:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo.*frobinicate;</p>
+<p>$foo.+frobinicate;</p>
+</blockquote>
+
+
+<p>As readers can probably guess '.*' will invoke 0 or more methods named 'frobinicate' on $foo returning Nill if none exist. &nbsp;That leaves '.+' to invoke 1 or more matching methods, the line dies if it finds no matching methods.</p>
+
+
+<p>Here is an example of the above:</p>
+
+
+<blockquote class="posterous_medium_quote">
+<p>class Dog {</p>
+<p>&nbsp;&nbsp; method talk { 'bark' }</p>
+<p>}</p>
+<p>class TalkingDog is Dog {</p>
+<p>&nbsp;&nbsp; method talk { 'Hello' }</p>
+<p>}</p>
+<p>my TalkingDog $td .= new;</p>
+<p>$td.talk # returns 'Hello'</p>
+<p>$td.?talk # returns 'Hello'</p>
+<p>$td.*talk # returns ('Hello', 'bark')</p>
+<p>$td.+talk # also returns ('Hello', 'bark')</p>
+<p>$td.*calculate_pi # returns Nil</p>
+<p>$td.+calculate_pi # dies</p>
+<p>$td.?calculate_pi # returns Nil</p>
+<p>$td.calculate_pi # dies</p>
+</blockquote>
+
+
+<h3>Parallel Invokation</h3>
+
+
+<p>Perl 6 has an incredibly exciting new operator called the hyperoperator. &nbsp;The hyperoperator indicates that the methods being invoked can be dispatched in parallel. &nbsp;This makes simple cases of parallel execution very simple to do. &nbsp;To do this, simply prepend '&gt;&gt;' between the object and the invocation operator. &nbsp;For example:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@foo&gt;&gt;.frobinicate</p>
+</blockquote>
+
+
+<p>This would invoke 'frobinicate' on all the elements in @foo in parallel. &nbsp;</p>
+
+
+<p>The hyperoperator can be combined with the previous topic of invoking all the methods that match. &nbsp;This makes it very simple to invoke all of the possible methods on an object in parallel:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo&gt;&gt;.*frobinicate()</p>
+</blockquote>
+
+
+<p>Here is a simple, but more fleshed out example to wrap things up:</p>
+
+
+<blockquote class="posterous_medium_quote">
+<p>class Department {</p>
+<p>&nbsp;&nbsp; has @.employees;</p>
+<p>&nbsp;&nbsp; has $.name;</p>
+<p>&nbsp;&nbsp; method gen_print_info { return "$.name:\n" ~"\t\t" ~ @.employees.sort.join(', ')}</p>
+<p>}</p>
+<p>my @company = (</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Accounting', 'employees' =&gt; &lt;Jeff Jane Susan&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Security', employees =&gt; &lt;Alice Bob&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Marketing', employees =&gt; &lt;Margaret Terry Lawrence&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Development', employees =&gt; &lt;Matt Fred Steve Joe Alith Jie&gt;)</p>
+<p>)</p>
+<p>my @print_info = @company&gt;&gt;.gen_print_info;</p>
+</blockquote>
+
+
+<p>The example above would execute gen_print_info on all of the Department typed objects in @company.</p>
+
+
+<p>&nbsp;</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12 - Objects</a></li>
+<li>Patrick Michaud's <a href="http://pmichaud.com/2010/pres/yapcna-perl6/slides/start.html">Cool Perl 6</a>&nbsp;has some neat examples&nbsp;</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Coding with Class]]></title>
+    <link href="http://mfollett.github.io/perl-6-coding-with-class/index.html"/>
+    <updated>2010-09-26T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-coding-with-class/perl-6-coding-with-class</id>
+    <content type="html"><![CDATA[<p>This entry will focus on creating and using classes in Perl 6. &nbsp;Perl 6's class system greatly expands on the approach of Perl 5 in many ways, a few of which are giving a standard <em>new</em> method and providing an approach for easily declaring attributes on a class.</p>
+
+
+<p>Here is a very simple example of a Perl 6 class:</p>
+
+
+<p><script src="https://gist.github.com/598491.js"></script></p>
+
+
+<p>This example shows a few basic concepts. &nbsp;First there is the new <em>class</em>&nbsp;keyword. &nbsp;Named classes can easily be declared in one of two ways. &nbsp;The example above, with curly braces, is useful when defining more than one class in a file or providing for some code to execute outside of the scope of the class when loading. &nbsp;Without the curly braces is also legal, however it means that the rest of the file is the class definition.</p>
+
+
+<p>Additionally, this shows our first attribute, name. &nbsp;The name attribute is defined as being of type Str. &nbsp;The twigil '.' in this case indicates that this attribute should have a public accessor. &nbsp;In this case that accessor is read-only because we did not define it otherwise (see below).</p>
+
+
+<p>The eat and sleep method were also defined. &nbsp;The sleep method uses the name attribute on the class in the string that it says. &nbsp;It can do this without using $self because $. implies the object the method was invoked on. &nbsp;So, the eat method could have also been rewritten like it is for the sleep method.</p>
+
+
+<p>Instantiating new objects of type Animal and using their methods is simple:</p>
+
+
+<p><script src="https://gist.github.com/598494.js"></script></p>
+
+
+<p>A more complicated example is below. &nbsp;In this one two more classes, 'Dog' and 'Tail', have been defined:</p>
+
+
+<p><script src="https://gist.github.com/598497.js"></script></p>
+
+
+<p>The Dog class has a couple new interesting additions. &nbsp;The first thing to notice is that Dog inherits from Animal via the is keyword on the first line. &nbsp;The <em>tag</em> attribute is defined as 'rw'. &nbsp;This means that public accessors for both acquiring and mutating the value of the tag are provided. &nbsp;The <em>tail </em>attribute has a '!' as a twigil. &nbsp;This twigil indicates that no public accessors should be defined. &nbsp;However, an instance of the Dog class delegates to the tail attribute when the wag method is invoked upon it. &nbsp;This means that when someone calls $a_dog.wag they are really calling wag on $a_dog's $!tail. &nbsp;Delegation is a very handy way to improve code reuse, Perl 5 developers who use <a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">M&oslash;&oslash;se</a> should be familiar with it. &nbsp;Finally the tail also has a default value of a new Tail object.</p>
+
+
+<p>This new class can be easily used like the following example:</p>
+
+
+<p><script src="https://gist.github.com/598498.js"></script></p>
+
+
+<p>However, what if we didn't want to use the simple Tail class for our dog's tail. &nbsp;We could pass in an object of another class that had a wag method on it like so:</p>
+
+
+<p><script src="https://gist.github.com/598500.js"></script></p>
+
+
+<p>That pretty much wraps up this entry on Perl 6's class system. &nbsp;The system includes many more powerful features that should be covered at a later date.</p>
+
+
+<p>Further Reading:</p>
+
+
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12: Objects</a></li>
+<li><a href="http://search.cpan.org/~drolsky/Moose-1.14/lib/Moose.pm">Moose</a></li>
+<li><a href="http://github.com/perl6/book/downloads">Using Perl 6</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6 - The Many Faces & Features of Functions]]></title>
+    <link href="http://mfollett.github.io/27523143/index.html"/>
+    <updated>2010-09-06T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/27523143/27523143</id>
+    <content type="html"><![CDATA[<p><strong>***Update: Carl M&auml;sak (<a href="http://www.twitter.com/carlmasak">@carlmasak</a>) corrected some misunderstandings I had regarding the scoping of subroutines and the use of export.***</strong></p>
+
+
+<p>When I first announced the Functional Perl series on the STL-PM <a href="http://tmtowtdi.com/">Bill Odom</a> <a href="http://groups.google.com/group/stl-pm/browse_thread/thread/b93c52c02fc2ef2b">asked if I would be including Perl 6</a>. &nbsp;I declined at the time stating that there were sufficient difference between Perl 6 and Perl 5 to make the articles too busy. &nbsp;There aren't a huge amount of differences, but I didn't want to clutter a Perl 5 article with things like <em>method.assuming( x=&gt; 11)</em> or leave it out of a Perl 6 article. &nbsp;This article isn't an article about functional programming, but it is a talk about functions in Perl 6 so that I can later do functional articles.</p>
+
+
+<h3>Named Functions</h3>
+
+
+<p>Perl 6 sports an incredible amount of power and flexibility without losing a bit of the flexibility one can find in Perl 5. &nbsp;In fact, one could write a Perl 6 subroutine that looked like this:</p>
+
+
+<p><script src="https://gist.github.com/567852.js"></script></p>
+
+
+<p>Or like this, which gives us type checking:</p>
+
+
+<p><script src="https://gist.github.com/567857.js"></script></p>
+
+
+<p>But constraint checking can even move beyond basic type checking. &nbsp;Perl 6 can can provide further constraint checking with a <em>where</em> clause on a parameter:</p>
+
+
+<p><script src="https://gist.github.com/567871.js"></script></p>
+
+
+<p>This version only allows us to give interest rates that will increase the future value. &nbsp;</p>
+
+
+<p>Perl 6 also allows for functions to be able to declare through traits:</p>
+
+
+<ul>
+<li>if they are safe to automatically cache</li>
+<li>the precedence (if it is for an operator)</li>
+<li>tons of other stuff</li>
+</ul>
+
+
+<p>Additionally, explicitly stating all the implicit traits on a method can make it very verbose, like AppleScript verbose.</p>
+
+
+<h3>Anonymous Functions</h3>
+
+
+<p>&nbsp;</p>
+
+
+<p>The Perl 5 way of creating anonymous functions is still valid in Perl6. &nbsp;However, you now use the method invocation operator ('.') instead of the '-&gt;' available in Perl 5. &nbsp;You can actually skip the method invocation operator since it can be implicit in this case. &nbsp;So, for example, you can make and use an anonymous subroutine like this:</p>
+
+
+<p><script src="https://gist.github.com/571386.js"></script></p>
+
+
+<p>&nbsp;</p>
+
+
+<p>Perl 6 also provides for a lot of new approaches towards creating and using anonymous functions. &nbsp;In fact, according to <a href="http://perlcabal.org/syn/S04.html">Synopsis 4</a>, every block is a closure. &nbsp;so, for example, you can now write an anonymous function simply by doing this:</p>
+
+
+<p><script src="https://gist.github.com/571388.js"></script></p>
+
+
+<p>If you wish to include a parameter list you can do so with a slightly modified version of that called the "pointy block":</p>
+
+
+<p><script src="https://gist.github.com/571390.js"></script></p>
+
+
+<p>Additionally, If you read my post on <a href="http://mfollett.com/perl-6-whatever">Perl 6's Whatever</a> then you already know that you can use Whatever in a statement to close over that statement and create a function to evaluate it later.</p>
+
+
+<h3>A Bump in the Road: Scope</h3>
+
+
+<p>The move isn't completely roses for function happy developers though, there is one little hiccup you might encounter. &nbsp;This code, which uses a hash as a cache that's closed over in the subroutine will be a little different than the Perl 5 version:</p>
+
+
+<p><script src="https://gist.github.com/571400.js"></script></p>
+
+
+<p>That is because subroutines are now also scoped and are&nbsp;implicitly&nbsp;given the same scope as provided by 'my'. &nbsp;This is a simple matter though, we simply give the subroutine the 'our' scope. &nbsp;Here is the equivalent example in Perl 6:</p>
+
+
+<p><script src="https://gist.github.com/571411.js"></script></p>
+
+
+<p><span style="font-size: 15px; font-weight: bold;">A Tangent: Control Structures</span></p>
+
+
+<p>This is a bit of a tangent, but I find it interesting. &nbsp;Do you remember when I said that any block is a closure? &nbsp;That counts for things you probably didn't consider, things like the blocks on if, while, and for statements. &nbsp;These are all now closures too. &nbsp;In fact, Perl 6 allows us to iterate over lists n-at-a-time because of this. &nbsp;The for loop will now pass us as many values as we provide as parameters in our block.&nbsp;Here is an example:</p>
+
+
+<p><script src="https://gist.github.com/571425.js"></script></p>
+
+
+<p>Of course, this example will complain when we reach 100, so we can do this:</p>
+
+
+<p><script src="https://gist.github.com/571426.js"></script></p>
+
+
+<p>The above example allows us to pass in 1-3 parameters, as many as are available. &nbsp;In this case though Mu is assigned to values that aren't passed in, which stringifies to "Mu()". &nbsp;We probably don't want that, so we'll just use defaults:</p>
+
+
+<p><script src="https://gist.github.com/571429.js"></script></p>
+
+
+<h3>Summary</h3>
+
+
+<p>Perl 6 gives functions, named or otherwise, a wide variety of new syntactic features. &nbsp;It also really promotes the role of closures and anonymous functions, which is a welcome addition. &nbsp;Perl 6 is also bakes in new features, like memoization and currying.</p>
+
+
+<p>Given all of that, I hope people understand why I'll be trying to keep Perl 5 and Perl 6 articles apart.</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://perlgeek.de/blog-en/perl-5-to-6/28-currying.html">Perl 5 to Perl 6 - Lesson 28 Currying</a></li>
+<li><a href="http://blogs.perl.org/users/tyler_curtis/2010/08/age-discrimination-in-perl-6-using-subsets-and-multiple-dispatch.html">Tyler Curtis - Age&nbsp;Discrimination&nbsp;in Perl 6 using Subsets and Multiple Dispatch</a>&nbsp;- talk on multimethod dispatching</li>
+<li><a href="http://dev.perl.org/perl6/doc/design/exe/E06.html">Exegesis 6 - Subroutines</a></li>
+<li><a href="http://perlcabal.org/syn/S06.html">Synopsis 6</a></li>
+<li><a href="http://perlcabal.org/syn/S04.html">Synopsis 4</a></li>
+<li><a href="http://mfollett.com/perl-6-whatever">Perl 6 - Whatever</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

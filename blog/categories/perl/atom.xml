@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: perl | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/perl/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[If You Like X, You Might Like Perl]]></title>
+    <link href="http://mfollett.github.io/if-you-like-x-you-might-like-perl/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/if-you-like-x-you-might-like-perl/if-you-like-x-you-might-like-perl</id>
+    <content type="html"><![CDATA[<p><strong>Objective-C </strong>- You'd probably like <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Manual.pod">Moose</a>'s concept of <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Role.pm">roles</a>&nbsp;if you like categories. &nbsp;Roles also provide the ability to require methods exist on classes so you could use them for interfaces too, but when you consume a role you can't guarantee it won't add functionality.</p>
+
+
+<p><strong>Clojure</strong>&nbsp;- If you were willing to play with <a href="http://rakudo.org/how-to-get-rakudo">Perl 6</a> you'd probably like the many of its lazy aspects. &nbsp;The common example being binding an infinitely long fib sequence to a list (my @fib := 0,1,*+*...* ). &nbsp;Perl 6 also supports multi-method dispatching and pattern matching. &nbsp;I don't know about Clojure's pattern matching abilities, but I do know that Perl 6's is weaker than Erlang's, so be aware of that.</p>
+
+
+<p>If you don't want to try Perl 6 you should look at the Higher Order Perl book. &nbsp;It focuses on functional Perl and steals heavily from Lisp. &nbsp;In fact, the author states very early on that of the <a href="http://www.paulgraham.com/diff.html">7 things that make Lisp different</a>,&nbsp;Perl has 6. &nbsp;It is available <a href="http://hop.perl.plover.com/book/#PDF">free online</a>&nbsp;or from a book store. &nbsp;The author is currently boycotting Amazon though, so while they sell it you may want to buy from someone else.&nbsp;</p>
+
+
+<p><strong>Ruby</strong> - I haven't gotten around to learning Ruby. &nbsp;For what it's worth, there are a lot of people I know that like both Ruby and Perl so I have to assume there are some good&nbsp;similarities. &nbsp;If you are looking for method_missing it is called autoload. &nbsp;Besides that, <a href="http://search.cpan.org/~drolsky/Moose-1.15/lib/Moose/Exporter.pm">Moose::Exporter</a> is great for making keywords for DSLs. &nbsp;You can use Perl 5's <a href="http://perldoc.perl.org/perlsub.html#Prototypes">prototypes</a>, but that gets a little more complicated. &nbsp;You can also use <a href="http://search.cpan.org/~flora/Devel-Declare-0.006000/lib/Devel/Declare.pm">Devel::Declare</a> if you just want to take the parser over altogether which, of course, is gets more complicated.</p>
+
+
+<p>Feel free to add more in the comments or tell me where I'm wrong, I'll update the body of the post as the conversation goes along.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 Languages in 7 Weeks in St. Louis]]></title>
+    <link href="http://mfollett.github.io/7-languages-in-7-weeks-st-louis/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/7-languages-in-7-weeks-st-louis/7-languages-in-7-weeks-st-louis</id>
+    <content type="html"><![CDATA[<p>One of the guys at the Genome Center mentioned he wanted to get a 7 Languages in 7 Weeks group started in St. Louis to go through the languages. &nbsp;I thought that was a neat idea, but I also realized it was very simple and may not require a group.</p>
+
+
+<p>If you look at the list that Tate provides for <a href="http://www.amazon.com/dp/193435659X?tag=mfollettcom-20&amp;camp=213381&amp;creative=390973&amp;linkCode=as4&amp;creativeASIN=193435659X&amp;adid=0PAPM4C2W0RA1YW6J762&amp;">Tate's book</a>, he lists these languages:</p>
+
+
+<ol>
+<li>Ruby</li>
+<li>Io</li>
+<li>Scala</li>
+<li>Erlang</li>
+<li>Clojure</li>
+<li>Haskell</li>
+<li>Prolog</li>
+</ol>
+
+
+<p>If you look at <a href="http://www.sluug.org/resources/calendar/">SLUUG's St. Louis Event Calendar</a> you find that:</p>
+
+
+<ol>
+<li><a href="http://groups.google.com/group/stlruby/about">Ruby</a> - Meets 2nd Monday of the Month</li>
+<li>Io</li>
+<li>Scala</li>
+<li><a href="http://groups.google.com/group/erlang-colearning">Erlang</a> - Is now dead due to lack if interest, but could be resurected (I know since I ran it :) )</li>
+<li><a href="http://clojurecljub.wordpress.com/">Clojure</a>&nbsp;- Meets 4th Thursday of the month</li>
+<li>Haskell - Had its first social, maybe it can take off with meetings soon</li>
+<li>Prolog</li>
+</ol>
+
+
+<p>&nbsp;</p>
+
+
+<p>Sadly, we don't have a Scala, Io, or Prolog group that I know. &nbsp;However, I bet that we could get people to volunteer for such talks in <a href="http://www.lambdalounge.com">Lambda Lounge</a>.</p>
+
+
+<p>As an addendum, if STLRUBY didn't want to do a session I'm sure <a href="http://stlouis.pm.org">St. Louis Perl Mongers</a> would be willing to shift around their schedule to do a talk on dynamic typing and meta programming.</p>
+
+
+<p><iframe marginheight="0" scrolling="no" marginwidth="0" src="http://rcm.amazon.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=mfollettcom-20&o=1&p=8&l=as1&m=amazon&f=ifr&md=10FE9736YVPPT7A0FBG2&asins=193435659X" frameborder="0" style="height: 240px;"></iframe></p>
+
+
+<p>&nbsp;</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[15 Minutes of Fame]]></title>
+    <link href="http://mfollett.github.io/15-minutes-of-fame/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/15-minutes-of-fame/15-minutes-of-fame</id>
+    <content type="html"><![CDATA[<p>Holy cow! &nbsp;I decided to check my Google Analytics account to see what the impact of my <a href="http://mfollett.com/if-you-like-x-you-might-like-perl">If You Like X You Might Like Perl</a>. &nbsp;I thought it might, maybe, double the visitors to this page. &nbsp;I was quite wrong, here is how wrong:</p>
+
+
+<p>[[posterous-content:yhofHwAcfwbthvkqAcAn]]So I started looking around at what drove this traffic. &nbsp;It turns out that <a href="http://www.reddit.com/user/perlgeek">perlgeek</a> <a href="http://www.reddit.com/r/programming/comments/ds2w1/if_you_like_x_you_might_like_perl/">posted my article to reddit</a>. &nbsp;When I followed the referring links I found a few interesting things. &nbsp;Apparently the article is the 16th most controversial at the moment. &nbsp;It is below whether ads are like reality, but above some insult against redit users, some act that played out in the war in&nbsp;Afghanistan, and the POTUS's policy on&nbsp;cannabis:</p>
+
+
+<p>[[posterous-content:uEljCjbzqDglzvjGlHms]]It is also 24th on top scoring links in the programming category, but there aren't any interesting juxtapositions so I'm not providing a screenshot. &nbsp;Honestly, I find the whole thing so amusing that I don't mind that the link has received more negative votes than positive ones or that 4 of the 5 comments are either negative, useless, or both. &nbsp;The fifth is asking if one of the other commenters actually read the article, which is really neither positive nor negative.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finalized Perl 6 Talk Slides]]></title>
+    <link href="http://mfollett.github.io/finalized-perl-6-talk-slides/index.html"/>
+    <updated>2010-10-13T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/finalized-perl-6-talk-slides/finalized-perl-6-talk-slides</id>
+    <content type="html"><![CDATA[<p>In a little over 12 hours I will be giving my Perl 6 talk at Strange Loop. &nbsp;I have provided the finalized slides below. &nbsp;Hopefully in the next week I will have an audio overlay on these slides so you can hear how badly I mess up. :)</p>
+
+
+<p><a href="http://www.slideshare.net/mfollett/perl-6-talk">http://www.slideshare.net/mfollett/perl-6-talk</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dancer Presentation]]></title>
+    <link href="http://mfollett.github.io/dancer-presentation/index.html"/>
+    <updated>2010-10-06T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/dancer-presentation/dancer-presentation</id>
+    <content type="html"><![CDATA[<p>SawyerX presented on the exciting new Perl web framework Dancer at a Python meeting. &nbsp;The slides are very informative, I recommend looking over them.<p /><div><a href="http://www.slideshare.net/xSawyer/perl-dancer-for-python-programmers">http://www.slideshare.net/xSawyer/perl-dancer-for-python-programmers</a></div></p>
+]]></content>
+  </entry>
+  
+</feed>

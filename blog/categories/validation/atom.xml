@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: validation | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/validation/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Grails Custom Validation messages]]></title>
+    <link href="http://mfollett.github.io/grails-custom-validation-messages/index.html"/>
+    <updated>2012-01-23T00:00:00-06:00</updated>
+    <id>http://mfollett.github.io/grails-custom-validation-messages/grails-custom-validation-messages</id>
+    <content type="html"><![CDATA[<p>Grails' GORM provides convenient ways to define many different constraints for inputing properties including basic ones like max, equal, &amp; notEqual to more specific ones like creditCard, url, &amp; email (full list <a href="http://grails.org/doc/2.0.0/ref/Constraints/Usage.html">here</a> under Quick Reference). But sooner or later you&rsquo;ll want to create your own custom validator. This can be done by providing a validator closure to your domain, for example:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1668699.js"></script></p>
+
+
+
+
+<p>Now, in this example a domain will validate all of the fields, including the user&rsquo;s favorite prime (to a degree of certainty). However, if the prime number certainly isn&rsquo;t prime then the error message provided when validation fails (through validate or save) will be:</p>
+
+
+
+
+<blockquote class="posterous_short_quote"><p>favoritePrime does not pass custom validation.</p></blockquote>
+
+
+
+
+<p>That probably isn&rsquo;t a helpful message to eventually pass back to the user, they might guess what the mysterious &ldquo;custom validation&rdquo; is in this case, but certainly not in all others.</p>
+
+
+
+
+<p>So what <em>is</em> the solution? You might try passing an error message back, but that won&rsquo;t work; you&rsquo;ll get the same message again. It turns out the proper approach is to return a key from your <code>message.properties</code> file. If the key exists in the proper localization file (e.g. French is messages_fr.properties) then it will use that string. A simple modification to the validator above will solve this:</p>
+
+
+
+
+<p><script src="https://gist.github.com/1668702.js"></script></p>
+
+
+
+
+<p>Adding the line:</p>
+
+
+
+
+<p>my.localized.not.prime.message=The number {2} is not prime.</p>
+
+
+
+
+<p>Will cause Grails to generate a much more useful validation failed
+message. As you can probably guess the {2} will be replaced with the
+value inputed by the user.</p>
+
+
+
+
+<p>You can include additional values to your message by returning an array. The first element should be a message key (e.g. &lsquo;my.localized.not.prime.message&rsquo;) and the subsequent entries will be interpolated into the message starting at index 3. So, if you returned <code>['my.localized.not.prime.message', 5]</code> you could have the message:
+my.localized.not.prime.message=The number {2} is not prime, {3} is an example of a prime.
+And in this case if the user passed in 4 they would end up with the message:</p>
+
+
+
+
+<blockquote class="posterous_short_quote"><p>The number 4 is not prime, 5 is an example of a prime.</p></blockquote>
+
+
+
+
+<p>Of course, if you aren&rsquo;t using a prime number validator multiple times
+in your code it may seem silly to have a special key/value pair
+dedicated to primes. Another option is to use a key/value pair dedicated
+to that field. You can do this simply by using the code in the first
+example and addding a field to your message.properties file like:</p>
+
+
+
+
+<p>Groovyist.favoritePrime.validator.invalid=The number {2} is not prime.</p>
+
+
+
+
+<p>Much of this is documented in the <a href="http://grails.org/doc/2.0.0/ref/Constraints/validator.html">validator docs</a>.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

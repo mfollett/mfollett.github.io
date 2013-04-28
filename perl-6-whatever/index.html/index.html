@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Perl 6 - Whatever - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="***UPDATE: Carl M&auml;sak (@carlmasak) was kind enough to let me know that Whatever is simply a term. *** The specifications for Perl 6 define the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/perl-6-whatever">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Perl 6 - Whatever</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-02T00:00:00-05:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>***UPDATE: Carl M&auml;sak (<a href="http://twitter.com/carlmasak">@carlmasak</a>) was kind enough to let me know that Whatever is simply a term. ***</strong></p>
+<p>The specifications for Perl 6 define the Whatever term,&nbsp;which is just an asterisk (*). &nbsp;The Whatever term basically means &#8220;I don&#8217;t care, you decide.&#8221; &nbsp;This breaks down to some slightly different meanings in different contexts.</p>
+<h3>As a Parameter</h3>
+<p>The Whatever term can be used by passing it as a parameter in a function, e.g. `bless( *, |%my_Data)`. &nbsp;In the case where it is a parameter passed into the method it is telling the method, &#8220;I don&#8217;t know or care, so whatever you think is best.&#8221; &nbsp;This may seem strange, but this is actually very similar to default values in other languages (and Perl 6), but is more powerful. &nbsp;</p>
+<p>This is more powerful than default values you see in other languages for two reasons. The first reason is that the Whatever term can appear anywhere in the parameter list. &nbsp;This means that API designers don&#8217;t have to guess their most commonly defaulted parameters and then put them at the end, they can put them in the order that makes the most sense. The second reason is that Whatever can be more powerful than a default. &nbsp;Since methods receive your Whatever they can hold on to it and do a little bit of reasoning to determine what it is you probably want before it replaces your Whatever. &nbsp;This is unlike defaults which are set at the top of the function. &nbsp;Here is an example usage with bless:</p>
+<p><script src="https://gist.github.com/563295.js"></script></p>
+<p>In this case bless will return back an object of type Any because bless decides to use the type of the object that called this.&nbsp;</p>
+<p>Of course, it is important to know how this works. &nbsp;When you pass in &#8216;*&#8217; as a parameter to a method the method gets back an object of type Whatever. &nbsp;This effectively signals to the called method that it can do whatever it wants with that parameter.</p>
+<h3>In a statement</h3>
+<p>When you provide the Whatever term inside of a statement that&nbsp;statement is closed over, replacing your Whatever term with a&nbsp;variable that will be passed in to the new anonymous function. &nbsp;So, for&nbsp;example, were you to provide:</p>
+<p><script src="https://gist.github.com/563296.js"></script></p>
+<p>You would find $foo holds something like:</p>
+<p><script src="https://gist.github.com/563297.js"></script></p>
+<p>Which you could then use like this:</p>
+<p><script src="https://gist.github.com/563298.js"></script></p>
+<p>You can also use it for a method call, like this:</p>
+<p><script src="https://gist.github.com/563300.js"></script></p>
+<p>In this case $x basically holds something like:</p>
+<p><script src="https://gist.github.com/563301.js"></script></p>
+<h3>Specific Uses</h3>
+<p>The Whatever term has some very specific uses when it is provided in some cases:</p>
+<p><script src="https://gist.github.com/563302.js"></script></p>
+<h3>Further Reading</h3>
+<p>If you would like to read more on the Whatever term you should look through <a href="http://perlcabal.org/syn/S02.html">Synopsis 2-Bits and Pieces</a>&nbsp;where this is defined.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-02T00:00:00-05:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/anything/'>Anything</a>, <a class='category' href='/blog/categories/perl/'>perl</a>, <a class='category' href='/blog/categories/perl-6/'>perl 6</a>, <a class='category' href='/blog/categories/rakudo/'>rakudo</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mfollett.github.io/perl-6-whatever/index.html" data-via="" data-counturl="http://mfollett.github.io/perl-6-whatever/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/basic-moose-week-1-creating-a-class/index.html" title="Previous Post: Basic Moose Week 1: Creating a Class">&laquo; Basic Moose Week 1: Creating a Class</a>
+      
+      
+        <a class="basic-alignment right" href="/week-2-closures/index.html" title="Next Post: Week 2:  Closures">Week 2:  Closures &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

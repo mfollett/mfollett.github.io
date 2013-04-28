@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: methods | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/methods/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Perl 6: Exciting Method Invocation]]></title>
+    <link href="http://mfollett.github.io/perl-6-exciting-method-invocation/index.html"/>
+    <updated>2010-10-03T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/perl-6-exciting-method-invocation/perl-6-exciting-method-invocation</id>
+    <content type="html"><![CDATA[<p>Perl 6 provides many new and interesting approaches to method invocation. &nbsp;New constructs in the language allow the developer to define how many matching methods are called, how they are called, as well as a few other things.</p>
+
+
+<h3>In Line Mutators</h3>
+
+
+<p>Perl 6 supports the idea of inline mutators. &nbsp;In Perl 5 it isn't too uncommon to see code like this:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@array = sort @array</p>
+</blockquote>
+
+
+<p>It is common enough in the Perl community to see "assign this mutated value back into the variable it came from" that Perl 6 gives a cleaner way. &nbsp;The same code in Perl 6 could be written:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@array .= sort</p>
+</blockquote>
+
+
+<p>The line above says to take @array, sort it, and put the values back in @array all in one fluid motion. &nbsp;Of course, there is one motion that developers go through that is so common most probably don't think about it:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>my SVG $svg_serializer = SVG.new;</p>
+</blockquote>
+
+
+<p>Thankfully, .= can use used here to assign a value into $svg_serializer more cleanly:</p>
+
+
+<blockquote style="margin-top: 10px; margin-left: 1px; border-left-width: 4px !important; border-left-style: solid !important; border-left-color: #dddddd !important; padding-left: 10px;">
+<p>my SVG $svg_serializer .= new;</p>
+</blockquote>
+
+
+<h3>Invoking Multiple Matched Methods</h3>
+
+
+<p>In Perl5 (and other languages) one often finds code litered with statements like this:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo-&gt;frobinicate() if $foo-&gt;can('frobinicate');</p>
+</blockquote>
+
+
+<p>That gets old after a while. &nbsp;Perl 6 solves this, and a few other problems, with a new approach to method calls that allows the developer to request 0 or 1, 1, 1 or more, or any number of methods be called at a time. &nbsp;So, for example, the Perl6 equivalent of above is:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo.?frobinicate;</p>
+</blockquote>
+
+
+<p>The above code will invoke the frobinicate method on $foo if one exists. &nbsp;However, if no method exists that matches that criteria then nothing will be executed and instead of dying the statement simply returns Nil.</p>
+
+
+<p>As I mentioned there are other options here also, for example if the developer wanted to execute all of the 'frobinicate's that existed within the inheritance hierarchy of $foo they could do either:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo.*frobinicate;</p>
+<p>$foo.+frobinicate;</p>
+</blockquote>
+
+
+<p>As readers can probably guess '.*' will invoke 0 or more methods named 'frobinicate' on $foo returning Nill if none exist. &nbsp;That leaves '.+' to invoke 1 or more matching methods, the line dies if it finds no matching methods.</p>
+
+
+<p>Here is an example of the above:</p>
+
+
+<blockquote class="posterous_medium_quote">
+<p>class Dog {</p>
+<p>&nbsp;&nbsp; method talk { 'bark' }</p>
+<p>}</p>
+<p>class TalkingDog is Dog {</p>
+<p>&nbsp;&nbsp; method talk { 'Hello' }</p>
+<p>}</p>
+<p>my TalkingDog $td .= new;</p>
+<p>$td.talk # returns 'Hello'</p>
+<p>$td.?talk # returns 'Hello'</p>
+<p>$td.*talk # returns ('Hello', 'bark')</p>
+<p>$td.+talk # also returns ('Hello', 'bark')</p>
+<p>$td.*calculate_pi # returns Nil</p>
+<p>$td.+calculate_pi # dies</p>
+<p>$td.?calculate_pi # returns Nil</p>
+<p>$td.calculate_pi # dies</p>
+</blockquote>
+
+
+<h3>Parallel Invokation</h3>
+
+
+<p>Perl 6 has an incredibly exciting new operator called the hyperoperator. &nbsp;The hyperoperator indicates that the methods being invoked can be dispatched in parallel. &nbsp;This makes simple cases of parallel execution very simple to do. &nbsp;To do this, simply prepend '&gt;&gt;' between the object and the invocation operator. &nbsp;For example:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>@foo&gt;&gt;.frobinicate</p>
+</blockquote>
+
+
+<p>This would invoke 'frobinicate' on all the elements in @foo in parallel. &nbsp;</p>
+
+
+<p>The hyperoperator can be combined with the previous topic of invoking all the methods that match. &nbsp;This makes it very simple to invoke all of the possible methods on an object in parallel:</p>
+
+
+<blockquote class="posterous_short_quote">
+<p>$foo&gt;&gt;.*frobinicate()</p>
+</blockquote>
+
+
+<p>Here is a simple, but more fleshed out example to wrap things up:</p>
+
+
+<blockquote class="posterous_medium_quote">
+<p>class Department {</p>
+<p>&nbsp;&nbsp; has @.employees;</p>
+<p>&nbsp;&nbsp; has $.name;</p>
+<p>&nbsp;&nbsp; method gen_print_info { return "$.name:\n" ~"\t\t" ~ @.employees.sort.join(', ')}</p>
+<p>}</p>
+<p>my @company = (</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Accounting', 'employees' =&gt; &lt;Jeff Jane Susan&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Security', employees =&gt; &lt;Alice Bob&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Marketing', employees =&gt; &lt;Margaret Terry Lawrence&gt;),</p>
+<p>&nbsp;&nbsp; Department.new( name =&gt; 'Development', employees =&gt; &lt;Matt Fred Steve Joe Alith Jie&gt;)</p>
+<p>)</p>
+<p>my @print_info = @company&gt;&gt;.gen_print_info;</p>
+</blockquote>
+
+
+<p>The example above would execute gen_print_info on all of the Department typed objects in @company.</p>
+
+
+<p>&nbsp;</p>
+
+
+<h3>Further Reading</h3>
+
+
+<ul>
+<li><a href="http://perlcabal.org/syn/S12.html">Synopsis 12 - Objects</a></li>
+<li>Patrick Michaud's <a href="http://pmichaud.com/2010/pres/yapcna-perl6/slides/start.html">Cool Perl 6</a>&nbsp;has some neat examples&nbsp;</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

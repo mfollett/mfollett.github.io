@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: masters | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/masters/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Unity Model]]></title>
+    <link href="http://mfollett.github.io/the-unity-model/index.html"/>
+    <updated>2010-10-16T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/the-unity-model/the-unity-model</id>
+    <content type="html"><![CDATA[<p>I'm reading <a href="http://www.amazon.com/gp/product/0201058669?ie=UTF8&amp;tag=mfollettcom-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0201058669">Parallel Programming Design: &nbsp;A Foundation by Chandy and Misra</a> for a master's class and am finding it very interesting. &nbsp;The book covers the Unity Model as an approach towards parallel programming. &nbsp;The language used to model solutions to a problem isn't meant to be directly implemented as a language (though it has been incarnated as <a href="http://www.osti.gov/bridge/servlets/purl/5955653-tcrAK9/5955653.pdf">PCN</a>) but instead to be used as a model for implementing the solution in some other language. &nbsp;It is a fun language and hopefully now that I don't have a presentation looming over my head I can explore it independently and post some example.</p>
+
+
+<p>The language is broken up into several parts:</p>
+
+
+<ol>
+<li>Declare - used for declaring variables</li>
+<li>Always - used for defining functions</li>
+<li>Initially - used for initializing variables</li>
+<li>Assign - the main portion of the code</li>
+</ol>
+
+
+<p>The reason why initialization doesn't happen in the main portion of the code is that there is no guarantee that it would happen when you would want or that it would only happen once. &nbsp;In fact, the assignment section of the program has very weak promises. &nbsp;It only guarantees that when the program is executing any given line that any other line will eventually be executed if the program is run forever. &nbsp;Other than that it just randomly picks statements to execute.&nbsp;</p>
+
+
+<p>By the way, the book has been out of print for a while now, so it isn't the easiest to find for cheap and is impossible to find new. &nbsp;I ordered it three times used from third parties before someone finally actually had it in stock and shipped it to me.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

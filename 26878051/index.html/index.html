@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Week 1: The Lambda Function - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="***UPDATE: &nbsp;I modified the final example with Naveed&#8217;s (@ironcamel) suggestion, it looks much nicer now.*** ***UPDATE: Christopher Bottom &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mfollett.github.io/26878051">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mfollett.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Week 1: The Lambda Function</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-30T00:00:00-05:00" pubdate data-updated="true">Aug 30<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>***UPDATE: &nbsp;I modified the final example with Naveed&#8217;s (<a href="http://twitter.com/ironcamel">@ironcamel</a>) suggestion, it looks much nicer now.***</strong></p>
+<p><strong>***UPDATE: Christopher Bottom caught some vestigial lines of code in the final example, which I have removed.***</strong></p>
+<p>The <em>Lambda Function</em> is the building block of all functional programming.&nbsp; It is also referred to as an <em>anonymous function</em> or sometimes in Perl as an <em>anonymous subroutine</em>.&nbsp; Perl treats subroutines as first class data types.&nbsp; Because of this it is incredibly simple to create, store, and invoke anonymous subroutines.&nbsp; To create an anonymous subroutine you simply use the &#8216;sub&#8217; keyword without putting a name between the keyword and the body.&nbsp; For example:<p />
+<script src="http://gist.github.com/556891.js?file=fpblog-week1a.pl"></script>
+<p />Is an example of an anonymous subroutine.&nbsp; Obviously it isn&#8217;t very useful though.&nbsp; To make this useful we need to store the reference of that anonymous subroutine in a variable:<p />
+<script src="http://gist.github.com/556893.js?file=fpblog-week1b.pl"></script>
+<p />Now that we have an anonymous subroutine referenced by the $hello variable we can access it by dereferencing and calling it like so:<p />
+<script src="http://gist.github.com/556894.js?file=fpblog-week1c.pl"></script>
+<p />Anonymous subroutines are just like normal subroutines.&nbsp; Because of this you can pass parameters in to them.&nbsp; Passed in parameters are provided in @_ just like in a normal subroutine.&nbsp; If an anonymous subroutine exists within a larger subroutine then both will have their own @_ within their scope and you won&#8217;t have to worry about them intermingling.<p />
+<script src="http://gist.github.com/556896.js?file=fpblog-week1d.pl"></script>
+<br />
+<script src="http://gist.github.com/556898.js?file=fpblog-week1d.pl"></script>
+</p>
+<p><br />Without dereferencing and calling it you are simply referring to the variable itself, which you can pass around.&nbsp; In fact, because these subroutine references are first class they can be treated the same as any other value.&nbsp; This means that you can store subroutine references in arrays and in hashes (as both the key or the value), and that you can pass it along in subroutines.<p />
+<script src="http://gist.github.com/556900.js?file=fpblog-week1e.pl"></script>
+<br />
+<script src="http://gist.github.com/556901.js?file=fpblog-week1f.pl"></script>
+</p>
+<p>This concludes this week&#8217;s installment in Functional Perl.&nbsp; Next week will cover the next building block, closures.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-30T00:00:00-05:00" pubdate data-updated="true">Aug 30<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/anonymous-function/'>anonymous function</a>, <a class='category' href='/blog/categories/anonymous-subroutine/'>anonymous subroutine</a>, <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/perl/'>perl</a>, <a class='category' href='/blog/categories/perl-5/'>perl 5</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mfollett.github.io/26878051/index.html" data-via="" data-counturl="http://mfollett.github.io/26878051/index.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/basic-moose-week-1-creating-a-class/index.html" title="Next Post: Basic Moose Week 1: Creating a Class">Basic Moose Week 1: Creating a Class &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/when-type-systems-attack/index.html">When Type Systems Attack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grailsdatabasemigrationpluginliquibase-quirk/index.html">Grails/DatabaseMigrationPlugin/Liquibase Quirk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/grails-custom-validation-messages/index.html">Grails Custom Validation messages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/yammer-scala-burgeoning-languages/index.html">Yammer, Scala, & Burgeoning Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/perl-to-groovy-mappings/index.html">Perl to Groovy Mappings (An Introduction)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

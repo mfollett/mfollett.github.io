@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: functional programming | My Octopress Blog]]></title>
+  <link href="http://mfollett.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
+  <link href="http://mfollett.github.io/"/>
+  <updated>2013-04-28T16:00:39-05:00</updated>
+  <id>http://mfollett.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Week 4:  Currying]]></title>
+    <link href="http://mfollett.github.io/week-3-currying/index.html"/>
+    <updated>2010-09-19T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/week-3-currying/week-3-currying</id>
+    <content type="html"><![CDATA[<p>This week we'll be covering the process of partially applying parameters to a subroutine, this is based off of closures which we covered last week. &nbsp;This allows us to create new subroutines that we can pass around that already have some of their parameters defined. &nbsp;One of the benefits of this is that we don't have to pass around a parameter list and wait until all the parameters are ready, instead we can apply each parameter as we get it and then execute the subroutine at some later time when we are ready. &nbsp;Doing this in Perl is actually very simple.</p>
+
+
+<p>
+<script src="http://gist.github.com/556982.js?file=fpblog-week3a.pl"></script>
+</p>
+
+
+<p>The function above provides us the ability to curry other functions. &nbsp;Analyzing it shows that all we are doing is creating a new anonymous function that is going to call the function we passed in with the parameters we passed in and the parameters it receives. &nbsp;Let's see an example of how this would work.</p>
+
+
+<p>
+<script src="http://gist.github.com/556983.js?file=fpblog-week3b.pl"></script>
+</p>
+
+
+<p>So, let's look at how it all worked. &nbsp;First, we made a new anonymous function that takes a list of parameters, joins them, and prints them. &nbsp;Next we curried that list with 3 fruit. &nbsp;To do this we created a new anonymous subroutine that passed in the three fruit into the first anonymous subroutine. &nbsp;After that we repeated the process, by currying the new subroutine we created from the last curried we now have a subroutine that calls the subroutine created on line 3 with 2 new fruit, that subroutine calls the subroutine created on line 1. &nbsp;Once we execute this we will output a list of all the fruit we've given to the function.</p>
+
+
+<p>We don't have to only curry anonymous functions. &nbsp;Because we can get the reference of named functions and builtins we can also curry those.</p>
+
+
+<p>
+<script src="http://gist.github.com/556984.js?file=fpblog-week3c.pl"></script>
+</p>
+
+
+<p>This concludes this week's lesson. &nbsp;Next week we will move past the building blocks of functional programming and start getting into systems built on top of this functional foundation. &nbsp;Next week we'll cover dynamic dispatch tables.</p>
+
+
+<p>As an aside, the name curry didn't come from the tasty South Asian type of dish, unlike the <a href="http://listserv.linguistlist.org/cgi-bin/wa?A2=ind0208a&amp;L=ads-l&amp;P=11751">naming of Mix-Ins</a>. &nbsp;Instead, currying is named after the American Mathematician and Logician <a href="http://en.wikipedia.org/wiki/Haskell_Curry">Haskell Curry</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Week 2:  Closures]]></title>
+    <link href="http://mfollett.github.io/week-2-closures/index.html"/>
+    <updated>2010-09-05T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/week-2-closures/week-2-closures</id>
+    <content type="html"><![CDATA[<p>This week we will be covering <em>closures</em>. &nbsp;Closures are another basic concept of functional programming. &nbsp;They are based right on top of anonymous functions so if you haven't read <a href="http://mfollett.com/26878051">last week's article</a> it would behoove you to do so.</p>
+
+
+<p>Closures are subroutines that "close over" variables thereby storing them in the scope of the subroutine to be accessed later. &nbsp;Values stored in variables that exist within the scope of a function are guaranteed to exist as long as the function does. &nbsp;This allows a developer to create subroutines that do many useful things, including provide state and encapsulate values.</p>
+
+
+<p>In Perl a subroutine can access variables defined anywhere lexically above it, even once the scope that it is in is left. &nbsp;This allows us to access otherwise lost data.</p>
+
+
+<p>
+<script src="http://gist.github.com/556960.js?file=fpblog-week2a.pl"></script>
+</p>
+
+
+<p>Whereas if we change this example to simply:</p>
+
+
+<p>
+<script src="http://gist.github.com/556961.js?file=fpblog-week2b.pl"></script>
+</p>
+
+
+<p>This code will fail at compilation time because $value isn't defined in the outer scope.</p>
+
+
+<p>This is not unique to named functions, anonymous functions provide the same functionality:</p>
+
+
+<p>
+<script src="http://gist.github.com/556962.js?file=fpblog-week2c.pl"></script>
+</p>
+
+
+<p>We can use closures to create new subroutines that have some state stored in them. &nbsp;For example, here is a subroutine that returns a subroutine that takes numbers to the power of the variable that was closed over.</p>
+
+
+<p>
+<script src="http://gist.github.com/556963.js?file=fpblog-week2d.pl"></script>
+</p>
+
+
+<p>It is important to note in the example above that each time power_of_generator is called the new anonymous subroutine returned has a new value to $power and cannot interfere with any other subroutines value of $power.</p>
+
+
+<p>Another useful ability that closures have is that they can safely encapsulate data, more safely than many of the OOP approaches in Perl.</p>
+
+
+<p>
+<script src="http://gist.github.com/556964.js?file=fpblog-week2e.pl"></script>
+</p>
+
+
+<p>It is important to note in the example above that $name cannot be accessed outside of the scope of the outer curly brackets. &nbsp;As such, there is no way to set $name to a value that is not title cased. &nbsp;This is because the only way to set name is through set_name() which will not accept a value that isn't title cased.</p>
+
+
+<p>The example above only provides the ability to store one name in a running program. &nbsp;If we wanted to safely store multiple names we could do so by wrapping the $name and accompanying subs into a larger sub.</p>
+
+
+<p>
+<script src="http://gist.github.com/556965.js?file=fpblog-week2f.pl"></script>
+</p>
+
+
+<p>This concludes our discussion on closures. &nbsp;Next week we will move on to currying and a discussion on 'higher order' subroutines.</p>
+
+
+<p>&nbsp;</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Week 1: The Lambda Function]]></title>
+    <link href="http://mfollett.github.io/26878051/index.html"/>
+    <updated>2010-08-30T00:00:00-05:00</updated>
+    <id>http://mfollett.github.io/26878051/26878051</id>
+    <content type="html"><![CDATA[<p><strong>***UPDATE: &nbsp;I modified the final example with Naveed's (<a href="http://twitter.com/ironcamel">@ironcamel</a>) suggestion, it looks much nicer now.***</strong></p>
+
+
+<p><strong>***UPDATE: Christopher Bottom caught some vestigial lines of code in the final example, which I have removed.***</strong></p>
+
+
+<p>The <em>Lambda Function</em> is the building block of all functional programming.&nbsp; It is also referred to as an <em>anonymous function</em> or sometimes in Perl as an <em>anonymous subroutine</em>.&nbsp; Perl treats subroutines as first class data types.&nbsp; Because of this it is incredibly simple to create, store, and invoke anonymous subroutines.&nbsp; To create an anonymous subroutine you simply use the 'sub' keyword without putting a name between the keyword and the body.&nbsp; For example:<p />
+<script src="http://gist.github.com/556891.js?file=fpblog-week1a.pl"></script>
+<p />Is an example of an anonymous subroutine.&nbsp; Obviously it isn't very useful though.&nbsp; To make this useful we need to store the reference of that anonymous subroutine in a variable:<p />
+<script src="http://gist.github.com/556893.js?file=fpblog-week1b.pl"></script>
+<p />Now that we have an anonymous subroutine referenced by the $hello variable we can access it by dereferencing and calling it like so:<p />
+<script src="http://gist.github.com/556894.js?file=fpblog-week1c.pl"></script>
+<p />Anonymous subroutines are just like normal subroutines.&nbsp; Because of this you can pass parameters in to them.&nbsp; Passed in parameters are provided in @_ just like in a normal subroutine.&nbsp; If an anonymous subroutine exists within a larger subroutine then both will have their own @_ within their scope and you won't have to worry about them intermingling.<p />
+<script src="http://gist.github.com/556896.js?file=fpblog-week1d.pl"></script>
+<br />
+<script src="http://gist.github.com/556898.js?file=fpblog-week1d.pl"></script>
+</p>
+<p><br />Without dereferencing and calling it you are simply referring to the variable itself, which you can pass around.&nbsp; In fact, because these subroutine references are first class they can be treated the same as any other value.&nbsp; This means that you can store subroutine references in arrays and in hashes (as both the key or the value), and that you can pass it along in subroutines.<p />
+<script src="http://gist.github.com/556900.js?file=fpblog-week1e.pl"></script>
+<br />
+<script src="http://gist.github.com/556901.js?file=fpblog-week1f.pl"></script>
+</p>
+<p>This concludes this week's installment in Functional Perl.&nbsp; Next week will cover the next building block, closures.</p>
+
+]]></content>
+  </entry>
+  
+</feed>
